@@ -7,6 +7,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.ManualRobot;
+
+import org.firstinspires.ftc.teamcode.enums.Alliance;
+import org.firstinspires.ftc.teamcode.enums.CycleTarget;
 import org.firstinspires.ftc.teamcode.enums.GameStage;
 
 
@@ -15,7 +18,12 @@ public class TeleOpSingleCont extends LinearOpMode {
     // Config
     Config config;
     ManualRobot manualRobot;
+
     GameStage stage = GameStage.TeleOp;
+    Alliance alliance = Alliance.RED;
+
+    CycleTarget tgt = CycleTarget.SPECIMEN;
+
     FtcDashboard dashboard;
 
     @Override
