@@ -49,32 +49,18 @@ public class MeepMeepTesting {
                 .strafeToLinearHeading(new Vector2d(-26, -12), Math.toRadians(180))
                 .build());
 
-        blueDrive.runAction(redDrive.getDrive().actionBuilder(new Pose2d(13, 59, Math.toRadians(90)))
-                .strafeTo(new Vector2d(8, 34))
-                .splineToLinearHeading(new Pose2d(48, 35, Math.toRadians(90)),-2)
-                .waitSeconds(INTAKE)
-                .splineToLinearHeading(new Pose2d(54, 52, Math.toRadians(45)), 1)
-                .waitSeconds(BASKET)
-                .strafeToLinearHeading(new Vector2d(58, 35), Math.toRadians(90))
-                .waitSeconds(INTAKE)
-                .splineToLinearHeading(new Pose2d(54, 52, Math.toRadians(45)), 1)
-                .waitSeconds(BASKET)
-                .strafeToLinearHeading(new Vector2d(57, 33), Math.toRadians(115))
-                .waitSeconds(INTAKE)
-                .splineToLinearHeading(new Pose2d(54, 52, Math.toRadians(45)), 1)
-                .waitSeconds(BASKET)
-                .strafeToLinearHeading(new Vector2d(26, 12), Math.toRadians(0))
-                .waitSeconds(INTAKE + 1)
-                .splineToLinearHeading(new Pose2d(54, 52, Math.toRadians(45)), 1)
-                .waitSeconds(BASKET)
-                .strafeToLinearHeading(new Vector2d(26, 12), Math.toRadians(0))
+        blueDrive.runAction(redDrive.getDrive().actionBuilder(new Pose2d(-13, -59, Math.toRadians(90)))
+                .strafeTo(new Vector2d(-45, -59))
+                .waitSeconds(1)
+                .strafeTo(new Vector2d(56, -59))
                 .build());
+
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
                 .addEntity(redDrive)
-                //.addEntity(blueDrive)
+                .addEntity(blueDrive)
                 .start();
     }
 }
