@@ -8,11 +8,14 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.enums.LiftPosition;
+import org.piedmontpioneers.intothedeep.LimitSwitch;
 import org.piedmontpioneers.intothedeep.enums.Color;
 import org.piedmontpioneers.intothedeep.utils.PIDController;
 
 public class Lift extends SubSystem {
     private DcMotor lift;
+
+    private LimitSwitch switchA;
 
     private final int LIFT_TOP_BASKET = 1000;
     private final int LIFT_BOTTOM_BASKET = 500;
