@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
-import org.firstinspires.ftc.teamcode.subsystem.Dashboard;
 import org.firstinspires.ftc.teamcode.subsystem.Drive;
-import org.firstinspires.ftc.teamcode.subsystem.Lift;
+import org.firstinspires.ftc.teamcode.subsystem.Intake;
+import org.firstinspires.ftc.teamcode.subsystem.Outtake;
 import org.firstinspires.ftc.teamcode.subsystem.SubSystem;
 
 import java.util.LinkedList;
@@ -17,9 +17,13 @@ public class ManualRobot {
     // Constructor
     public ManualRobot(Config cfg, boolean isOneController) {
         config = cfg;
+
         // Register the subsystem. System will not work if it's not registered
         subSystems.add(new Drive(config, isOneController));
-        subSystems.add(new Lift(config, isOneController));
+        subSystems.add(new Outtake(config, isOneController));
+        subSystems.add(new Intake(config, isOneController));
+        //subSystems.add(new Hang(config, isOneController));
+
     }
 
     // Initialize each subsystem

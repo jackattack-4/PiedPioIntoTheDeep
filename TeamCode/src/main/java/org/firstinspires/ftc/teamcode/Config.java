@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import org.firstinspires.ftc.teamcode.enums.Alliance;
+import org.firstinspires.ftc.teamcode.enums.CycleTarget;
 import org.firstinspires.ftc.teamcode.enums.GameStage;
 
 // Config stores everything any of our SubSystems need to function, stores GamePads, Telemetry, HardwareMap,
@@ -27,6 +28,8 @@ public class Config {
 
     public Alliance alliance;
 
+    public CycleTarget target;
+
     // Stores the hardwareMap names as constants
     // Drive system
     public static final String RIGHT_FRONT_DRIVE = "rightFront";
@@ -45,12 +48,13 @@ public class Config {
     public double robotX, robotY, robotHeading;
 
     // Constructor
-    public Config(Telemetry tlm, FtcDashboard dsh, HardwareMap hwm, Gamepad gmp1, Gamepad gmp2, GameStage stage) {
+    public Config(Telemetry tlm, FtcDashboard dsh, HardwareMap hwm, Gamepad gmp1, Gamepad gmp2, GameStage stage, CycleTarget target) {
         this.telemetry = tlm;
         this.hardwareMap = hwm;
         this.dashboard = dsh;
         this.gamePad1 = gmp1;
         this.gamePad2 = gmp2;
+        this.target = target;
     }
 
     // Telemetry is similar to logging. Appears in Driver Station
