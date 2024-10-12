@@ -18,13 +18,13 @@ public class Outtake extends SubSystem {
 
     private LimitSwitch switchA;
 
-    private final int LIFT_TOP_BASKET = 1000;
-    private final int LIFT_BOTTOM_BASKET = 500;
+    private final int LIFT_TOP_BASKET = 4600;
+    private final int LIFT_BOTTOM_BASKET = 2400;
 
     private final int LIFT_TOP_BAR = 700;
     private final int LIFT_BOTTOM_BAR = 300;
 
-    private final int LIFT_BOTTOM = 100;
+    private final int LIFT_BOTTOM = 50;
 
     private LiftPosition position;
 
