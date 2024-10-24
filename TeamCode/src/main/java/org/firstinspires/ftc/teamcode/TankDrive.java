@@ -116,7 +116,7 @@ public final class TankDrive {
 
     public final VoltageSensor voltageSensor;
 
-    public final LocalizerRR localizer;
+    public final Localizer localizer;
     public Pose2d pose;
 
     private final LinkedList<Pose2d> poseHistory = new LinkedList<>();
@@ -127,7 +127,7 @@ public final class TankDrive {
 
     private final DownsampledWriter tankCommandWriter = new DownsampledWriter("TANK_COMMAND", 50_000_000);
 
-    public class DriveLocalizer implements LocalizerRR {
+    public class DriveLocalizer implements Localizer {
         public final List<Encoder> leftEncs, rightEncs;
 
         private double lastLeftPos, lastRightPos;
