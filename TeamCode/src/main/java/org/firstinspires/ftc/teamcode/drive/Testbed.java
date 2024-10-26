@@ -16,7 +16,7 @@ public class Testbed extends OpMode {
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
-    public Servo bucket;
+    public Servo bucket, out;
 
     public double speed = 0.5;
     @Override
@@ -46,6 +46,7 @@ public class Testbed extends OpMode {
         intake = hardwareMap.get(DcMotor.class, "intake");
 
         bucket = hardwareMap.get(Servo.class, "bucket");
+        out = hardwareMap.get(Servo.class, "out");
 
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         extendo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -63,12 +64,14 @@ public class Testbed extends OpMode {
         double pos = bucket.getPosition();
 
         if (gamepad1.left_trigger >= 0.1) {
-            lift.setPower(speed);
+            lift.setTargetPosition(1230);
+            lift.setPower(1);
+            lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         } else if (gamepad1.right_trigger >= 0.1) {
-            lift.setPower(-speed);
-        } else {
+            lift.setPower(lift.getPower()-0.05);
+        } /*else {
             lift.setPower(0);
-        }
+        }*/
 
         if (gamepad1.left_bumper) {
             extendo.setPower(speed);
@@ -103,6 +106,10 @@ public class Testbed extends OpMode {
         }
         if (gamepad1.dpad_left) {
             intake.setPower(-0.2);
+        }
+
+        if (gamepad1.dpad_right) {
+            out.setPosition(0);
         }
         double axial = -gamepad1.left_stick_x;  // Note: pushing stick forward gives negative value
         double lateral = gamepad1.left_stick_y * 1.1; // 1.1 fixes strafing issues
@@ -145,6 +152,7 @@ public class Testbed extends OpMode {
         telemetry.addData("lift", lift.getCurrentPosition());
         telemetry.addData("extendo", extendo.getCurrentPosition());
         telemetry.addData("speed", speed);
+        telemetry.addData("power", lift.getPower());
         telemetry.addData("bucket", bucket.getPosition());
         telemetry.update();
     }
