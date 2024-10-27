@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive;
 
+import static java.lang.Thread.sleep;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -17,6 +19,9 @@ public class Testbed extends OpMode {
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
     public Servo bucket, out;
+
+    public int target = 0;
+    public boolean direction = true;
 
     public double speed = 0.5;
     @Override
@@ -56,7 +61,7 @@ public class Testbed extends OpMode {
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         extendo.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        bucket.setPosition(0);
+        out.setPosition(0);
     }
 
     @Override
@@ -64,14 +69,29 @@ public class Testbed extends OpMode {
         double pos = bucket.getPosition();
 
         if (gamepad1.left_trigger >= 0.1) {
-            lift.setTargetPosition(1230);
-            lift.setPower(1);
-            lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            lift.setPower(-0.8);
+            target = 5;
+            direction = false;
+
         } else if (gamepad1.right_trigger >= 0.1) {
-            lift.setPower(lift.getPower()-0.05);
-        } /*else {
-            lift.setPower(0);
-        }*/
+            lift.setPower(1);
+            target = 1200;
+        }
+
+        if (target != 0) {
+            if (direction) {
+                if (lift.getCurrentPosition() >= target) {
+                    lift.setPower(0.4);
+                    target = 0;
+                }
+            } else {
+                if (lift.getCurrentPosition() <= target) {
+                    lift.setPower(0.4);
+                    target = 0;
+                    direction = true;
+                }
+            }
+        }
 
         if (gamepad1.left_bumper) {
             extendo.setPower(speed);
@@ -110,6 +130,12 @@ public class Testbed extends OpMode {
 
         if (gamepad1.dpad_right) {
             out.setPosition(0);
+            try {
+                Thread.sleep(1000);
+                out.setPosition(0.5);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
         double axial = -gamepad1.left_stick_x;  // Note: pushing stick forward gives negative value
         double lateral = gamepad1.left_stick_y * 1.1; // 1.1 fixes strafing issues
