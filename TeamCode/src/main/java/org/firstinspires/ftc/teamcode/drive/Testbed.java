@@ -69,12 +69,12 @@ public class Testbed extends OpMode {
         double pos = bucket.getPosition();
 
         if (gamepad1.left_trigger >= 0.1) {
-            lift.setPower(-0.8);
+            lift.setPower(-0.75);
             target = 5;
             direction = false;
 
         } else if (gamepad1.right_trigger >= 0.1) {
-            lift.setPower(1);
+            lift.setPower(0.75);
             target = 1200;
         }
 
@@ -129,10 +129,10 @@ public class Testbed extends OpMode {
         }
 
         if (gamepad1.dpad_right) {
-            out.setPosition(0);
+            out.setPosition(0.5);
             try {
                 Thread.sleep(1000);
-                out.setPosition(0.5);
+                out.setPosition(0);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
