@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import org.firstinspires.ftc.teamcode.subsystem.Drive;
+import org.firstinspires.ftc.teamcode.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.subsystem.Outtake;
 import org.firstinspires.ftc.teamcode.subsystem.SubSystem;
 
@@ -20,7 +21,7 @@ public abstract class Robot {
         // Register the subsystem. System will not work if it's not registered
         subSystems.add(new Drive(config));
         subSystems.add(new Outtake(config));
-        //subSystems.add(new Intake(config, isOneController));
+        subSystems.add(new Intake(config));
         //subSystems.add(new Hang(config, isOneController));
 
     }
@@ -29,6 +30,13 @@ public abstract class Robot {
     public void init() {
         for (SubSystem sub : subSystems) {
             sub.init();
+        }
+    }
+
+    // Tick each subsystem
+    public void update() {
+        for (SubSystem sub : subSystems) {
+            sub.update();
         }
     }
 }

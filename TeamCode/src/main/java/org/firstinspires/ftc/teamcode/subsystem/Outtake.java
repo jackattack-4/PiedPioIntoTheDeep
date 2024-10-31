@@ -28,11 +28,6 @@ public class Outtake extends SubSystem {
 
     private LiftPosition position;
 
-    private PIDController liftPID = new PIDController(
-            0.9,
-            0.1,
-            0.9);
-
     public Outtake(Config config) {
         super(config);
     }
@@ -94,58 +89,4 @@ public class Outtake extends SubSystem {
         config.telemetry.addData("Lift Busy?", lift.isBusy());
 
         }
-
-    public class LiftToTopBasket implements Action {
-        private boolean initialized = false;
-
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            if (LIFT_TOP_BASKET + 40 >= lift.getCurrentPosition() && lift.getCurrentPosition() >= LIFT_TOP_BASKET) {
-                return true;
-            } else {
-                lift.setPower(liftPID.pidToPos(lift, LIFT_TOP_BASKET));
-                return false;
-            }
-        }
-    }
-
-    public Action liftToTopBasket() {
-        return new LiftToTopBasket();
-    }
-
-    public class LiftToBottom implements Action {
-        private boolean initialized = false;
-
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            if (LIFT_BOTTOM + 40 >= lift.getCurrentPosition() && lift.getCurrentPosition() >= LIFT_BOTTOM) {
-                return true;
-            } else {
-                lift.setPower(liftPID.pidToPos(lift, LIFT_BOTTOM));
-                return false;
-            }
-        }
-    }
-
-    public Action liftToBottom() {
-        return new LiftToBottom();
-    }
-
-    public class LiftToBottomBasket implements Action {
-        private boolean initialized = false;
-
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            if (LIFT_BOTTOM_BASKET + 40 >= lift.getCurrentPosition() && lift.getCurrentPosition() >= LIFT_BOTTOM_BASKET) {
-                return true;
-            } else {
-                lift.setPower(liftPID.pidToPos(lift, LIFT_BOTTOM_BASKET));
-                return false;
-            }
-        }
-    }
-
-    public Action liftToBottomBasket() {
-        return new LiftToBottomBasket();
-    }
 }

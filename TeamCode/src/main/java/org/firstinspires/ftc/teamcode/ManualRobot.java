@@ -1,12 +1,19 @@
 package org.firstinspires.ftc.teamcode;
 
-import org.firstinspires.ftc.teamcode.subsystem.Drive;
-import org.firstinspires.ftc.teamcode.subsystem.Intake;
-import org.firstinspires.ftc.teamcode.subsystem.Outtake;
-import org.firstinspires.ftc.teamcode.subsystem.SubSystem;
+public class ManualRobot extends Robot {
+    Config cfg = null;
 
-import java.util.LinkedList;
-import java.util.List;
+    public ManualRobot(Config cfg) {
+        super(cfg);
+    }
 
-public class ManualRobot {
+    @Override
+    public void init() {
+        super.init();
+    }
+
+    @Override
+    public void update() {
+        super.update();
+    }
 }

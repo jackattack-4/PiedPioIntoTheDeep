@@ -6,9 +6,11 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Config;
+import org.piedmontpioneers.intothedeep.LimitSwitch;
 
 @TeleOp(name="Testbed", group="Tuning")
 public class Testbed extends OpMode {
@@ -19,6 +21,8 @@ public class Testbed extends OpMode {
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
     public Servo bucket, out;
+
+    public LimitSwitch switchA = null;
 
     public int target = 0;
     public boolean direction = true;
@@ -52,6 +56,8 @@ public class Testbed extends OpMode {
 
         bucket = hardwareMap.get(Servo.class, "bucket");
         out = hardwareMap.get(Servo.class, "out");
+
+        switchA = new LimitSwitch(hardwareMap.get(DigitalChannel.class, "a"));
 
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         extendo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -92,6 +98,8 @@ public class Testbed extends OpMode {
                 }
             }
         }
+
+
 
         if (gamepad1.left_bumper) {
             extendo.setPower(speed);
