@@ -2,12 +2,14 @@ package org.firstinspires.ftc.teamcode.drive;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.ManualRobot;
 import org.firstinspires.ftc.teamcode.enums.CycleTarget;
 import org.firstinspires.ftc.teamcode.enums.GameStage;
 
+@TeleOp(name="TeleOp")
 public class TeleOpMain extends OpMode {
     ManualRobot robot;
     Config config;

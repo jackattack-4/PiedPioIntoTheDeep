@@ -5,12 +5,10 @@ import static java.lang.Thread.sleep;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.Config;
-import org.piedmontpioneers.intothedeep.LimitSwitch;
+import org.firstinspires.ftc.teamcode.hardware.LimitSwitch;
 
 @TeleOp(name="Testbed", group="Tuning")
 public class Testbed extends OpMode {
@@ -76,7 +74,7 @@ public class Testbed extends OpMode {
 
         if (gamepad1.left_trigger >= 0.1) {
             lift.setPower(-0.75);
-            target = 5;
+            target = 15;
             direction = false;
 
         } else if (gamepad1.right_trigger >= 0.1) {
@@ -92,14 +90,16 @@ public class Testbed extends OpMode {
                 }
             } else {
                 if (lift.getCurrentPosition() <= target) {
-                    lift.setPower(0.4);
+                    if (target == 15) {
+                        lift.setPower(0);
+                    } else {
+                        lift.setPower(0.4);
+                    }
                     target = 0;
                     direction = true;
                 }
             }
         }
-
-
 
         if (gamepad1.left_bumper) {
             extendo.setPower(speed);

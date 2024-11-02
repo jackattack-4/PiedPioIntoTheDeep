@@ -20,7 +20,7 @@ public abstract class Robot {
 
         // Register the subsystem. System will not work if it's not registered
         subSystems.add(new Drive(config));
-        subSystems.add(new Outtake(config));
+        //subSystems.add(new Outtake(config));
         subSystems.add(new Intake(config));
         //subSystems.add(new Hang(config, isOneController));
 
