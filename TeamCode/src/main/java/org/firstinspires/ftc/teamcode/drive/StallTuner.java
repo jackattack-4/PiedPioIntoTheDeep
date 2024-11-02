@@ -23,14 +23,18 @@ public class StallTuner extends OpMode {
     @Override
     public void loop() {
         if (gamepad1.a) {
-            lift.setPower(1);
-            running = true;
+            lift.setPower(0.2);
         }
 
-        if (running) {
-            if (lift.getCurrentPosition() >= 1100) {
-                lift.setPower(0.4);
-            }
+        if (gamepad1.b) {
+            lift.setPower(0.4);
+        }
+        if (gamepad1.x) {
+            lift.setPower(0.1);
+        }
+
+        if (gamepad1.y) {
+            lift.setPower(0.3);
         }
 
         telemetry.addData("Power", power);

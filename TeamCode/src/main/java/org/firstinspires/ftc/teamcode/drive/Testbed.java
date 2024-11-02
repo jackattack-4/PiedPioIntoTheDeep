@@ -20,8 +20,6 @@ public class Testbed extends OpMode {
     private DcMotor rightBackDrive = null;
     public Servo bucket, out;
 
-    public LimitSwitch switchA = null;
-
     public int target = 0;
     public boolean direction = true;
 
@@ -55,15 +53,12 @@ public class Testbed extends OpMode {
         bucket = hardwareMap.get(Servo.class, "bucket");
         out = hardwareMap.get(Servo.class, "out");
 
-        switchA = new LimitSwitch(hardwareMap.get(DigitalChannel.class, "a"));
-
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         extendo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         extendo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        extendo.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         out.setPosition(0);
     }
@@ -73,19 +68,19 @@ public class Testbed extends OpMode {
         double pos = bucket.getPosition();
 
         if (gamepad1.left_trigger >= 0.1) {
-            lift.setPower(-0.75);
+            lift.setPower(-1);
             target = 15;
             direction = false;
 
         } else if (gamepad1.right_trigger >= 0.1) {
-            lift.setPower(0.75);
-            target = 1200;
+            lift.setPower(1);
+            target = 3200;
         }
 
         if (target != 0) {
             if (direction) {
                 if (lift.getCurrentPosition() >= target) {
-                    lift.setPower(0.4);
+                    lift.setPower(0.2);
                     target = 0;
                 }
             } else {
@@ -93,7 +88,7 @@ public class Testbed extends OpMode {
                     if (target == 15) {
                         lift.setPower(0);
                     } else {
-                        lift.setPower(0.4);
+                        lift.setPower(0.2);
                     }
                     target = 0;
                     direction = true;
@@ -102,9 +97,13 @@ public class Testbed extends OpMode {
         }
 
         if (gamepad1.left_bumper) {
-            extendo.setPower(speed);
+            extendo.setPower(1);
+
+            if (extendo.getCurrentPosition() <= 50 && Math.round(bucket.getPosition()*10) != 2) {
+                bucket.setPosition(0.2);
+            }
         } else if (gamepad1.right_bumper) {
-            extendo.setPower(-speed);
+            extendo.setPower(-1);
         } else {
             extendo.setPower(0);
         }
@@ -115,29 +114,26 @@ public class Testbed extends OpMode {
 
         if (gamepad1.b) {
             bucket.setPosition(0);
+            intake.setPower(1);
         }
 
         if (gamepad1.x) {
-            bucket.setPosition(0.18);
+            bucket.setPosition(0.2);
+            intake.setPower(0);
         }
 
         if (gamepad1.y) {
             bucket.setPosition(0.35);
-        }
-
-        if (gamepad1.dpad_up) {
-            intake.setPower(1);
+            intake.setPower(-0.2);
         }
 
         if (gamepad1.dpad_down) {
             intake.setPower(0);
         }
-        if (gamepad1.dpad_left) {
-            intake.setPower(-0.2);
-        }
 
         if (gamepad1.dpad_right) {
             out.setPosition(0.5);
+            intake.setPower(0);
             try {
                 Thread.sleep(1000);
                 out.setPosition(0);
