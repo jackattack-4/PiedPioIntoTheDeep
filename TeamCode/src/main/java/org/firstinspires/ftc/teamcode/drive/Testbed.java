@@ -60,7 +60,7 @@ public class Testbed extends OpMode {
 
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        out.setPosition(0);
+        out.setPosition(0.27);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class Testbed extends OpMode {
 
         } else if (gamepad1.right_trigger >= 0.1) {
             lift.setPower(1);
-            target = 3200;
+            target = 3300;
         }
 
         if (target != 0) {
@@ -113,7 +113,7 @@ public class Testbed extends OpMode {
         }
 
         if (gamepad1.b) {
-            bucket.setPosition(0);
+            bucket.setPosition(0.03);
             intake.setPower(1);
         }
 
@@ -132,11 +132,11 @@ public class Testbed extends OpMode {
         }
 
         if (gamepad1.dpad_right) {
-            out.setPosition(0.5);
+            out.setPosition(0);
             intake.setPower(0);
             try {
                 Thread.sleep(1000);
-                out.setPosition(0);
+                out.setPosition(0.27);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
