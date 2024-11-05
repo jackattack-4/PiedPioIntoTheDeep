@@ -9,6 +9,6 @@ public class AutonomousRobot extends Robot {
 
     @Override
     public void init() {
-        super.init();
+        super.autoInit();
     }
 }

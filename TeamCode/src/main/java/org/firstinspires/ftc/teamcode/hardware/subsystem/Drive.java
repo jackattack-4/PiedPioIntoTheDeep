@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystem;
+package org.firstinspires.ftc.teamcode.hardware.subsystem;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -8,7 +8,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Config;
 
 
-public class Drive extends SubSystem {
+public class Drive implements SubSystem {
+    Config config = null;
+
     private DcMotor leftFrontDrive = null;
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
@@ -17,11 +19,7 @@ public class Drive extends SubSystem {
     private IMU imu = null;
 
     public Drive(Config cfg) {
-        super(cfg);
-    }
-
-    public Drive(Config cfg, boolean isOneController) {
-        super(cfg, isOneController);
+        this.config = config;
     }
 
     public void init() {

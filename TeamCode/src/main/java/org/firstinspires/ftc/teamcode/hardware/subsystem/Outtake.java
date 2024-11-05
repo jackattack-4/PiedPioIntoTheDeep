@@ -1,12 +1,14 @@
-package org.firstinspires.ftc.teamcode.subsystem;
+package org.firstinspires.ftc.teamcode.hardware.subsystem;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.enums.LiftPosition;
-import org.firstinspires.ftc.teamcode.hardware.LimitSwitch;
+import org.firstinspires.ftc.teamcode.hardware.device.LimitSwitch;
 
-public class Outtake extends SubSystem {
+public class Outtake implements SubSystem {
+    Config config = null;
+
     private DcMotor lift;
 
     private LimitSwitch switchA;
@@ -21,13 +23,7 @@ public class Outtake extends SubSystem {
 
     private LiftPosition position;
 
-    public Outtake(Config config) {
-        super(config);
-    }
-
-    public Outtake(Config config, boolean isOneController) {
-        super(config, isOneController);
-    }
+    public Outtake(Config config) {this.config = config;}
 
     @Override
     public void init() {
