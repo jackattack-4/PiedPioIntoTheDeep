@@ -95,9 +95,9 @@ public class Intake implements SubSystem {
 
                     intakeStatus = IntakePosition.INTAKING;
 
-                    return true;
+                    return false;
                 }
-                return false;
+                return true;
             };
         };
     }
@@ -141,9 +141,9 @@ public class Intake implements SubSystem {
 
                     intakeStatus = IntakePosition.RETRACTED;
 
-                    return true;
+                    return false;
                 }
-                return false;
+                return true;
             };
         };
     }

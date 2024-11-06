@@ -68,9 +68,9 @@ public final class MecanumDrive {
         public double trackWidthTicks = 4761.74295140333;
 
         // feedforward parameters (in tick units)
-        public double kS = 2.5020906457446377;
-        public double kV = 0.0002295026479480715;
-        public double kA = 0.00013;
+        public double kS = 0;
+        public double kV = 0;
+        public double kA = 0;
 
         // path profile parameters (in inches)
         public double maxWheelVel = 50;
@@ -240,7 +240,7 @@ public final class MecanumDrive {
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
-        localizer = new TwoDeadWheelLocalizer(hardwareMap, lazyImu.get(), PARAMS.inPerTick);
+        localizer = new ThreeDeadWheelLocalizer(hardwareMap, PARAMS.inPerTick);
 
 
         FlightRecorder.write("MECANUM_PARAMS", PARAMS);

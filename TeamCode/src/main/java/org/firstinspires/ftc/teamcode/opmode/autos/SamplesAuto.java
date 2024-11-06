@@ -27,7 +27,7 @@ public class SamplesAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        startPose = new Pose2d(-50, -50, Math.toRadians(90));
+        startPose = new Pose2d(-30, -61, Math.toRadians(0));
 
         dashboard = FtcDashboard.getInstance();
 
@@ -42,12 +42,25 @@ public class SamplesAuto extends LinearOpMode {
         waitForStart();
 
         Actions.runBlocking(
-                new ParallelAction(
-                        drive.actionBuilder(startPose)
-                            .strafeTo(new Vector2d(-74,-74))
-                            .build(),
-                        robot.outtake.up();
-                        robot.intake.intakeOut()
+                new SequentialAction(
+                        new ParallelAction(
+                                drive.actionBuilder(startPose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build(),
+                                robot.outtake.up()
+                        ),
+                        robot.outtake.dump(),
+                        robot.outtake.down(),
+                        new ParallelAction(
+                                drive.actionBuilder(drive.pose).strafeToLinearHeading(new Vector2d(-24, -32), Math.toRadians(170)).build(),
+                                robot.intake.intakeOut()
+                        ),
+                        robot.intake.intakeInAndDump(),
+                        drive.actionBuilder(drive.pose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build(),
+                        robot.outtake.up(),
+                        robot.outtake.dump(),
+                        new ParallelAction(
+                                robot.outtake.down(),
+                                drive.actionBuilder(drive.pose).strafeToLinearHeading(new Vector2d(-30, -11), Math.toRadians(90)).build()
+                        )
                 )
         );
     }

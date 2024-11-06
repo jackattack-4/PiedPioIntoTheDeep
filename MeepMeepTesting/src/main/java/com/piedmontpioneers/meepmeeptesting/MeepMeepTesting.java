@@ -19,15 +19,15 @@ public class MeepMeepTesting {
                 .setConstraints(100, 100, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
-        redDrive.runAction(redDrive.getDrive().actionBuilder(new Pose2d(-13, -59, Math.toRadians(0)))
-                .strafeToLinearHeading(new Vector2d(-53, -53), Math.toRadians(45))
-                .strafeToLinearHeading(new Vector2d(-57,-47), Math.toRadians(60))
-                .strafeToLinearHeading(new Vector2d(-52, -51), Math.toRadians(45))
-                .splineToLinearHeading(new Pose2d(-40,-37, Math.toRadians(155)),1)
-                .splineToLinearHeading(new Pose2d(-51,-52, Math.toRadians(45)),1)
-                .splineToLinearHeading(new Pose2d(-52,-36, Math.toRadians(155)),1)
-                .splineToLinearHeading(new Pose2d(-51,-52, Math.toRadians(45)),1)
-                .splineToLinearHeading(new Pose2d(-28,-10, Math.toRadians(90)),1)
+        redDrive.runAction(redDrive.getDrive().actionBuilder(new Pose2d(-30, -61, Math.toRadians(0)))
+                .strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45))
+                .waitSeconds(5)
+                .strafeToLinearHeading(new Vector2d(-24, -32), Math.toRadians(170))
+                .waitSeconds(5)
+                .strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45))
+                .waitSeconds(5)
+                .strafeToLinearHeading(new Vector2d(-30, -11), Math.toRadians(90))
+                .waitSeconds(10)
                 .build());
 
 
