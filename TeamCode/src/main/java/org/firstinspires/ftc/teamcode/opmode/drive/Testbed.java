@@ -62,8 +62,6 @@ public class Testbed extends OpMode {
 
     @Override
     public void loop() {
-        double pos = bucket.getPosition();
-
         if (gamepad1.left_trigger >= 0.1) {
             lift.setPower(-1);
             target = 15;
@@ -94,19 +92,11 @@ public class Testbed extends OpMode {
         }
 
         if (gamepad1.left_bumper) {
-            extendo.setPower(1);
-
-            if (extendo.getCurrentPosition() <= 50 && Math.round(bucket.getPosition()*10) != 2) {
-                bucket.setPosition(0.2);
-            }
+            extendo.setPower(2);
         } else if (gamepad1.right_bumper) {
-            extendo.setPower(-1);
+            extendo.setPower(-2);
         } else {
             extendo.setPower(0);
-        }
-
-        if (gamepad1.a) {
-            speed = (speed == 0.5)?1:0.5;
         }
 
         if (gamepad1.b) {

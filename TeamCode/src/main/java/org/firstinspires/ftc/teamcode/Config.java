@@ -37,8 +37,7 @@ public class Config {
     public static final String LEFT_FRONT_DRIVE = "leftFront";
     public static final String LEFT_BACK_DRIVE = "leftBack";
 
-    public static final String LEFT_LIFT_MOTOR = "leftLift";
-    public static final String RIGHT_LIFT_MOTOR = "rightLift";
+    public static final String LEFT_LIFT_MOTOR = "lift";
 
     public static final int ROBOT_WIDTH = 18;
 

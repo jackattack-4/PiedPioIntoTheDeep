@@ -30,10 +30,13 @@ public class Outtake implements SubSystem {
     private final double LIFT_IDLE = 0.2;
 
     private final double OUTTAKE_SERVO_DOWN = 0.27;
-
     private final double OUTTAKE_SERVO_UP = 0;
 
     private LiftPosition position;
+
+    private int target = 0;
+
+    private boolean direction = true;
 
     public Outtake(Config config) {this.config = config;}
 
@@ -47,17 +50,53 @@ public class Outtake implements SubSystem {
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         position = LiftPosition.BOTTOM;
+
+        out.setPosition(OUTTAKE_SERVO_DOWN);
     }
 
     @Override
     public void update() {
 
+        if (config.gamePad1.left_trigger >= 0.1) {
+            lift.setPower(-1);
+            target = 15;
+            direction = false;
 
-        config.telemetry.addData("Lift Position", lift.getCurrentPosition());
-        config.telemetry.addData("Lift Busy?", lift.isBusy());
+        } else if (config.gamePad1.right_trigger >= 0.1) {
+            lift.setPower(1);
+            target = 3300;
+        }
 
+        if (target != 0) {
+            if (direction) {
+                if (lift.getCurrentPosition() >= target) {
+                    lift.setPower(0.2);
+                    target = 0;
+                }
+            } else {
+                if (lift.getCurrentPosition() <= target) {
+                    if (target == 15) {
+                        lift.setPower(0);
+                    } else {
+                        lift.setPower(0.2);
+                    }
+                    target = 0;
+                    direction = true;
+                }
+            }
+        }
+        if (config.gamePad1.dpad_right) {
+            out.setPosition(OUTTAKE_SERVO_UP);
+            try {
+                Thread.sleep(1000);
+                out.setPosition(OUTTAKE_SERVO_DOWN);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public Action up() {
@@ -72,11 +111,13 @@ public class Outtake implements SubSystem {
                     initialized = true;
                 }
 
+                telemetryPacket.put("lift", lift.getCurrentPosition());
+                telemetryPacket.put("liftPower", lift.getPower());
+
                 if (lift.getCurrentPosition() >= LIFT_TOP_BASKET) {
                     lift.setPower(LIFT_IDLE);
 
                     position = LiftPosition.TOP_BASKET;
-
                     return false;
                 }
 
@@ -93,6 +134,7 @@ public class Outtake implements SubSystem {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 if (!initialized) {
+                    out.setPosition(OUTTAKE_SERVO_DOWN);
                     lift.setPower(-1);
 
                     initialized = true;
@@ -118,12 +160,6 @@ public class Outtake implements SubSystem {
                 @Override
                 public void run() {
                     out.setPosition(OUTTAKE_SERVO_UP);
-                    try {
-                        wait(1000);
-                        out.setPosition(OUTTAKE_SERVO_DOWN);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
                 }
             }
             );

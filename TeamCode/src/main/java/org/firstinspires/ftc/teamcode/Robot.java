@@ -32,12 +32,12 @@ public abstract class Robot {
     public void init() {
         drive.init();
         intake.init();
-        outtake.update();
+        outtake.init();
     }
 
     public void autoInit() {
         intake.init();
-        outtake.update();
+        outtake.init();
     }
 
     // Tick each subsystem

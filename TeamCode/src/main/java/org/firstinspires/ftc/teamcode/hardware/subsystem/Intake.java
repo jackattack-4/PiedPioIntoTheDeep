@@ -65,8 +65,32 @@ public class Intake implements SubSystem {
 
     @Override
     public void update() {
-        config.telemetry.addData("Intake Down?", intakeDown);
-        config.telemetry.addData("Extendo Out?", extendoOut);
+        if (config.gamePad1.left_bumper) {
+            extendo.setPower(1);
+        } else if (config.gamePad1.right_bumper) {
+            extendo.setPower(-1);
+        } else {
+            extendo.setPower(0);
+        }
+
+        if (config.gamePad1.b) {
+            bucket.setPosition(0.03);
+            intake.setPower(1);
+        }
+
+        if (config.gamePad1.x) {
+            bucket.setPosition(0.2);
+            intake.setPower(0);
+        }
+
+        if (config.gamePad1.y) {
+            bucket.setPosition(0.35);
+            intake.setPower(-0.2);
+        }
+
+        if (config.gamePad1.dpad_down) {
+            intake.setPower(0);
+        }
     }
 
     public Action intakeOut() {
