@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.enums.CycleTarget;
 import org.firstinspires.ftc.teamcode.enums.GameStage;
 
 @TeleOp(name="TeleOp")
-public class TeleOpMain extends OpMode {
+public class DriveControl extends OpMode {
     ManualRobot robot;
     Config config;
     FtcDashboard dashboard;

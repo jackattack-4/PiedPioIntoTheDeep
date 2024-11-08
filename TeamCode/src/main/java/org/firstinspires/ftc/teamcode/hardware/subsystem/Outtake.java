@@ -11,6 +11,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Config;
 import org.firstinspires.ftc.teamcode.enums.LiftPosition;
+import org.firstinspires.ftc.teamcode.enums.OuttakePosition;
+
+import java.util.Objects;
 
 public class Outtake implements SubSystem {
     Config config = null;
@@ -33,6 +36,7 @@ public class Outtake implements SubSystem {
     private final double OUTTAKE_SERVO_UP = 0;
 
     private LiftPosition position;
+    private OuttakePosition outtakePosition;
 
     private int target = 0;
 
@@ -54,47 +58,50 @@ public class Outtake implements SubSystem {
 
         position = LiftPosition.BOTTOM;
 
+        outtakePosition = OuttakePosition.CLOSED;
+
         out.setPosition(OUTTAKE_SERVO_DOWN);
     }
 
     @Override
     public void update() {
-
-        if (config.gamePad1.left_trigger >= 0.1) {
-            lift.setPower(-1);
-            target = 15;
-            direction = false;
-
-        } else if (config.gamePad1.right_trigger >= 0.1) {
-            lift.setPower(1);
-            target = 3300;
-        }
-
-        if (target != 0) {
-            if (direction) {
-                if (lift.getCurrentPosition() >= target) {
-                    lift.setPower(0.2);
-                    target = 0;
-                }
-            } else {
-                if (lift.getCurrentPosition() <= target) {
-                    if (target == 15) {
-                        lift.setPower(0);
-                    } else {
-                        lift.setPower(0.2);
+        if (config.gamePad1.right_trigger >= 0.1) {
+            switch (position) {
+                case BOTTOM:
+                    lift.setPower(1);
+                    position = LiftPosition.RISING;
+                case RISING:
+                    if (lift.getCurrentPosition() >= LIFT_TOP_BASKET) {
+                        lift.setPower(LIFT_IDLE);
+                        position = LiftPosition.TOP;
                     }
-                    target = 0;
-                    direction = true;
-                }
+                case LOWERING:
+                    lift.setPower(1);
+                    position = LiftPosition.RISING;
+            }
+        } else {
+            switch (position) {
+                case TOP:
+                    lift.setPower(-1);
+                    position = LiftPosition.LOWERING;
+                case LOWERING:
+                    if (lift.getCurrentPosition() <= LIFT_BOTTOM) {
+                        lift.setPower(0);
+                        position = LiftPosition.BOTTOM;
+                    }
+                case RISING:
+                    lift.setPower(-1);
+                    position = LiftPosition.LOWERING;
             }
         }
-        if (config.gamePad1.dpad_right) {
-            out.setPosition(OUTTAKE_SERVO_UP);
-            try {
-                Thread.sleep(1000);
+
+        if (config.gamePad2.right_trigger >= 0.1) {
+            if (Objects.requireNonNull(outtakePosition) == OuttakePosition.CLOSED) {
+                out.setPosition(OUTTAKE_SERVO_UP);
+            }
+        } else {
+            if (Objects.requireNonNull(outtakePosition) == OuttakePosition.OPEN) {
                 out.setPosition(OUTTAKE_SERVO_DOWN);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
             }
         }
     }
@@ -117,7 +124,7 @@ public class Outtake implements SubSystem {
                 if (lift.getCurrentPosition() >= LIFT_TOP_BASKET) {
                     lift.setPower(LIFT_IDLE);
 
-                    position = LiftPosition.TOP_BASKET;
+                    position = LiftPosition.TOP;
                     return false;
                 }
 
