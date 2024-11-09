@@ -65,7 +65,7 @@ public class Outtake implements SubSystem {
 
     @Override
     public void update() {
-        if (config.gamePad1.right_trigger >= 0.1) {
+        if (config.gamePad2.right_trigger >= 0.1) {
             switch (position) {
                 case BOTTOM:
                     lift.setPower(1);
