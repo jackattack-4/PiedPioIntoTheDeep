@@ -65,24 +65,37 @@ public class Intake implements SubSystem {
 
     @Override
     public void update() {
-        extendo.setPower(config.gamePad2.left_stick_y);
 
-        if (config.gamePad2.right_stick_y <= -0.25) {
-            bucket.setPosition(BUCKET_DOWN);
-            intake.setPower(INTAKE_POWER_OFF);
+        if (config.gamePad2.right_bumper && !(extendo.getCurrentPosition() >= 2100)) {
+            extendo.setPower(1);
+        } else if (config.gamePad2.left_bumper && !(extendo.getCurrentPosition() <= 50)) {
+            extendo.setPower(-1);
+        } else {
+            extendo.setPower(0);
+        }
+        if (config.gamePad2.b) {
+            bucket.setPosition(0.25);
+            intake.setPower(0);
+
+            extendo.setPower(-1);
         }
 
-        if (config.gamePad2.right_stick_y <= 0.2 && config.gamePad2.right_stick_y >= -0.2) {
+        if (config.gamePad2.a) {
+            bucket.setPosition(BUCKET_DOWN);
+            intake.setPower(INTAKE_POWER_ON);
+        }
+
+        if (config.gamePad2.x) {
             bucket.setPosition(BUCKET_UP);
             intake.setPower(INTAKE_POWER_OFF);
         }
 
-        if (config.gamePad2.right_stick_y >= 0.25) {
+        if (config.gamePad2.y) {
             bucket.setPosition(BUCKET_DUMP);
             intake.setPower(INTAKE_POWER_DUMP);
         }
 
-        if (config.gamePad2.right_stick_button) {
+        if (config.gamePad2.dpad_up) {
             intake.setPower(-1);
         }
     }

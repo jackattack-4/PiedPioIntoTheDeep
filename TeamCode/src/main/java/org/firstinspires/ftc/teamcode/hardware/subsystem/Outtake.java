@@ -22,11 +22,10 @@ public class Outtake implements SubSystem {
 
     private Servo out;
 
-    private final int LIFT_TOP_BASKET = 4400;
+    private final int LIFT_TOP_BASKET = 4650;
     private final int LIFT_BOTTOM_BASKET = 2400;
 
     private final int LIFT_TOP_BAR = 700;
-    private final int LIFT_BOTTOM_BAR = 300;
 
     private final int LIFT_BOTTOM = 20;
 
@@ -37,10 +36,6 @@ public class Outtake implements SubSystem {
 
     private LiftPosition position;
     private OuttakePosition outtakePosition;
-
-    private int target = 0;
-
-    private boolean direction = true;
 
     public Outtake(Config config) {this.config = config;}
 
@@ -66,6 +61,7 @@ public class Outtake implements SubSystem {
     @Override
     public void update() {
         if (config.gamePad2.right_trigger >= 0.1) {
+            out.setPosition(OUTTAKE_SERVO_DOWN);
             switch (position) {
                 case BOTTOM:
                     lift.setPower(1);
@@ -79,7 +75,8 @@ public class Outtake implements SubSystem {
                     lift.setPower(1);
                     position = LiftPosition.RISING;
             }
-        } else {
+        } else if (config.gamePad2.left_trigger >= 0.1) {
+            out.setPosition(OUTTAKE_SERVO_DOWN);
             switch (position) {
                 case TOP:
                     lift.setPower(-1);
@@ -95,15 +92,13 @@ public class Outtake implements SubSystem {
             }
         }
 
-        if (config.gamePad2.right_trigger >= 0.1) {
-            if (Objects.requireNonNull(outtakePosition) == OuttakePosition.CLOSED) {
-                out.setPosition(OUTTAKE_SERVO_UP);
-            }
-        } else {
-            if (Objects.requireNonNull(outtakePosition) == OuttakePosition.OPEN) {
-                out.setPosition(OUTTAKE_SERVO_DOWN);
-            }
+        if (config.gamePad2.dpad_right) {
+            out.setPosition(OUTTAKE_SERVO_UP);
         }
+
+        config.telemetry.addData("Lift Position", lift.getCurrentPosition());
+        config.telemetry.addData("Lift Power", lift.getPower());
+        config.telemetry.addData("Outtake Position", out.getPosition());
     }
 
     public Action up() {
