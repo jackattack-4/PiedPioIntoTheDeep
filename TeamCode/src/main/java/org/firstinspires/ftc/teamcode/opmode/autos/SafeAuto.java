@@ -49,10 +49,11 @@ public class SafeAuto extends LinearOpMode {
                         robot.outtake.up(),
                         drive.actionBuilder(startPose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build(),
                         robot.outtake.dump(),
-                        new SleepAction(1),
+                        new SleepAction(2),
+                        drive.actionBuilder(drive.pose).fresh().strafeTo(new Vector2d(-50,-50)).build(),
                         new ParallelAction(
                                 robot.outtake.down(),
-                                drive.actionBuilder(drive.pose).fresh().strafeToLinearHeading(new Vector2d(-35, -11), Math.toRadians(90)).build()
+                                drive.actionBuilder(drive.pose).fresh().waitSeconds(5).strafeToLinearHeading(new Vector2d(-45, -45), Math.toRadians(90)).build()
                         )
                 )
         );

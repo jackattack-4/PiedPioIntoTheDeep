@@ -23,6 +23,7 @@ public class Testbed extends OpMode {
     public Servo bucket, out;
 
     public int target = 0;
+    public int eTarget = 0;
     public boolean direction = true;
 
     public IMU imu;
@@ -66,6 +67,9 @@ public class Testbed extends OpMode {
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         out.setPosition(0.27);
+
+        bucket.setPosition(0.25);
+        intake.setPower(0);
     }
 
     @Override
@@ -78,7 +82,7 @@ public class Testbed extends OpMode {
 
         } else if (gamepad2.right_trigger >= 0.1) {
             lift.setPower(1);
-            target = 4400;
+            target = 4650;
             intake.setPower(0);
         }
 
@@ -100,20 +104,31 @@ public class Testbed extends OpMode {
                 }
             }
         }
-
-        if (gamepad2.right_bumper && !(extendo.getCurrentPosition() >= 2000)) {
-            extendo.setPower(1);
-            if (extendo.getCurrentPosition() <= 1000) {
-                bucket.setPosition(0.25);
-                intake.setPower(0);
+        if (eTarget != 0) {
+            if (extendo.getCurrentPosition() <= eTarget) {
+                lift.setPower(0);
+                eTarget = 0;
             }
-        } else if (gamepad2.left_bumper && !(extendo.getCurrentPosition() <= 120)) {
+        }
+
+        if (gamepad2.right_bumper && !(extendo.getCurrentPosition() >= 2100)) {
+            extendo.setPower(1);
+        } else if (gamepad2.left_bumper && !(extendo.getCurrentPosition() <= 50)) {
             extendo.setPower(-1);
         } else {
             extendo.setPower(0);
         }
 
         if (gamepad2.b) {
+            bucket.setPosition(0.25);
+            intake.setPower(0);
+
+            extendo.setPower(-1);
+            eTarget = 20;
+        }
+
+
+        if (gamepad2.a) {
             bucket.setPosition(0.02);
             intake.setPower(1);
         }
@@ -124,7 +139,7 @@ public class Testbed extends OpMode {
         }
 
         if (gamepad2.y) {
-            bucket.setPosition(0.40);
+            bucket.setPosition(0.37);
             intake.setPower(-0.2);
         }
 
