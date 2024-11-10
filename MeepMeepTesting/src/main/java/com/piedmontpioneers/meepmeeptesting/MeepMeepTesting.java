@@ -22,12 +22,17 @@ public class MeepMeepTesting {
         redDrive.runAction(redDrive.getDrive().actionBuilder(new Pose2d(-30, -61, Math.toRadians(0)))
                 .strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45))
                 .waitSeconds(5)
-                .strafeToLinearHeading(new Vector2d(-24, -32), Math.toRadians(170))
+                .strafeToLinearHeading(new Vector2d(-24, -37), Math.toRadians(160))
+                .strafeTo(new Vector2d(-28, -34))
                 .waitSeconds(5)
                 .strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45))
                 .waitSeconds(5)
-                .strafeToLinearHeading(new Vector2d(-30, -11), Math.toRadians(90))
-                .waitSeconds(10)
+                .strafeToLinearHeading(new Vector2d(-36, -28), Math.toRadians(160))
+                .strafeTo(new Vector2d(-40, -28))
+                .waitSeconds(5)
+                .strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45))
+                .waitSeconds(5)
+                .strafeToLinearHeading(new Vector2d(-35, -11), Math.toRadians(90))
                 .build());
 
 

@@ -52,7 +52,7 @@ public class SafeAuto extends LinearOpMode {
                         new SleepAction(1),
                         new ParallelAction(
                                 robot.outtake.down(),
-                                drive.actionBuilder(drive.pose).fresh().strafeToLinearHeading(new Vector2d(-45, -10), Math.toRadians(90)).build()
+                                drive.actionBuilder(drive.pose).fresh().strafeToLinearHeading(new Vector2d(-35, -11), Math.toRadians(90)).build()
                         )
                 )
         );

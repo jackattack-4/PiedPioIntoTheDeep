@@ -35,7 +35,7 @@ public final class TuningOpModes {
     public static final Class<?> DRIVE_CLASS = MecanumDrive.class;
 
     public static final String GROUP = "tuning";
-    public static final boolean DISABLED = false; //TODO enable if needed
+    public static final boolean DISABLED = true; //TODO enable if needed
 
     private TuningOpModes() {}
 

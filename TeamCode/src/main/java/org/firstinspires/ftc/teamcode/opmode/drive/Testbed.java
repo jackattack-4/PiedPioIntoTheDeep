@@ -2,12 +2,17 @@ package org.firstinspires.ftc.teamcode.opmode.drive;
 
 import static java.lang.Thread.sleep;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name="Testbed", group="Tuning")
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
+@TeleOp(name="TeleOp", group="Tuning")
 public class Testbed extends OpMode {
     public DcMotor lift, extendo, intake;
 
@@ -20,22 +25,24 @@ public class Testbed extends OpMode {
     public int target = 0;
     public boolean direction = true;
 
+    public IMU imu;
+
     public double speed = 0.5;
     @Override
     public void init() {
         // Initialize the hardware variables. Note that the strings used here must correspond
         // to the names assigned during the robot configuration step on the DS or RC devices.
-        leftFrontDrive = hardwareMap.get(DcMotor.class, "leftFront");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFront");
-        leftBackDrive = hardwareMap.get(DcMotor.class, "leftBack");
-        rightBackDrive = hardwareMap.get(DcMotor.class, "rightBack");
 
+        leftFrontDrive = hardwareMap.get(DcMotor.class, "rightBack");
+        rightFrontDrive = hardwareMap.get(DcMotor.class, "leftBack");
+        leftBackDrive = hardwareMap.get(DcMotor.class, "leftFront");
+        rightBackDrive = hardwareMap.get(DcMotor.class, "rightFront");
         // Most robots need the motors on one side to be reversed to drive forward.
         // When you first test your robot, push the left joystick forward
         // and flip the direction ( FORWARD <-> REVERSE ) of any wheel that runs backwards
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE); // DO NOT CHANGE
-        leftBackDrive.setDirection(DcMotor.Direction.REVERSE); // DO NOT CHANGE
-        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD); // DO NOT CHANGE
+        leftBackDrive.setDirection(DcMotor.Direction.FORWARD); // DO NOT CHANGE
+        rightFrontDrive.setDirection(DcMotor.Direction.REVERSE); // DO NOT CHANGE
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD); // DO NOT CHANGE
 
         leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // DO NOT CHANGE
@@ -54,6 +61,7 @@ public class Testbed extends OpMode {
         extendo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         extendo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        extendo.setDirection(DcMotorSimple.Direction.REVERSE);
 
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -62,14 +70,16 @@ public class Testbed extends OpMode {
 
     @Override
     public void loop() {
-        if (gamepad1.left_trigger >= 0.1) {
+        if (gamepad2.left_trigger >= 0.1) {
             lift.setPower(-1);
             target = 15;
             direction = false;
+            intake.setPower(0);
 
-        } else if (gamepad1.right_trigger >= 0.1) {
+        } else if (gamepad2.right_trigger >= 0.1) {
             lift.setPower(1);
-            target = 3300;
+            target = 4400;
+            intake.setPower(0);
         }
 
         if (target != 0) {
@@ -91,34 +101,38 @@ public class Testbed extends OpMode {
             }
         }
 
-        if (gamepad1.left_bumper) {
-            extendo.setPower(2);
-        } else if (gamepad1.right_bumper) {
-            extendo.setPower(-2);
+        if (gamepad2.right_bumper && !(extendo.getCurrentPosition() >= 2000)) {
+            extendo.setPower(1);
+            if (extendo.getCurrentPosition() <= 1000) {
+                bucket.setPosition(0.25);
+                intake.setPower(0);
+            }
+        } else if (gamepad2.left_bumper && !(extendo.getCurrentPosition() <= 120)) {
+            extendo.setPower(-1);
         } else {
             extendo.setPower(0);
         }
 
-        if (gamepad1.b) {
-            bucket.setPosition(0.03);
+        if (gamepad2.b) {
+            bucket.setPosition(0.02);
             intake.setPower(1);
         }
 
-        if (gamepad1.x) {
-            bucket.setPosition(0.2);
+        if (gamepad2.x) {
+            bucket.setPosition(0.25);
             intake.setPower(0);
         }
 
-        if (gamepad1.y) {
-            bucket.setPosition(0.35);
+        if (gamepad2.y) {
+            bucket.setPosition(0.40);
             intake.setPower(-0.2);
         }
 
-        if (gamepad1.dpad_down) {
+        if (gamepad2.dpad_down) {
             intake.setPower(0);
         }
 
-        if (gamepad1.dpad_right) {
+        if (gamepad2.dpad_right) {
             out.setPosition(0);
             intake.setPower(0);
             try {
@@ -128,8 +142,9 @@ public class Testbed extends OpMode {
                 throw new RuntimeException(e);
             }
         }
-        double axial = -gamepad1.left_stick_x;  // Note: pushing stick forward gives negative value
-        double lateral = gamepad1.left_stick_y * 1.1; // 1.1 fixes strafing issues
+        // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
+        double axial = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
+        double lateral = gamepad1.left_stick_x * 1.1; // 1.1 fixes strafing issues
         // MUST BE INVERTED!
         double yaw = -gamepad1.right_stick_x;
         // Take the average of the 2 triggers
@@ -138,9 +153,9 @@ public class Testbed extends OpMode {
         // Combine the joystick requests for each axis-motion to determine each wheel's power.
         // Set up a variable for each drive wheel to save the power level for telemetry.
         double leftFrontPower = (axial + lateral - yaw) * speed; // DO NOT CHANGE
-        double rightFrontPower = (axial - lateral + yaw) * speed; // DO NOT CHANGE
-        double leftBackPower = (axial - lateral - yaw) * speed; // DO NOT CHANGE
-        double rightBackPower = (axial + lateral + yaw) * speed; // DO NOT CHANGE
+        double rightFrontPower = (axial - lateral - yaw) * speed; // DO NOT CHANGE
+        double leftBackPower = (axial + lateral + yaw) * speed; // DO NOT CHANGE
+        double rightBackPower = (axial - lateral + yaw) * speed; // DO NOT CHANGE
 
         // Normalize the values so no wheel power exceeds 100%
         // This ensures that the robot maintains the desired motion.
@@ -171,6 +186,7 @@ public class Testbed extends OpMode {
         telemetry.addData("speed", speed);
         telemetry.addData("power", lift.getPower());
         telemetry.addData("bucket", bucket.getPosition());
+        telemetry.addData("out", out.getPosition());
         telemetry.update();
     }
 }

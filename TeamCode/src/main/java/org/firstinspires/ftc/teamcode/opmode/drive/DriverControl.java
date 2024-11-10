@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmode.drive;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -9,6 +10,7 @@ import org.firstinspires.ftc.teamcode.ManualRobot;
 import org.firstinspires.ftc.teamcode.enums.CycleTarget;
 import org.firstinspires.ftc.teamcode.enums.GameStage;
 
+@Disabled
 @TeleOp(name="TeleOp")
 public class DriverControl extends OpMode {
     ManualRobot robot;

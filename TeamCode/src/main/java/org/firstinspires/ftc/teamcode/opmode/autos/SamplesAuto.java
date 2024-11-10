@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -45,24 +46,21 @@ public class SamplesAuto extends LinearOpMode {
 
         Actions.runBlocking(
                 new SequentialAction(
-                        new ParallelAction(
-                                drive.actionBuilder(startPose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build(),
-                                robot.outtake.up()
-                        ),
+                        robot.outtake.up(),
+                        drive.actionBuilder(startPose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build(),
                         robot.outtake.dump(),
+                        new SleepAction(1),
                         robot.outtake.down(),
                         new ParallelAction(
-                                drive.actionBuilder(drive.pose).strafeToLinearHeading(new Vector2d(-24, -32), Math.toRadians(170)).build(),
-                                robot.intake.intakeOut()
+                                robot.intake.intakeOut(),
+                                drive.actionBuilder(drive.pose).fresh().strafeToLinearHeading(new Vector2d(-45, -10), Math.toRadians(90)).build()
                         ),
                         robot.intake.intakeInAndDump(),
-                        drive.actionBuilder(drive.pose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build(),
                         robot.outtake.up(),
+                        drive.actionBuilder(drive.pose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build(),
                         robot.outtake.dump(),
-                        new ParallelAction(
-                                robot.outtake.down(),
-                                drive.actionBuilder(drive.pose).strafeToLinearHeading(new Vector2d(-30, -11), Math.toRadians(90)).build()
-                        )
+                        robot.outtake.down(),
+                        drive.actionBuilder(drive.pose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build()
                 )
         );
     }

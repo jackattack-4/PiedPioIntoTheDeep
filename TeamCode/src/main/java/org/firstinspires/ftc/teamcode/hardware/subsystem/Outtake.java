@@ -22,7 +22,7 @@ public class Outtake implements SubSystem {
 
     private Servo out;
 
-    private final int LIFT_TOP_BASKET = 3300;
+    private final int LIFT_TOP_BASKET = 4400;
     private final int LIFT_BOTTOM_BASKET = 2400;
 
     private final int LIFT_TOP_BAR = 700;
