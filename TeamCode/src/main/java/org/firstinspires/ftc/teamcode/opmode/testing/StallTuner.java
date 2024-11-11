@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.drive;
+package org.firstinspires.ftc.teamcode.opmode.testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 @Disabled
-@TeleOp(name="StallTuner", group = "tuner")
+@TeleOp(name="StallTuner", group="Testing")
 public class StallTuner extends OpMode {
     DcMotor lift;
 

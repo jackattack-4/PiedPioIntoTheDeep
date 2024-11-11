@@ -16,8 +16,8 @@ import org.firstinspires.ftc.teamcode.enums.CycleTarget;
 import org.firstinspires.ftc.teamcode.enums.GameStage;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
-@Autonomous(name="Safe Auto / 1+0 ", group="Autos")
-public class SafeAuto extends LinearOpMode {
+@Autonomous(name="Safe Specimen Auto / 0+1 Auto", group="Autos")
+public class SafeSpecimenAuto extends LinearOpMode {
     Config config;
 
     AutonomousRobot robot;
@@ -49,12 +49,18 @@ public class SafeAuto extends LinearOpMode {
                         robot.outtake.up(),
                         drive.actionBuilder(startPose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build(),
                         robot.outtake.dump(),
-                        new SleepAction(2),
-                        drive.actionBuilder(drive.pose).fresh().strafeTo(new Vector2d(-50,-50)).build(),
+                        new SleepAction(1),
+                        robot.outtake.down(),
                         new ParallelAction(
-                                robot.outtake.down(),
-                                drive.actionBuilder(drive.pose).fresh().waitSeconds(5).strafeToLinearHeading(new Vector2d(-45, -45), Math.toRadians(90)).build()
-                        )
+                                robot.intake.intakeOut(),
+                                drive.actionBuilder(drive.pose).fresh().strafeToLinearHeading(new Vector2d(-45, -10), Math.toRadians(90)).build()
+                        ),
+                        robot.intake.intakeInAndDump(),
+                        robot.outtake.up(),
+                        drive.actionBuilder(drive.pose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build(),
+                        robot.outtake.dump(),
+                        robot.outtake.down(),
+                        drive.actionBuilder(drive.pose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build()
                 )
         );
     }

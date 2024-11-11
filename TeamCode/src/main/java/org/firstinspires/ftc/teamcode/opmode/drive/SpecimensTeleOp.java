@@ -11,8 +11,8 @@ import org.firstinspires.ftc.teamcode.enums.CycleTarget;
 import org.firstinspires.ftc.teamcode.enums.GameStage;
 
 @Disabled
-@TeleOp(name="TeleOp")
-public class DriverControl extends OpMode {
+@TeleOp(name="Specimens TeleOp", group="TeleOp")
+public class SpecimensTeleOp extends OpMode {
     ManualRobot robot;
     Config config;
     FtcDashboard dashboard;
@@ -21,9 +21,9 @@ public class DriverControl extends OpMode {
     public void init() {
         dashboard = FtcDashboard.getInstance();
 
-        config = new Config(telemetry, dashboard, hardwareMap, gamepad1, gamepad2, GameStage.TeleOp, CycleTarget.SAMPLE);
+        config = new Config(telemetry, dashboard, hardwareMap, gamepad1, gamepad2, GameStage.TeleOp, CycleTarget.SPECIMEN);
         robot = new ManualRobot(config);
-        
+
         robot.init();
     }
 

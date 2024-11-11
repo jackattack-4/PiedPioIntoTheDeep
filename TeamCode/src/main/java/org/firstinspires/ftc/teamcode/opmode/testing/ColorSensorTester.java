@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.drive;
+package org.firstinspires.ftc.teamcode.opmode.testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
 @Disabled
-@TeleOp(name="ColorSensorTester", group="Tuning")
+@TeleOp(name="ColorSensorTester", group="Testing")
 public class ColorSensorTester extends OpMode {
     public ColorSensor sensor;
 

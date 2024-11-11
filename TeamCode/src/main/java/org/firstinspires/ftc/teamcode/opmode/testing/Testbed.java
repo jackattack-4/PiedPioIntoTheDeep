@@ -1,8 +1,7 @@
-package org.firstinspires.ftc.teamcode.opmode.drive;
+package org.firstinspires.ftc.teamcode.opmode.testing;
 
 import static java.lang.Thread.sleep;
 
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,9 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-
-@TeleOp(name="TeleOp", group="Tuning")
+@TeleOp(name="TestTeleOp", group="Testing")
 public class Testbed extends OpMode {
     public DcMotor lift, extendo, intake;
 
