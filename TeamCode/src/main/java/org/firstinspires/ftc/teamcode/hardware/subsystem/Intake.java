@@ -8,12 +8,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.Config;
-import org.firstinspires.ftc.teamcode.Globals;
-import org.firstinspires.ftc.teamcode.ManualRobot;
+import org.firstinspires.ftc.teamcode.hardware.robot.Config;
+import org.firstinspires.ftc.teamcode.hardware.Globals;
 import org.firstinspires.ftc.teamcode.enums.IntakePosition;
-
-import java.util.jar.Manifest;
 
 public class Intake implements SubSystem {
     Config config = null;
@@ -49,37 +46,37 @@ public class Intake implements SubSystem {
     @Override
     public void update() {
 
-        if (config.gamePad2.right_bumper && !(extendo.getCurrentPosition() >= 2100)) {
+        if (config.gamepad2.right_bumper && !(extendo.getCurrentPosition() >= 2100)) {
             extendo.setPower(1);
-        } else if (config.gamePad2.left_bumper && !(extendo.getCurrentPosition() <= 50)) {
+        } else if (config.gamepad2.left_bumper && !(extendo.getCurrentPosition() <= 50)) {
             extendo.setPower(-1);
         } else {
             extendo.setPower(0);
         }
 
-        if (config.gamePad2.b) {
+        if (config.gamepad2.b) {
             bucket.setPosition(0.25);
             intake.setPower(0);
 
             extendo.setPower(-1);
         }
 
-        if (config.gamePad2.a) {
+        if (config.gamepad2.a) {
             bucket.setPosition(Globals.Intake.BUCKET_DOWN);
             intake.setPower(Globals.Intake.POWER_ON);
         }
 
-        if (config.gamePad2.x) {
+        if (config.gamepad2.x) {
             bucket.setPosition(Globals.Intake.BUCKET_UP);
             intake.setPower(Globals.Intake.POWER_OFF);
         }
 
-        if (config.gamePad2.y) {
+        if (config.gamepad2.y) {
             bucket.setPosition(Globals.Intake.BUCKET_DUMP);
             intake.setPower(Globals.Intake.POWER_DUMP);
         }
 
-        if (config.gamePad2.dpad_up) {
+        if (config.gamepad2.dpad_up) {
             intake.setPower(-1);
         }
     }

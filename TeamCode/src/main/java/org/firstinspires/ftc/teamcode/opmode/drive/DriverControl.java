@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Config;
-import org.firstinspires.ftc.teamcode.ManualRobot;
+import org.firstinspires.ftc.teamcode.hardware.robot.Config;
+import org.firstinspires.ftc.teamcode.hardware.robot.ManualRobot;
 import org.firstinspires.ftc.teamcode.enums.CycleTarget;
 import org.firstinspires.ftc.teamcode.enums.GameStage;
 

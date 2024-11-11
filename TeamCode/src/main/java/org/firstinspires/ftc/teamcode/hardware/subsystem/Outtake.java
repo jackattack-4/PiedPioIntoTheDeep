@@ -5,16 +5,13 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.InstantAction;
-import com.acmerobotics.roadrunner.InstantFunction;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.Config;
-import org.firstinspires.ftc.teamcode.Globals;
+import org.firstinspires.ftc.teamcode.hardware.robot.Config;
+import org.firstinspires.ftc.teamcode.hardware.Globals;
 import org.firstinspires.ftc.teamcode.enums.LiftPosition;
 import org.firstinspires.ftc.teamcode.enums.OuttakePosition;
-
-import java.util.Objects;
 
 public class Outtake implements SubSystem {
     Config config = null;
@@ -49,7 +46,7 @@ public class Outtake implements SubSystem {
 
     @Override
     public void update() {
-        if (config.gamePad2.right_trigger >= 0.1) {
+        if (config.gamepad2.right_trigger >= 0.1) {
             out.setPosition(Globals.Outtake.OUTTAKE_CLOSE);
             switch (position) {
                 case BOTTOM:
@@ -64,7 +61,7 @@ public class Outtake implements SubSystem {
                     lift.setPower(Globals.Outtake.LIFT_POWER);
                     position = LiftPosition.RISING;
             }
-        } else if (config.gamePad2.left_trigger >= 0.1) {
+        } else if (config.gamepad2.left_trigger >= 0.1) {
             out.setPosition(Globals.Outtake.OUTTAKE_CLOSE);
             switch (position) {
                 case TOP:
@@ -81,7 +78,7 @@ public class Outtake implements SubSystem {
             }
         }
 
-        if (config.gamePad2.dpad_right) {
+        if (config.gamepad2.dpad_right) {
             out.setPosition(Globals.Outtake.OUTTAKE_OPEN);
         }
 

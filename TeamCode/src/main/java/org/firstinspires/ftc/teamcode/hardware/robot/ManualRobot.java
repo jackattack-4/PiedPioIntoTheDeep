@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.hardware.robot;
 
 public class ManualRobot extends Robot {
     Config cfg = null;

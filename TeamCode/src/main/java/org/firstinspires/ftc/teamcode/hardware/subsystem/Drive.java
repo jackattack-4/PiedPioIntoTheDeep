@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode.hardware.subsystem;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.Config;
-import org.firstinspires.ftc.teamcode.Globals;
+import org.firstinspires.ftc.teamcode.hardware.robot.Config;
+import org.firstinspires.ftc.teamcode.hardware.Globals;
 
 
 public class Drive implements SubSystem {
@@ -47,9 +47,9 @@ public class Drive implements SubSystem {
             https://gm0.org/en/latest/docs/software/tutorials/mecanum-drive.html
          */
 
-        double y = -config.gamePad1.left_stick_y; // Remember, Y stick value is reversed
-        double x = config.gamePad1.left_stick_x * 1.1; // Counteract imperfect strafing
-        double rx = config.gamePad1.right_stick_x;
+        double y = -config.gamepad1.left_stick_y; // Remember, Y stick value is reversed
+        double x = config.gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
+        double rx = config.gamepad1.right_stick_x;
 
         // Denominator is the largest motor power (absolute value) or 1
         // This ensures all the powers maintain the same ratio,

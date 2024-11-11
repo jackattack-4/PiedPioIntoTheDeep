@@ -10,8 +10,8 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.AutonomousRobot;
-import org.firstinspires.ftc.teamcode.Config;
+import org.firstinspires.ftc.teamcode.hardware.robot.AutonomousRobot;
+import org.firstinspires.ftc.teamcode.hardware.robot.Config;
 import org.firstinspires.ftc.teamcode.enums.CycleTarget;
 import org.firstinspires.ftc.teamcode.enums.GameStage;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;

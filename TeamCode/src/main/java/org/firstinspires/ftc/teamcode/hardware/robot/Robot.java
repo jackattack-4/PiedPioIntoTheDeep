@@ -1,12 +1,8 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.hardware.robot;
 
 import org.firstinspires.ftc.teamcode.hardware.subsystem.Drive;
 import org.firstinspires.ftc.teamcode.hardware.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.hardware.subsystem.Outtake;
-import org.firstinspires.ftc.teamcode.hardware.subsystem.SubSystem;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public abstract class Robot {
     // Config class to all hardware controls

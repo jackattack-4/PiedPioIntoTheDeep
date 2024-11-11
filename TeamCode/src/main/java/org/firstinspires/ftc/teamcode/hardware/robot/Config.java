@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.hardware.robot;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -19,8 +19,8 @@ public class Config {
 
     public HardwareMap hardwareMap;
 
-    public Gamepad gamePad1;
-    public Gamepad gamePad2;
+    public Gamepad gamepad1;
+    public Gamepad gamepad2;
 
     public FtcDashboard dashboard;
 
@@ -29,17 +29,6 @@ public class Config {
     public Alliance alliance;
 
     public CycleTarget target;
-
-    // Stores the hardwareMap names as constants
-    // Drive system
-    public static final String RIGHT_FRONT_DRIVE = "rightFront";
-    public static final String RIGHT_BACK_DRIVE = "rightBack";
-    public static final String LEFT_FRONT_DRIVE = "leftFront";
-    public static final String LEFT_BACK_DRIVE = "leftBack";
-
-    public static final String LEFT_LIFT_MOTOR = "lift";
-
-    public static final int ROBOT_WIDTH = 18;
 
     // Current game runtime
     private ElapsedTime runtime = new ElapsedTime();
@@ -51,8 +40,8 @@ public class Config {
         this.telemetry = tlm;
         this.hardwareMap = hwm;
         this.dashboard = dsh;
-        this.gamePad1 = gmp1;
-        this.gamePad2 = gmp2;
+        this.gamepad1 = gmp1;
+        this.gamepad2 = gmp2;
         this.target = target;
     }
 
@@ -60,7 +49,7 @@ public class Config {
     public void updateTelemetry() {
         telemetry.addData("Status", "Run Time: " + runtime.toString());
 
-        telemetry.addData("G1: bumper", "L: %b R: %b", gamePad1.left_bumper, gamePad1.right_bumper);
-        telemetry.addData("G1: trigger", "L: %4.2f, R: %4.2f", gamePad1.left_trigger, gamePad1.right_trigger);
+        telemetry.addData("G1: bumper", "L: %b R: %b", gamepad1.left_bumper, gamepad1.right_bumper);
+        telemetry.addData("G1: trigger", "L: %4.2f, R: %4.2f", gamepad1.left_trigger, gamepad1.right_trigger);
     }
 }
