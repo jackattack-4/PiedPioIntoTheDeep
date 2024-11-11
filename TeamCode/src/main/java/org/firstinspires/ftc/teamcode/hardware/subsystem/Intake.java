@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Config;
+import org.firstinspires.ftc.teamcode.Globals;
 import org.firstinspires.ftc.teamcode.ManualRobot;
 import org.firstinspires.ftc.teamcode.enums.IntakePosition;
 
@@ -29,36 +30,18 @@ public class Intake implements SubSystem {
 
     public Intake(Config config) {this.config = config;}
 
-    public final double BUCKET_UP = 0.18;
-    public final double BUCKET_DOWN = 0;
-    public final double BUCKET_DUMP = 0.35;
-
-    public final double EXTENDO_POWER = 1;
-    public final double EXTENDO_OUT = 100;
-    public final double EXTENDO_IN = 10;
-
-    public final double INTAKE_POWER_DUMP = -0.4;
-    public final double INTAKE_POWER_OFF = 0;
-    public final double INTAKE_POWER_ON = 1;
-
-    public boolean extendoOut, intakeDown;
-
     @Override
     public void init() {
-        extendo = config.hardwareMap.get(DcMotor.class, "extendo");
+        extendo = config.hardwareMap.get(DcMotor.class, Globals.Intake.EXTENDO_MOTOR);
 
-        intake = config.hardwareMap.get(DcMotor.class, "intake");
+        intake = config.hardwareMap.get(DcMotor.class, Globals.Intake.INTAKE_MOTOR);
 
-        bucket = config.hardwareMap.get(Servo.class, "bucket");
+        bucket = config.hardwareMap.get(Servo.class, Globals.Intake.INTAKE_SERVO);
 
         //colorSensor = new IntakeColorSensor(config.hardwareMap.get(ColorSensor.class, "colorSensor"));
 
         intake.setDirection(DcMotorSimple.Direction.FORWARD);
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        extendoOut = false;
-
-        intakeDown = false;
 
         intakeStatus = IntakePosition.RETRACTED;
     }
@@ -73,6 +56,7 @@ public class Intake implements SubSystem {
         } else {
             extendo.setPower(0);
         }
+
         if (config.gamePad2.b) {
             bucket.setPosition(0.25);
             intake.setPower(0);
@@ -81,18 +65,18 @@ public class Intake implements SubSystem {
         }
 
         if (config.gamePad2.a) {
-            bucket.setPosition(BUCKET_DOWN);
-            intake.setPower(INTAKE_POWER_ON);
+            bucket.setPosition(Globals.Intake.BUCKET_DOWN);
+            intake.setPower(Globals.Intake.POWER_ON);
         }
 
         if (config.gamePad2.x) {
-            bucket.setPosition(BUCKET_UP);
-            intake.setPower(INTAKE_POWER_OFF);
+            bucket.setPosition(Globals.Intake.BUCKET_UP);
+            intake.setPower(Globals.Intake.POWER_OFF);
         }
 
         if (config.gamePad2.y) {
-            bucket.setPosition(BUCKET_DUMP);
-            intake.setPower(INTAKE_POWER_DUMP);
+            bucket.setPosition(Globals.Intake.BUCKET_DUMP);
+            intake.setPower(Globals.Intake.POWER_DUMP);
         }
 
         if (config.gamePad2.dpad_up) {
@@ -111,7 +95,7 @@ public class Intake implements SubSystem {
                 }
 
                 if (!initialized) {
-                    extendo.setPower(EXTENDO_POWER);
+                    extendo.setPower(Globals.Intake.EXTENDO_POWER);
                     intakeStatus = IntakePosition.EXTENDING;
 
                     initialized = true;
@@ -119,10 +103,10 @@ public class Intake implements SubSystem {
 
                 packet.put("STATUS", "EXTENDING");
 
-                if (extendo.getCurrentPosition() >= EXTENDO_OUT) {
+                if (extendo.getCurrentPosition() >= Globals.Intake.EXTENDO_OUT) {
                     extendo.setPower(0);
-                    bucket.setPosition(BUCKET_DOWN);
-                    intake.setPower(INTAKE_POWER_ON);
+                    bucket.setPosition(Globals.Intake.BUCKET_DOWN);
+                    intake.setPower(Globals.Intake.POWER_ON);
 
                     intakeStatus = IntakePosition.INTAKING;
 
@@ -144,10 +128,10 @@ public class Intake implements SubSystem {
                 }
 
                 if (!initialized) {
-                    bucket.setPosition(BUCKET_UP);
-                    intake.setPower(INTAKE_POWER_OFF);
+                    bucket.setPosition(Globals.Intake.BUCKET_UP);
+                    intake.setPower(Globals.Intake.POWER_OFF);
 
-                    extendo.setPower(-EXTENDO_POWER);
+                    extendo.setPower(-Globals.Intake.EXTENDO_POWER);
                     intakeStatus = IntakePosition.RETRACTING;
 
                     initialized = true;
@@ -155,11 +139,11 @@ public class Intake implements SubSystem {
 
                 packet.put("STATUS", "RETRACTING");
 
-                if (extendo.getCurrentPosition() <= EXTENDO_IN) {
+                if (extendo.getCurrentPosition() <= Globals.Intake.EXTENDO_IN) {
                     extendo.setPower(0);
 
-                    bucket.setPosition(BUCKET_DUMP);
-                    intake.setPower(INTAKE_POWER_DUMP);
+                    bucket.setPosition(Globals.Intake.BUCKET_DUMP);
+                    intake.setPower(Globals.Intake.POWER_DUMP);
 
                     try {
                         wait(2000);
@@ -167,8 +151,8 @@ public class Intake implements SubSystem {
                         throw new RuntimeException(e);
                     }
 
-                    bucket.setPosition(BUCKET_UP);
-                    intake.setPower(INTAKE_POWER_OFF);
+                    bucket.setPosition(Globals.Intake.BUCKET_UP);
+                    intake.setPower(Globals.Intake.POWER_OFF);
 
                     intakeStatus = IntakePosition.RETRACTED;
 
