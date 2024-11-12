@@ -76,8 +76,8 @@ public class Intake implements SubSystem {
             intake.setPower(Globals.Intake.POWER_DUMP);
         }
 
-        if (config.gamepad2.dpad_up) {
-            intake.setPower(-1);
+        if (config.gamepad2.dpad_left) {
+            intake.setPower(Globals.Intake.POWER_PURGE);
         }
     }
 
@@ -87,10 +87,6 @@ public class Intake implements SubSystem {
 
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                if (intakeStatus == IntakePosition.INTAKING) {
-                    return true;
-                }
-
                 if (!initialized) {
                     extendo.setPower(Globals.Intake.EXTENDO_POWER);
                     intakeStatus = IntakePosition.EXTENDING;

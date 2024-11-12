@@ -24,6 +24,7 @@ public class Globals {
         public static final double POWER_DUMP = -0.4;
         public static final double POWER_OFF = 0;
         public static final double POWER_ON = 1;
+        public static final double POWER_PURGE = -1;
     }
 
     public static class Outtake {
@@ -34,6 +35,7 @@ public class Globals {
         public static final int LIFT_BOTTOM_BASKET = 2400;
 
         public static final int LIFT_TOP_BAR = 700;
+        public static final int LIFT_TOP_BAR_ATTACH = 680;
 
         public static final int LIFT_BOTTOM = 20;
 

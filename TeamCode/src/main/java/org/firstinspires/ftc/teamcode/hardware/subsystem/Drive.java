@@ -41,12 +41,6 @@ public class Drive implements SubSystem {
     }
 
     public void update() {
-        /*
-            Stolen from GM0 in the dead of the night.
-
-            https://gm0.org/en/latest/docs/software/tutorials/mecanum-drive.html
-         */
-
         double y = -config.gamepad1.left_stick_y; // Remember, Y stick value is reversed
         double x = config.gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
         double rx = config.gamepad1.right_stick_x;
