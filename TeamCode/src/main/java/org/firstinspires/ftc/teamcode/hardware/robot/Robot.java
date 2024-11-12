@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.hardware.robot;
 
+import org.firstinspires.ftc.teamcode.enums.GameStage;
 import org.firstinspires.ftc.teamcode.hardware.subsystem.Drive;
 import org.firstinspires.ftc.teamcode.hardware.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.hardware.subsystem.Outtake;
@@ -26,12 +27,10 @@ public abstract class Robot {
 
     // Initialize each subsystem
     public void init() {
-        drive.init();
-        intake.init();
-        outtake.init();
-    }
+        if (config.stage != GameStage.Autonomous) {
+            drive.init();
+        }
 
-    public void autoInit() {
         intake.init();
         outtake.init();
     }

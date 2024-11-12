@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.hardware.robot;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -10,6 +11,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.enums.Alliance;
 import org.firstinspires.ftc.teamcode.enums.CycleTarget;
 import org.firstinspires.ftc.teamcode.enums.GameStage;
+
+import java.util.List;
 
 // Config stores everything any of our SubSystems need to function, stores GamePads, Telemetry, HardwareMap,
 // and names of each motor
@@ -36,13 +39,22 @@ public class Config {
     public double robotX, robotY, robotHeading;
 
     // Constructor
-    public Config(Telemetry tlm, FtcDashboard dsh, HardwareMap hwm, Gamepad gmp1, Gamepad gmp2, GameStage stage, CycleTarget target) {
+    public Config(Telemetry tlm, FtcDashboard dsh, HardwareMap hwm, Gamepad gmp1, Gamepad gmp2, GameStage stage, CycleTarget target, Alliance alliance) {
         this.telemetry = tlm;
         this.hardwareMap = hwm;
         this.dashboard = dsh;
         this.gamepad1 = gmp1;
         this.gamepad2 = gmp2;
+        this.stage = stage;
+        this.alliance = alliance;
         this.target = target;
+
+        // Sets up bulk caching. Instead of reading a sensor value multiple times, assign it to a variable and use that to prevent more bulk reads
+        List<LynxModule> allHubs = hardwareMap.getAll(LynxModule.class);
+
+        for (LynxModule hub : allHubs) {
+            hub.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
+        }
     }
 
     // Telemetry is similar to logging. Appears in Driver Station

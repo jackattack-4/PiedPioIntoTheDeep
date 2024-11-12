@@ -10,6 +10,7 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.enums.Alliance;
 import org.firstinspires.ftc.teamcode.hardware.robot.AutonomousRobot;
 import org.firstinspires.ftc.teamcode.hardware.robot.Config;
 import org.firstinspires.ftc.teamcode.enums.CycleTarget;
@@ -34,7 +35,7 @@ public class SpecimenAuto extends LinearOpMode {
 
         dashboard = FtcDashboard.getInstance();
 
-        config = new Config(telemetry, dashboard, hardwareMap, gamepad1, gamepad2, GameStage.Autonomous, CycleTarget.SAMPLE);
+        config = new Config(telemetry, dashboard, hardwareMap, gamepad1, gamepad2, GameStage.Autonomous, CycleTarget.SAMPLE, Alliance.RED);
 
         robot = new AutonomousRobot(config);
 
