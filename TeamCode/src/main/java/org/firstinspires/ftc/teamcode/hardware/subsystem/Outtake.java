@@ -6,8 +6,10 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.InstantAction;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.hardware.device.LimitSwitch;
 import org.firstinspires.ftc.teamcode.hardware.robot.Config;
 import org.firstinspires.ftc.teamcode.hardware.Globals;
 import org.firstinspires.ftc.teamcode.enums.LiftPosition;
@@ -19,16 +21,22 @@ public class Outtake implements SubSystem {
     private DcMotor lift;
 
     private Servo out;
+    private Servo claw;
 
-    private LiftPosition position;
-    private OuttakePosition outtakePosition;
+    //private LimitSwitch liftSwitch;
+
+    public LiftPosition position;
 
     public Outtake(Config config) {this.config = config;}
 
     @Override
     public void init() {
         lift = config.hardwareMap.get(DcMotor.class, Globals.Outtake.LIFT_MOTOR);
+
         out = config.hardwareMap.get(Servo.class, Globals.Outtake.OUTTAKE_SERVO);
+        claw = config.hardwareMap.get(Servo.class, Globals.Outtake.CLAW_SERVO);
+
+        //liftSwitch = new LimitSwitch(config.hardwareMap.get(DigitalChannel.class, "lift"));
 
         lift.setDirection(DcMotor.Direction.FORWARD);
 
@@ -38,14 +46,21 @@ public class Outtake implements SubSystem {
         lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         position = LiftPosition.BOTTOM;
+    }
 
-        outtakePosition = OuttakePosition.CLOSED;
-
+    @Override
+    public void start() {
         out.setPosition(Globals.Outtake.OUTTAKE_CLOSE);
+        claw.setPosition(Globals.Outtake.CLAW_CLOSE);
     }
 
     @Override
     public void update() {
+        /*if (liftSwitch.pressed()) {
+            lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }*/
+
         if (config.gamepad2.right_trigger >= 0.1) {
             out.setPosition(Globals.Outtake.OUTTAKE_CLOSE);
             switch (position) {
@@ -85,6 +100,7 @@ public class Outtake implements SubSystem {
         config.telemetry.addData("Lift Position", lift.getCurrentPosition());
         config.telemetry.addData("Lift Power", lift.getPower());
         config.telemetry.addData("Outtake Position", out.getPosition());
+        //config.telemetry.addData("Lift Down?", liftSwitch.pressed());
     }
 
     public Action up() {

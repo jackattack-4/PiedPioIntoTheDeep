@@ -23,9 +23,15 @@ public class SamplesTeleOp extends OpMode {
         dashboard = FtcDashboard.getInstance();
 
         config = new Config(telemetry, dashboard, hardwareMap, gamepad1, gamepad2,GameStage.TeleOp, CycleTarget.SAMPLE, Alliance.RED);
+
         robot = new ManualRobot(config);
         
         robot.init();
+    }
+
+    @Override
+    public void start() {
+        robot.start();
     }
 
     @Override

@@ -7,11 +7,5 @@ public class LimitSwitch {
 
     public LimitSwitch(DigitalChannel limitSwitch) { this.limitSwitch = limitSwitch;}
 
-    public boolean pressed() {
-        if (limitSwitch.getState()) {
-            return false;
-        } else {
-            return true;
-        }
-    }
+    public boolean pressed() {return !limitSwitch.getState();}
 }

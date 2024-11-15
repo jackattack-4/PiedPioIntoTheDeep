@@ -9,35 +9,35 @@ import org.firstinspires.ftc.teamcode.hardware.Globals;
 public class Drive implements SubSystem {
     Config config = null;
 
-    private DcMotor leftFrontDrive = null;
-    private DcMotor leftBackDrive = null;
-    private DcMotor rightFrontDrive = null;
-    private DcMotor rightBackDrive = null;
+    private DcMotor leftFrontDrive;
+    private DcMotor leftBackDrive;
+    private DcMotor rightFrontDrive;
+    private DcMotor rightBackDrive;
 
     public Drive(Config config) {
         this.config = config;
     }
 
     public void init() {
-        // Initialize the hardware variables. Note that the strings used here must correspond
-        // to the names assigned during the robot configuration step on the DS or RC devices.
         leftFrontDrive = config.hardwareMap.get(DcMotor.class, Globals.Drive.LEFT_FRONT_DRIVE);
-        rightFrontDrive = config.hardwareMap.get(DcMotor.class, Globals.Drive.LEFT_BACK_DRIVE);
-        leftBackDrive = config.hardwareMap.get(DcMotor.class, Globals.Drive.RIGHT_FRONT_DRIVE);
+        rightFrontDrive = config.hardwareMap.get(DcMotor.class, Globals.Drive.RIGHT_FRONT_DRIVE);
+        leftBackDrive = config.hardwareMap.get(DcMotor.class, Globals.Drive.LEFT_BACK_DRIVE);
         rightBackDrive = config.hardwareMap.get(DcMotor.class, Globals.Drive.RIGHT_BACK_DRIVE);
 
-        // Most robots need the motors on one side to be reversed to drive forward.
-        // When you first test your robot, push the left joystick forward
-        // and flip the direction ( FORWARD <-> REVERSE ) of any wheel that runs backwards
-        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE); // DO NOT CHANGE
-        leftBackDrive.setDirection(DcMotor.Direction.REVERSE); // DO NOT CHANGE
-        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD); // DO NOT CHANGE
-        rightBackDrive.setDirection(DcMotor.Direction.FORWARD); // DO NOT CHANGE
+        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
 
-        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // DO NOT CHANGE
-        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // DO NOT CHANGE
-        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // DO NOT CHANGE
-        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // DO NOT CHANGE
+        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+
+    @Override
+    public void start() {
+
     }
 
     public void update() {

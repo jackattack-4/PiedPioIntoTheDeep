@@ -18,21 +18,23 @@ public abstract class Robot {
     public Robot(Config cfg) {
         config = cfg;
 
-        // Register the subsystem. System will not work if it's not registered
         drive = new Drive(config);
         outtake = new Outtake(config);
         intake = new Intake(config);
-
     }
 
     // Initialize each subsystem
     public void init() {
-        if (config.stage != GameStage.Autonomous) {
-            drive.init();
-        }
-
+        if (config.stage != GameStage.Autonomous) {drive.init();}
         intake.init();
         outtake.init();
+    }
+
+    // Everything that moves right after pressing the start button
+    public void start() {
+        drive.start();
+        intake.start();
+        outtake.start();
     }
 
     // Tick each subsystem

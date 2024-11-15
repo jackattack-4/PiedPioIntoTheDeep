@@ -30,6 +30,7 @@ public class Globals {
     public static class Outtake {
         public static final String LIFT_MOTOR = "lift";
         public static final String OUTTAKE_SERVO = "bucket";
+        public static final String CLAW_SERVO = "claw";
 
         public static final int LIFT_TOP_BASKET = 4650;
         public static final int LIFT_BOTTOM_BASKET = 2400;
@@ -44,6 +45,9 @@ public class Globals {
 
         public static final double OUTTAKE_CLOSE = 0.27;
         public static final double OUTTAKE_OPEN = 0;
+
+        public static final double CLAW_CLOSE = 0.27;
+        public static final double CLAW_OPEN = 0;
     }
 
     public static class Drive {

@@ -44,6 +44,11 @@ public class Intake implements SubSystem {
     }
 
     @Override
+    public void start() {
+        bucket.setPosition(Globals.Intake.BUCKET_UP);
+    }
+
+    @Override
     public void update() {
 
         if (config.gamepad2.right_bumper && !(extendo.getCurrentPosition() >= 2100)) {

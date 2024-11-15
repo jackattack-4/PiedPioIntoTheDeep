@@ -13,6 +13,11 @@ public class ManualRobot extends Robot {
     }
 
     @Override
+    public void start() {
+        super.start();
+    }
+
+    @Override
     public void update() {
         super.update();
     }
