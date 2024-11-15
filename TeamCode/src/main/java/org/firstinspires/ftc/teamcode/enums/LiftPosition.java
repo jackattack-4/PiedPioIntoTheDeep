@@ -5,5 +5,6 @@ public enum LiftPosition {
     LOWERING,
     RISING,
     TOP,
-    DUMPING;
+    LOWERING_SPECIMEN,
+    ATTACHING;
 }

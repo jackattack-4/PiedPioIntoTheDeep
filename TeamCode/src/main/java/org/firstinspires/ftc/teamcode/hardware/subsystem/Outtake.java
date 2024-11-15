@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.enums.CycleTarget;
 import org.firstinspires.ftc.teamcode.hardware.device.LimitSwitch;
 import org.firstinspires.ftc.teamcode.hardware.robot.Config;
 import org.firstinspires.ftc.teamcode.hardware.Globals;
@@ -61,41 +62,94 @@ public class Outtake implements SubSystem {
             lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }*/
 
-        if (config.gamepad2.right_trigger >= 0.1) {
-            out.setPosition(Globals.Outtake.OUTTAKE_CLOSE);
-            switch (position) {
-                case BOTTOM:
-                    lift.setPower(Globals.Outtake.LIFT_POWER);
-                    position = LiftPosition.RISING;
-                case RISING:
-                    if (lift.getCurrentPosition() >= Globals.Outtake.LIFT_TOP_BASKET) {
-                        lift.setPower(Globals.Outtake.LIFT_IDLE);
-                        position = LiftPosition.TOP;
-                    }
-                case LOWERING:
-                    lift.setPower(Globals.Outtake.LIFT_POWER);
-                    position = LiftPosition.RISING;
-            }
-        } else if (config.gamepad2.left_trigger >= 0.1) {
-            out.setPosition(Globals.Outtake.OUTTAKE_CLOSE);
-            switch (position) {
-                case TOP:
-                    lift.setPower(-Globals.Outtake.LIFT_POWER);
-                    position = LiftPosition.LOWERING;
-                case LOWERING:
-                    if (lift.getCurrentPosition() <= Globals.Outtake.LIFT_BOTTOM) {
-                        lift.setPower(0);
-                        position = LiftPosition.BOTTOM;
-                    }
-                case RISING:
-                    lift.setPower(-Globals.Outtake.LIFT_POWER);
-                    position = LiftPosition.LOWERING;
-            }
-        }
+       if (config.target == CycleTarget.SAMPLE) {
+           if (config.gamepad2.right_trigger >= 0.1) {
+               out.setPosition(Globals.Outtake.OUTTAKE_CLOSE);
+               switch (position) {
+                   case BOTTOM:
+                       lift.setPower(Globals.Outtake.LIFT_POWER);
+                       position = LiftPosition.RISING;
+                   case RISING:
+                       if (lift.getCurrentPosition() >= Globals.Outtake.LIFT_TOP_BASKET) {
+                           lift.setPower(Globals.Outtake.LIFT_IDLE);
+                           position = LiftPosition.TOP;
+                       }
+                   case LOWERING:
+                       lift.setPower(Globals.Outtake.LIFT_POWER);
+                       position = LiftPosition.RISING;
+               }
+           } else if (config.gamepad2.left_trigger >= 0.1) {
+               out.setPosition(Globals.Outtake.OUTTAKE_CLOSE);
+               switch (position) {
+                   case TOP:
+                       lift.setPower(-Globals.Outtake.LIFT_POWER);
+                       position = LiftPosition.LOWERING;
+                   case LOWERING:
+                       if (lift.getCurrentPosition() <= Globals.Outtake.LIFT_BOTTOM) {
+                           lift.setPower(0);
+                           position = LiftPosition.BOTTOM;
+                       }
+                   case RISING:
+                       lift.setPower(-Globals.Outtake.LIFT_POWER);
+                       position = LiftPosition.LOWERING;
+               }
+           }
 
-        if (config.gamepad2.dpad_right) {
-            out.setPosition(Globals.Outtake.OUTTAKE_OPEN);
-        }
+           if (config.gamepad2.dpad_right) {
+               out.setPosition(Globals.Outtake.OUTTAKE_OPEN);
+           }
+       } else if (config.target == CycleTarget.SPECIMEN) {
+           if (config.gamepad2.right_trigger >= 0.1) {
+               switch (position) {
+                   case BOTTOM:
+                       lift.setPower(Globals.Outtake.LIFT_POWER);
+                       position = LiftPosition.RISING;
+                   case ATTACHING:
+                       lift.setPower(Globals.Outtake.LIFT_POWER);
+                       position = LiftPosition.RISING;
+                   case RISING:
+                       if (lift.getCurrentPosition() >= Globals.Outtake.LIFT_TOP_BAR) {
+                           lift.setPower(Globals.Outtake.LIFT_IDLE);
+                           position = LiftPosition.TOP;
+                       }
+                   case LOWERING_SPECIMEN:
+                       lift.setPower(Globals.Outtake.LIFT_POWER);
+                       position = LiftPosition.RISING;
+                   case LOWERING:
+                       lift.setPower(Globals.Outtake.LIFT_POWER);
+                       position = LiftPosition.RISING;
+               }
+           } else if (config.gamepad2.left_trigger >= 0.1) {
+               switch (position) {
+                   case TOP:
+                       lift.setPower(-Globals.Outtake.LIFT_POWER);
+                       position = LiftPosition.LOWERING_SPECIMEN;
+                   case LOWERING_SPECIMEN:
+                       if (lift.getCurrentPosition() <= Globals.Outtake.LIFT_TOP_BAR_ATTACH) {
+                           lift.setPower(0);
+                           position = LiftPosition.ATTACHING;
+                       }
+                   case LOWERING:
+                       if (lift.getCurrentPosition() <= Globals.Outtake.LIFT_BOTTOM) {
+                           lift.setPower(0);
+                           position = LiftPosition.BOTTOM;
+                       }
+                   case ATTACHING:
+                       lift.setPower(-Globals.Outtake.LIFT_POWER);
+                       position = LiftPosition.LOWERING;
+                   case RISING:
+                       lift.setPower(-Globals.Outtake.LIFT_POWER);
+                       position = LiftPosition.LOWERING;
+               }
+           }
+
+           if (config.gamepad2.dpad_right) {
+               claw.setPosition(Globals.Outtake.CLAW_OPEN);
+           }
+           if (config.gamepad2.dpad_left) {
+               claw.setPosition(Globals.Outtake.CLAW_CLOSE);
+           }
+       }
 
         config.telemetry.addData("Lift Position", lift.getCurrentPosition());
         config.telemetry.addData("Lift Power", lift.getPower());
