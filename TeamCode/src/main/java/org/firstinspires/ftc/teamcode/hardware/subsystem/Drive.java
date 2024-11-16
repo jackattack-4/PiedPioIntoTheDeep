@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.hardware.robot.Config;
 import org.firstinspires.ftc.teamcode.hardware.Globals;
+import org.firstinspires.ftc.teamcode.utils.DrivePowersBundle;
 
 
 public class Drive implements SubSystem {
@@ -13,6 +14,8 @@ public class Drive implements SubSystem {
     private DcMotor leftBackDrive;
     private DcMotor rightFrontDrive;
     private DcMotor rightBackDrive;
+
+    private DrivePowersBundle old;
 
     public Drive(Config config) {
         this.config = config;
@@ -33,6 +36,8 @@ public class Drive implements SubSystem {
         leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        old = new DrivePowersBundle(0,0,0,0);
     }
 
     @Override
@@ -55,9 +60,20 @@ public class Drive implements SubSystem {
         double frontRightPower = (y - x - rx) / denominator;
         double backRightPower = (y + x - rx) / denominator;
 
+        DrivePowersBundle now = new DrivePowersBundle(frontLeftPower, frontRightPower, backLeftPower, backRightPower);
+
+        if (old.moved() && !now.moved()) {
+            frontLeftPower = -old.FL;
+            frontRightPower = -old.FR;
+            backLeftPower = -old.BL;
+            backRightPower = -old.BR;
+        }
+
         leftFrontDrive.setPower(frontLeftPower);
         leftBackDrive.setPower(backLeftPower);
         rightFrontDrive.setPower(frontRightPower);
         rightBackDrive.setPower(backRightPower);
+
+        old = now;
     }
 }

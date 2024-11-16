@@ -14,20 +14,13 @@ import org.firstinspires.ftc.teamcode.hardware.Globals;
 @TeleOp(name="TeleOp", group="Testing")
 public class Testbed extends OpMode {
     public DcMotor lift, extendo, intake;
-
-    private DcMotor leftFrontDrive = null;
-    private DcMotor leftBackDrive = null;
-    private DcMotor rightFrontDrive = null;
-    private DcMotor rightBackDrive = null;
+    private DcMotor leftFrontDrive, leftBackDrive, rightFrontDrive, rightBackDrive;
     public Servo bucket, out;
 
     public int target = 0;
     public int eTarget = 0;
     public boolean direction = true;
 
-    public IMU imu;
-
-    public double speed = 0.5;
     @Override
     public void init() {
         // Initialize the hardware variables. Note that the strings used here must correspond
