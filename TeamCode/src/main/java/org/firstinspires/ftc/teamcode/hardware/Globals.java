@@ -13,9 +13,9 @@ public class Globals {
         public static final String INTAKE_SERVO = "bucket";
 
 
-        public static final double BUCKET_UP = 0.18;
-        public static final double BUCKET_DOWN = 0;
-        public static final double BUCKET_DUMP = 0.35;
+        public static final double BUCKET_UP = 0.12;
+        public static final double BUCKET_DOWN = 0.33;
+        public static final double BUCKET_DUMP = 0;
 
         public static final double EXTENDO_POWER = 1;
         public static final int EXTENDO_OUT = 100;

@@ -9,7 +9,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name="TestTeleOp", group="Testing")
+import org.firstinspires.ftc.teamcode.hardware.Globals;
+
+@TeleOp(name="TeleOp", group="Testing")
 public class Testbed extends OpMode {
     public DcMotor lift, extendo, intake;
 
@@ -117,31 +119,32 @@ public class Testbed extends OpMode {
         }
 
         if (gamepad2.b) {
-            bucket.setPosition(0.25);
-            intake.setPower(0);
-
-            extendo.setPower(-1);
+            bucket.setPosition(Globals.Intake.BUCKET_UP);
+            intake.setPower(Globals.Intake.POWER_OFF);
+            if (!(extendo.getCurrentPosition() <= 50)) {
+                extendo.setPower(-1);
+            }
             eTarget = 20;
         }
 
 
         if (gamepad2.a) {
-            bucket.setPosition(0.02);
-            intake.setPower(1);
+            bucket.setPosition(Globals.Intake.BUCKET_DOWN);
+            intake.setPower(Globals.Intake.POWER_ON);
         }
 
         if (gamepad2.x) {
-            bucket.setPosition(0.25);
-            intake.setPower(0);
+            bucket.setPosition(Globals.Intake.BUCKET_UP);
+            intake.setPower(Globals.Intake.POWER_OFF);
         }
 
         if (gamepad2.y) {
-            bucket.setPosition(0.37);
-            intake.setPower(-0.2);
+            bucket.setPosition(Globals.Intake.BUCKET_DUMP);
+            intake.setPower(Globals.Intake.POWER_DUMP);
         }
 
         if (gamepad2.dpad_down) {
-            intake.setPower(0);
+            intake.setPower(Globals.Intake.POWER_OFF);
         }
 
         if (gamepad2.dpad_right) {
