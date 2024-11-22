@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.hardware.robot.Config;
 import org.firstinspires.ftc.teamcode.hardware.Globals;
-import org.firstinspires.ftc.teamcode.utils.DrivePowersBundle;
+import org.firstinspires.ftc.teamcode.hardware.utils.DrivePowersBundle;
 
 
 public class Drive implements SubSystem {

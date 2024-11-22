@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.hardware.robot;
 
-import org.firstinspires.ftc.teamcode.enums.GameStage;
+import org.firstinspires.ftc.teamcode.hardware.robot.enums.GameStage;
 import org.firstinspires.ftc.teamcode.hardware.subsystem.Drive;
 import org.firstinspires.ftc.teamcode.hardware.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.hardware.subsystem.Outtake;

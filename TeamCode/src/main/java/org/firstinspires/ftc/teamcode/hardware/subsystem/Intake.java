@@ -10,9 +10,19 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.hardware.robot.Config;
 import org.firstinspires.ftc.teamcode.hardware.Globals;
-import org.firstinspires.ftc.teamcode.enums.IntakePosition;
 
 public class Intake implements SubSystem {
+
+    public enum IntakePosition {
+        DUMPING,
+        RETRACTED,
+        INTAKING,
+        RETRACTING,
+        EXTENDING;
+    }
+
+
+
     Config config = null;
 
     DcMotor intake;

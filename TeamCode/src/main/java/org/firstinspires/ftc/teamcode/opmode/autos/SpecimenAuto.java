@@ -10,11 +10,11 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.enums.Alliance;
+import org.firstinspires.ftc.teamcode.hardware.robot.enums.Alliance;
 import org.firstinspires.ftc.teamcode.hardware.robot.AutonomousRobot;
 import org.firstinspires.ftc.teamcode.hardware.robot.Config;
-import org.firstinspires.ftc.teamcode.enums.CycleTarget;
-import org.firstinspires.ftc.teamcode.enums.GameStage;
+import org.firstinspires.ftc.teamcode.hardware.robot.enums.CycleTarget;
+import org.firstinspires.ftc.teamcode.hardware.robot.enums.GameStage;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
 @Autonomous(name="Specimen Auto / 0+2 Auto", group="Autos")

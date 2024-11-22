@@ -6,17 +6,22 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.InstantAction;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.enums.CycleTarget;
-import org.firstinspires.ftc.teamcode.hardware.device.LimitSwitch;
+import org.firstinspires.ftc.teamcode.hardware.robot.enums.CycleTarget;
 import org.firstinspires.ftc.teamcode.hardware.robot.Config;
 import org.firstinspires.ftc.teamcode.hardware.Globals;
-import org.firstinspires.ftc.teamcode.enums.LiftPosition;
-import org.firstinspires.ftc.teamcode.enums.OuttakePosition;
 
 public class Outtake implements SubSystem {
+    public enum LiftPosition {
+        BOTTOM,
+        LOWERING,
+        RISING,
+        TOP,
+        LOWERING_SPECIMEN,
+        ATTACHING;
+    }
+
     Config config = null;
 
     private DcMotor lift;

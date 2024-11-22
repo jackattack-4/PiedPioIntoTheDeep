@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.utils;
+package org.firstinspires.ftc.teamcode.hardware.utils;
 
 public final class DrivePowersBundle {
     public final double FL;

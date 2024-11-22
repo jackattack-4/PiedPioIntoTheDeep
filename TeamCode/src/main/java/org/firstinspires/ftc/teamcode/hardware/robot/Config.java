@@ -8,15 +8,17 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-import org.firstinspires.ftc.teamcode.enums.Alliance;
-import org.firstinspires.ftc.teamcode.enums.CycleTarget;
-import org.firstinspires.ftc.teamcode.enums.GameStage;
+import org.firstinspires.ftc.teamcode.hardware.robot.enums.Alliance;
+import org.firstinspires.ftc.teamcode.hardware.robot.enums.CycleTarget;
+import org.firstinspires.ftc.teamcode.hardware.robot.enums.GameStage;
 
 import java.util.List;
 
 // Config stores everything any of our SubSystems need to function, stores GamePads, Telemetry, HardwareMap,
 // and names of each motor
+
 public class Config {
+
 
     public Telemetry telemetry;
 

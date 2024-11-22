@@ -5,11 +5,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.enums.Alliance;
+import org.firstinspires.ftc.teamcode.hardware.robot.enums.Alliance;
 import org.firstinspires.ftc.teamcode.hardware.robot.Config;
 import org.firstinspires.ftc.teamcode.hardware.robot.ManualRobot;
-import org.firstinspires.ftc.teamcode.enums.CycleTarget;
-import org.firstinspires.ftc.teamcode.enums.GameStage;
+import org.firstinspires.ftc.teamcode.hardware.robot.enums.CycleTarget;
+import org.firstinspires.ftc.teamcode.hardware.robot.enums.GameStage;
 
 @Disabled
 @TeleOp(name="Samples TeleOp", group="TeleOp")
