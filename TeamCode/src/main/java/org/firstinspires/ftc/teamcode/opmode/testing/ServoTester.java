@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class ServoTester extends OpMode {
     Servo servo;
 
-    double power = 0;
     @Override
     public void init() {
         servo = hardwareMap.get(Servo.class, "bucket");
