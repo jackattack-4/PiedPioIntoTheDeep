@@ -25,7 +25,7 @@ public class ServoTester extends OpMode {
             servo.setPosition(0.28);
         }
         if (gamepad1.x) {
-            servo.setPosition(0.15);
+            servo.setPosition(1);
         }
 
         if (gamepad1.y) {
