@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmode.testing;
 
-import static java.lang.Thread.sleep;
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -58,10 +56,10 @@ public class Testbed extends OpMode {
 
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        out.setPosition(0.27);
+        out.setPosition(Globals.Outtake.OUTTAKE_CLOSE);
 
-        bucket.setPosition(0.25);
-        intake.setPower(0);
+        bucket.setPosition(Globals.Intake.BUCKET_UP);
+        intake.setPower(Globals.Intake.POWER_OFF);
     }
 
     @Override
@@ -133,7 +131,15 @@ public class Testbed extends OpMode {
 
         if (gamepad2.y) {
             bucket.setPosition(Globals.Intake.BUCKET_DUMP);
-            intake.setPower(Globals.Intake.POWER_DUMP);
+            try {
+                Thread.sleep(500);
+                intake.setPower(Globals.Intake.POWER_DUMP);
+                Thread.sleep(1000);
+                intake.setPower(Globals.Intake.POWER_OFF);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
         }
 
         if (gamepad2.dpad_down) {
@@ -141,11 +147,11 @@ public class Testbed extends OpMode {
         }
 
         if (gamepad2.dpad_right) {
-            out.setPosition(0);
-            intake.setPower(0);
+            out.setPosition(Globals.Outtake.OUTTAKE_OPEN);
+            intake.setPower(Globals.Intake.POWER_OFF);
             try {
                 Thread.sleep(1000);
-                out.setPosition(0.27);
+                out.setPosition(Globals.Outtake.OUTTAKE_CLOSE);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

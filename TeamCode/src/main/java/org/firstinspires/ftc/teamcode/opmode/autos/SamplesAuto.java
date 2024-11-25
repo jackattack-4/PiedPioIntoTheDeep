@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -29,9 +30,12 @@ public class SamplesAuto extends LinearOpMode {
 
     MecanumDrive drive;
 
+    TrajectoryActionBuilder startBar;
+    TrajectoryActionBuilder barSpikemark;
+
     @Override
     public void runOpMode() throws InterruptedException {
-        startPose = new Pose2d(-30, -61, Math.toRadians(0));
+        startPose = new Pose2d(-12, -62, Math.toRadians(0));
 
         dashboard = FtcDashboard.getInstance();
 
@@ -43,21 +47,23 @@ public class SamplesAuto extends LinearOpMode {
 
         robot.init();
 
+        startBar = drive.actionBuilder(startPose).splineToConstantHeading(new Vector2d(-9,-34), 1);
+        barSpikemark = startBar.endTrajectory().fresh().strafeTo(new Vector2d(-9, -42)).splineToLinearHeading(new Pose2d(-27,-36.5, Math.toRadians(155)), Math.PI);
+        //spikemarkBasketA
+
         waitForStart();
 
         Actions.runBlocking(
                 new SequentialAction(
-                        robot.outtake.up(),
-                        drive.actionBuilder(startPose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build(),
-                        robot.outtake.dump(),
-                        new SleepAction(1),
+                        robot.outtake.raiseToBar(),
+                        startBar.build(),
+                        //robot.outtake.clip(),
                         robot.outtake.down(),
-                        new ParallelAction(
-                                robot.intake.intakeOut(),
-                                drive.actionBuilder(drive.pose).fresh().strafeToLinearHeading(new Vector2d(-45, -10), Math.toRadians(90)).build()
-                        ),
-                        robot.intake.intakeInAndDump(),
-                        robot.outtake.up(),
+                        barSpikemark.build(),
+                        //robot.intake.run(),
+                        //spikemarkBasketA.build,
+                        robot.outtake.raiseToBucket(),
+                        robot.outtake.dump(),
                         drive.actionBuilder(drive.pose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build(),
                         robot.outtake.dump(),
                         robot.outtake.down(),

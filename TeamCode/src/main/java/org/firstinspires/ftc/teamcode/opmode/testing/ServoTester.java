@@ -18,18 +18,18 @@ public class ServoTester extends OpMode {
     @Override
     public void loop() {
         if (gamepad1.a) {
-            servo.setPosition(0.18);
+            servo.setPosition(0.55);
         }
 
         if (gamepad1.b) {
             servo.setPosition(0.28);
         }
         if (gamepad1.x) {
-            servo.setPosition(1);
+            servo.setPosition(0.85);
         }
 
         if (gamepad1.y) {
-            servo.setPosition(0);
+            servo.setPosition(0.94);
         }
 
         telemetry.addData("pos", servo.getPosition());

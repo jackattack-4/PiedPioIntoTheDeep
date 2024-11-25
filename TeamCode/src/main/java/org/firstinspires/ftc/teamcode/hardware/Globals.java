@@ -13,12 +13,12 @@ public class Globals {
         public static final String INTAKE_SERVO = "bucket";
 
 
-        public static final double BUCKET_UP = 0.12;
-        public static final double BUCKET_DOWN = 0.33;
-        public static final double BUCKET_DUMP = 0;
+        public static final double BUCKET_UP = 0.55;
+        public static final double BUCKET_DOWN = 0.94;
+        public static final double BUCKET_DUMP = 0.28;
 
-        public static final double EXTENDO_POWER = 1;
-        public static final int EXTENDO_OUT = 100;
+        public static final double EXTENDO_POWER = 0.8;
+        public static final int EXTENDO_OUT = 100000;
         public static final int EXTENDO_IN = 10;
 
         public static final double POWER_DUMP = -0.4;
@@ -43,10 +43,10 @@ public class Globals {
         public static final double LIFT_IDLE = 0.2;
         public static final double LIFT_POWER = 1;
 
-        public static final double OUTTAKE_CLOSE = 0.27;
+        public static final double OUTTAKE_CLOSE = 0.34;
         public static final double OUTTAKE_OPEN = 0;
 
-        public static final double CLAW_CLOSE = 0.27;
+        public static final double CLAW_CLOSE = 0.34;
         public static final double CLAW_OPEN = 0;
     }
 

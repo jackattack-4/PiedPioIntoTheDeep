@@ -17,8 +17,8 @@ public class Outtake implements SubSystem {
         BOTTOM,
         LOWERING,
         RISING,
-        TOP,
-        LOWERING_SPECIMEN,
+        TOP_BASKET,
+        TOP_BAR,
         ATTACHING;
     }
 
@@ -77,7 +77,7 @@ public class Outtake implements SubSystem {
                    case RISING:
                        if (lift.getCurrentPosition() >= Globals.Outtake.LIFT_TOP_BASKET) {
                            lift.setPower(Globals.Outtake.LIFT_IDLE);
-                           position = LiftPosition.TOP;
+                           position = LiftPosition.TOP_BASKET;
                        }
                    case LOWERING:
                        lift.setPower(Globals.Outtake.LIFT_POWER);
@@ -86,7 +86,7 @@ public class Outtake implements SubSystem {
            } else if (config.gamepad2.left_trigger >= 0.1) {
                out.setPosition(Globals.Outtake.OUTTAKE_CLOSE);
                switch (position) {
-                   case TOP:
+                   case TOP_BASKET:
                        lift.setPower(-Globals.Outtake.LIFT_POWER);
                        position = LiftPosition.LOWERING;
                    case LOWERING:
@@ -111,7 +111,34 @@ public class Outtake implements SubSystem {
         //config.telemetry.addData("Lift Down?", liftSwitch.pressed());
     }
 
-    public Action up() {
+    public Action raiseToBar() {
+        return new Action() {
+            boolean initialized = false;
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                if (!initialized) {
+                    lift.setPower(1);
+
+                    initialized = true;
+                }
+
+                telemetryPacket.put("lift", lift.getCurrentPosition());
+                telemetryPacket.put("liftPower", lift.getPower());
+
+                if (lift.getCurrentPosition() >= Globals.Outtake.LIFT_TOP_BAR) {
+                    lift.setPower(Globals.Outtake.LIFT_IDLE);
+
+                    position = LiftPosition.TOP_BAR;
+                    return false;
+                }
+
+
+                return true;
+            }
+        };
+    }
+    public Action raiseToBucket() {
         return new Action() {
             boolean initialized = false;
 
@@ -129,7 +156,7 @@ public class Outtake implements SubSystem {
                 if (lift.getCurrentPosition() >= Globals.Outtake.LIFT_TOP_BASKET) {
                     lift.setPower(Globals.Outtake.LIFT_IDLE);
 
-                    position = LiftPosition.TOP;
+                    position = LiftPosition.TOP_BASKET;
                     return false;
                 }
 

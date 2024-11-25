@@ -47,9 +47,9 @@ public class SafeSamplesAuto extends LinearOpMode {
 
         Actions.runBlocking(
                 new SequentialAction(
-                        robot.outtake.up(),
+                        //robot.outtake.up(),
                         drive.actionBuilder(startPose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build(),
-                        robot.outtake.dump(),
+                        //robot.outtake.dump(),
                         new SleepAction(2),
                         drive.actionBuilder(drive.pose).fresh().strafeTo(new Vector2d(-50,-50)).build(),
                         new ParallelAction(
