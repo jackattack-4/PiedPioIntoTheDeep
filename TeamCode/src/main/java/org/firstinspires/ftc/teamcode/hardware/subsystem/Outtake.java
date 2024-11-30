@@ -19,10 +19,10 @@ public class Outtake implements SubSystem {
         RISING,
         TOP_BASKET,
         TOP_BAR,
-        ATTACHING;
+        ATTACHING
     }
 
-    Config config = null;
+    Config config;
 
     private DcMotor lift;
 

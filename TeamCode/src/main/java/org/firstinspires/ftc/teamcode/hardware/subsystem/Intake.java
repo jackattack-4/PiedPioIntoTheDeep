@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.hardware.subsystem;
 
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.InstantAction;
-import com.acmerobotics.roadrunner.InstantFunction;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -19,12 +18,12 @@ public class Intake implements SubSystem {
         INTAKING,
         RETRACTING,
         EXTENDING,
-        EXTENDED;
+        EXTENDED
     }
 
 
 
-    Config config = null;
+    Config config;
 
     DcMotor intake;
 
