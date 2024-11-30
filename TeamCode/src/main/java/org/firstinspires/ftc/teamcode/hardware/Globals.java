@@ -17,7 +17,9 @@ public class Globals {
         public static final double BUCKET_DOWN = 0.94;
         public static final double BUCKET_DUMP = 0.28;
 
-        public static final double EXTENDO_POWER = 0.8;
+        public static final double EXTENDO_POWER_OUT = 0.8;
+        public static final double EXTENDO_POWER_IN = -0.8;
+        public static final double EXTENDO_POWER_OFF = 0;
         public static final int EXTENDO_OUT = 100000;
         public static final int EXTENDO_IN = 10;
 
@@ -40,7 +42,7 @@ public class Globals {
 
         public static final int LIFT_BOTTOM = 20;
 
-        public static final double LIFT_IDLE = 0.2;
+        public static final double LIFT_IDLE = 0;
         public static final double LIFT_POWER = 1;
 
         public static final double OUTTAKE_CLOSE = 0.34;

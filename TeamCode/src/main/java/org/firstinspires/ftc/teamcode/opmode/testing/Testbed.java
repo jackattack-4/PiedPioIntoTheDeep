@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.hardware.Globals;
 public class Testbed extends OpMode {
     public DcMotor lift, extendo, intake;
     private DcMotor leftFrontDrive, leftBackDrive, rightFrontDrive, rightBackDrive;
-    public Servo bucket, out;
+    public Servo bucket;
 
     public int target = 0;
     public int eTarget = 0;
@@ -46,7 +46,6 @@ public class Testbed extends OpMode {
         intake = hardwareMap.get(DcMotor.class, "intake");
 
         bucket = hardwareMap.get(Servo.class, "bucket");
-        out = hardwareMap.get(Servo.class, "out");
 
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         extendo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -55,8 +54,6 @@ public class Testbed extends OpMode {
         extendo.setDirection(DcMotorSimple.Direction.REVERSE);
 
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        out.setPosition(Globals.Outtake.OUTTAKE_CLOSE);
 
         bucket.setPosition(Globals.Intake.BUCKET_UP);
         intake.setPower(Globals.Intake.POWER_OFF);
@@ -145,17 +142,6 @@ public class Testbed extends OpMode {
         if (gamepad2.dpad_down) {
             intake.setPower(Globals.Intake.POWER_OFF);
         }
-
-        if (gamepad2.dpad_right) {
-            out.setPosition(Globals.Outtake.OUTTAKE_OPEN);
-            intake.setPower(Globals.Intake.POWER_OFF);
-            try {
-                Thread.sleep(1000);
-                out.setPosition(Globals.Outtake.OUTTAKE_CLOSE);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
         // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
         double axial = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
         double lateral = gamepad1.left_stick_x * 1.1; // 1.1 fixes strafing issues
@@ -200,7 +186,6 @@ public class Testbed extends OpMode {
         telemetry.addData("speed", speed);
         telemetry.addData("power", lift.getPower());
         telemetry.addData("bucket", bucket.getPosition());
-        telemetry.addData("out", out.getPosition());
         telemetry.update();
     }
 }

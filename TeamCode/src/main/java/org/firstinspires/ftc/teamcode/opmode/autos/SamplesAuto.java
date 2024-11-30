@@ -55,14 +55,14 @@ public class SamplesAuto extends LinearOpMode {
 
         Actions.runBlocking(
                 new SequentialAction(
-                        robot.outtake.raiseToBar(),
+                        robot.outtake.bar(),
                         startBar.build(),
-                        //robot.outtake.clip(),
+                        robot.outtake.down(),
                         robot.outtake.down(),
                         barSpikemark.build(),
-                        //robot.intake.run(),
+                        robot.intake.run(),
                         //spikemarkBasketA.build,
-                        robot.outtake.raiseToBucket(),
+                        robot.outtake.bucket(),
                         robot.outtake.dump(),
                         drive.actionBuilder(drive.pose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build(),
                         robot.outtake.dump(),

@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.hardware.subsystem;
 
-import androidx.annotation.NonNull;
-
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.InstantAction;
+import com.acmerobotics.roadrunner.InstantFunction;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -18,7 +18,8 @@ public class Intake implements SubSystem {
         RETRACTED,
         INTAKING,
         RETRACTING,
-        EXTENDING;
+        EXTENDING,
+        EXTENDED;
     }
 
 
@@ -31,9 +32,9 @@ public class Intake implements SubSystem {
 
     Servo bucket;
 
-    //IntakeColorSensor colorSensor;
+    ColorSensor sensor;
 
-    IntakePosition intakeStatus;
+    IntakePosition status;
 
     public Intake(Config config) {this.config = config;}
 
@@ -45,12 +46,12 @@ public class Intake implements SubSystem {
 
         bucket = config.hardwareMap.get(Servo.class, Globals.Intake.INTAKE_SERVO);
 
-        //colorSensor = new IntakeColorSensor(config.hardwareMap.get(ColorSensor.class, "colorSensor"));
+        sensor = config.hardwareMap.get(ColorSensor.class, "colorSensor");
 
         intake.setDirection(DcMotorSimple.Direction.FORWARD);
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        intakeStatus = IntakePosition.RETRACTED;
+        status = IntakePosition.RETRACTED;
     }
 
     @Override
@@ -96,78 +97,56 @@ public class Intake implements SubSystem {
         }
     }
 
-    public Action intakeOut() {
-        return new Action() {
-            private boolean initialized = false;
+    public Action run() {
+        return packet -> {
+            switch (status) {
+                case DUMPING:
+                    return false;
+                case RETRACTED:
+                    extendo.setPower(Globals.Intake.EXTENDO_POWER_OUT);
+                    status = IntakePosition.EXTENDING;
+                    return true;
+                case INTAKING:
+                    if (sensor.red() >= 100 && sensor.blue() >= 100) {
+                        bucket.setPosition(Globals.Intake.BUCKET_UP);
+                        intake.setPower(Globals.Intake.POWER_OFF);
 
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                if (!initialized) {
-                    extendo.setPower(Globals.Intake.EXTENDO_POWER);
-                    intakeStatus = IntakePosition.EXTENDING;
+                        extendo.setPower(Globals.Intake.EXTENDO_POWER_IN);
 
-                    initialized = true;
-                }
+                        status = IntakePosition.RETRACTING;
+                    }
+                    return true;
+                case RETRACTING:
+                    if (extendo.getCurrentPosition() <= Globals.Intake.EXTENDO_IN) {
+                        extendo.setPower(Globals.Intake.EXTENDO_POWER_OFF);
+                        bucket.setPosition(Globals.Intake.BUCKET_DUMP);
+                        intake.setPower(Globals.Intake.POWER_DUMP);
 
-                packet.put("STATUS", "EXTENDING");
-
-                if (extendo.getCurrentPosition() >= Globals.Intake.EXTENDO_OUT) {
-                    extendo.setPower(0);
+                        status = IntakePosition.DUMPING;
+                    }
+                    return true;
+                case EXTENDING:
+                    if (extendo.getCurrentPosition() >= Globals.Intake.EXTENDO_OUT) {
+                        extendo.setPower(Globals.Intake.EXTENDO_POWER_OFF);
+                        status = IntakePosition.EXTENDED;
+                    }
+                    return true;
+                case EXTENDED:
                     bucket.setPosition(Globals.Intake.BUCKET_DOWN);
                     intake.setPower(Globals.Intake.POWER_ON);
 
-                    intakeStatus = IntakePosition.INTAKING;
-
-                    return false;
-                }
-                return true;
-            };
+                    status = IntakePosition.INTAKING;
+                    return true;
+            }
+            return false;
         };
     }
+    public InstantAction stopDumping() {
+        return new InstantAction(() -> {
+            intake.setPower(Globals.Intake.POWER_OFF);
+            bucket.setPosition(Globals.Intake.BUCKET_UP);
 
-    public Action intakeInAndDump() {
-        return new Action() {
-            private boolean initialized = false;
-
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                if (intakeStatus == IntakePosition.RETRACTED || intakeStatus == IntakePosition.DUMPING) {
-                    return true;
-                }
-
-                if (!initialized) {
-                    bucket.setPosition(Globals.Intake.BUCKET_UP);
-                    intake.setPower(Globals.Intake.POWER_OFF);
-
-                    extendo.setPower(-Globals.Intake.EXTENDO_POWER);
-                    intakeStatus = IntakePosition.RETRACTING;
-
-                    initialized = true;
-                }
-
-                packet.put("STATUS", "RETRACTING");
-
-                if (extendo.getCurrentPosition() <= Globals.Intake.EXTENDO_IN) {
-                    extendo.setPower(0);
-
-                    bucket.setPosition(Globals.Intake.BUCKET_DUMP);
-                    intake.setPower(Globals.Intake.POWER_DUMP);
-
-                    try {
-                        wait(2000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-
-                    bucket.setPosition(Globals.Intake.BUCKET_UP);
-                    intake.setPower(Globals.Intake.POWER_OFF);
-
-                    intakeStatus = IntakePosition.RETRACTED;
-
-                    return false;
-                }
-                return true;
-            };
-        };
+            status = IntakePosition.RETRACTED;
+        });
     }
 }

@@ -53,10 +53,10 @@ public class SpecimenAuto extends LinearOpMode {
                         new SleepAction(1),
                         robot.outtake.down(),
                         new ParallelAction(
-                                robot.intake.intakeOut(),
+                                //robot.intake.intakeOut(),
                                 drive.actionBuilder(drive.pose).fresh().strafeToLinearHeading(new Vector2d(-45, -10), Math.toRadians(90)).build()
                         ),
-                        robot.intake.intakeInAndDump(),
+                        //robot.intake.intakeInAndDump(),
                         //robot.outtake.up(),
                         drive.actionBuilder(drive.pose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build(),
                         robot.outtake.dump(),

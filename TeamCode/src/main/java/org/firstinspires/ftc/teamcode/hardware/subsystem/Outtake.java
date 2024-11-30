@@ -111,7 +111,7 @@ public class Outtake implements SubSystem {
         //config.telemetry.addData("Lift Down?", liftSwitch.pressed());
     }
 
-    public Action raiseToBar() {
+    public Action bar() {
         return new Action() {
             boolean initialized = false;
 
@@ -138,7 +138,7 @@ public class Outtake implements SubSystem {
             }
         };
     }
-    public Action raiseToBucket() {
+    public Action bucket() {
         return new Action() {
             boolean initialized = false;
 
