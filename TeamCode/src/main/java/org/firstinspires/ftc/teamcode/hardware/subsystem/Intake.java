@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.hardware.robot.Config;
 import org.firstinspires.ftc.teamcode.hardware.Globals;
 
 public class Intake implements SubSystem {
-
     public enum IntakePosition {
         DUMPING,
         RETRACTED,
@@ -21,12 +20,9 @@ public class Intake implements SubSystem {
         EXTENDED
     }
 
-
-
     Config config;
 
     DcMotor intake;
-
     DcMotor extendo;
 
     Servo bucket;

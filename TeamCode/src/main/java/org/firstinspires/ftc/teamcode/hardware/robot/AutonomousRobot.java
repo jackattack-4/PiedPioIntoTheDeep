@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.hardware.robot;
 
-public class AutonomousRobot extends Robot {
-    Config cfg = null;
+import com.acmerobotics.roadrunner.SleepAction;
 
+public class AutonomousRobot extends Robot {
     public AutonomousRobot(Config cfg) {
         super(cfg);
     }
@@ -11,4 +11,6 @@ public class AutonomousRobot extends Robot {
     public void init() {
         super.init();
     }
+
+    public SleepAction sleep(double dt) {return new SleepAction(dt);}
 }

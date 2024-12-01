@@ -38,8 +38,6 @@ public class Config {
     // Current game runtime
     private ElapsedTime runtime = new ElapsedTime();
 
-    public double robotX, robotY, robotHeading;
-
     // Constructor
     public Config(Telemetry tlm, FtcDashboard dsh, HardwareMap hwm, Gamepad gmp1, Gamepad gmp2, GameStage stage, CycleTarget target, Alliance alliance) {
         this.telemetry = tlm;
@@ -61,6 +59,10 @@ public class Config {
 
     // Telemetry is similar to logging. Appears in Driver Station
     public void updateTelemetry() {
+        if (gamepad2.options) {
+            target = (target == CycleTarget.SAMPLE) ? CycleTarget.SPECIMEN : CycleTarget.SAMPLE;
+        }
+
         telemetry.addData("Status", "Run Time: " + runtime.toString());
 
         telemetry.addData("G1: bumper", "L: %b R: %b", gamepad1.left_bumper, gamepad1.right_bumper);

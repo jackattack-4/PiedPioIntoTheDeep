@@ -49,7 +49,7 @@ public class SpecimenAuto extends LinearOpMode {
                 new SequentialAction(
                         //robot.outtake.up(),
                         drive.actionBuilder(startPose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build(),
-                        robot.outtake.dump(),
+                        
                         new SleepAction(1),
                         robot.outtake.down(),
                         new ParallelAction(
@@ -59,7 +59,7 @@ public class SpecimenAuto extends LinearOpMode {
                         //robot.intake.intakeInAndDump(),
                         //robot.outtake.up(),
                         drive.actionBuilder(drive.pose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build(),
-                        robot.outtake.dump(),
+                        
                         robot.outtake.down(),
                         drive.actionBuilder(drive.pose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build()
                 )
