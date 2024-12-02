@@ -43,6 +43,11 @@ public class Intake implements SubSystem {
 
         sensor = config.hardwareMap.get(ColorSensor.class, "colorSensor");
 
+
+        extendo.setDirection(DcMotorSimple.Direction.FORWARD);
+        extendo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        extendo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         intake.setDirection(DcMotorSimple.Direction.FORWARD);
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -57,9 +62,9 @@ public class Intake implements SubSystem {
     @Override
     public void update() {
 
-        if (config.gamepad2.right_bumper && !(extendo.getCurrentPosition() >= 2100)) {
+        if (config.gamepad2.right_bumper && !(extendo.getCurrentPosition() >= Globals.Intake.EXTENDO_OUT)) {
             extendo.setPower(1);
-        } else if (config.gamepad2.left_bumper && !(extendo.getCurrentPosition() <= 50)) {
+        } else if (config.gamepad2.left_bumper && !(extendo.getCurrentPosition() <= Globals.Intake.EXTENDO_IN)) {
             extendo.setPower(-1);
         } else {
             extendo.setPower(0);
@@ -102,7 +107,7 @@ public class Intake implements SubSystem {
                     status = IntakePosition.EXTENDING;
                     return true;
                 case INTAKING:
-                    if (sensor.red() >= 100 && sensor.blue() >= 100) {
+                    if (sensor.red() >= Globals.Intake.SENSOR_THRESHOLD_RED && sensor.blue() >= Globals.Intake.SENSOR_THRESHOLD_BLUE && sensor.green() >= Globals.Intake.SENSOR_THRESHOLD_GREEN) {
                         bucket.setPosition(Globals.Intake.BUCKET_UP);
                         intake.setPower(Globals.Intake.POWER_OFF);
 

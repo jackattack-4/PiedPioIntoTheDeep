@@ -58,33 +58,50 @@ public class Outtake implements SubSystem {
                    case BOTTOM:
                        lift.setPower(Globals.Outtake.LIFT_POWER);
                        position = LiftPosition.RISING;
+                       config.telemetry.addData("POSITION", "RISING");
                    case RISING:
                        if (lift.getCurrentPosition() >= Globals.Outtake.LIFT_TOP_BASKET) {
                            lift.setPower(Globals.Outtake.LIFT_IDLE);
                            position = LiftPosition.TOP_BASKET;
+                           config.telemetry.addData("POSITION", "TOP BASKET");
+                       } else {
+                           config.telemetry.addData("POSITION", "RISING");
                        }
                    case LOWERING:
                        lift.setPower(Globals.Outtake.LIFT_POWER);
                        position = LiftPosition.RISING;
+                       config.telemetry.addData("POSITION", "RISING");
+                   case TOP_BASKET:
+                       lift.setPower(Globals.Outtake.LIFT_IDLE);
+
+                       config.telemetry.addData("POSITION", "TOP BASKET");
                }
            } else if (config.gamepad2.left_trigger >= 0.1) {
                switch (position) {
                    case TOP_BASKET:
                        lift.setPower(-Globals.Outtake.LIFT_POWER);
                        position = LiftPosition.LOWERING;
+
+                       config.telemetry.addData("POSITION", "LOWERING");
                    case LOWERING:
                        if (lift.getCurrentPosition() <= Globals.Outtake.LIFT_BOTTOM) {
                            lift.setPower(0);
                            position = LiftPosition.BOTTOM;
+                           config.telemetry.addData("POSITION", "BOTTOM");
                        }
                    case RISING:
                        lift.setPower(-Globals.Outtake.LIFT_POWER);
                        position = LiftPosition.LOWERING;
+                       config.telemetry.addData("POSITION", "LOWERING");
+                   case BOTTOM:
+                       lift.setPower(Globals.Outtake.LIFT_IDLE);
+                       config.telemetry.addData("POSITION", "BOTTOM");
                }
            }
        }
+       /*
 
-        if (config.target == CycleTarget.SAMPLE) {
+        if (config.target == CycleTarget.SPECIMEN) {
             if (config.gamepad2.right_trigger >= 0.1) {
                 switch (position) {
                     case BOTTOM:
@@ -115,7 +132,7 @@ public class Outtake implements SubSystem {
                 }
             }
         }
-
+*/
         config.telemetry.addData("Lift Position", lift.getCurrentPosition());
         config.telemetry.addData("Lift Power", lift.getPower());
     }
