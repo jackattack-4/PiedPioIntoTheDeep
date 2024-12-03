@@ -1,4 +1,5 @@
 # Config file for dependabot
+# Probably shouldn't touch this unless you know what you're doing
 
 version: 2
 updates:
