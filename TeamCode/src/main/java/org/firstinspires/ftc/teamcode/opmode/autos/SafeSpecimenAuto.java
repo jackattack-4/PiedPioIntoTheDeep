@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -29,6 +30,8 @@ public class SafeSpecimenAuto extends LinearOpMode {
 
     MecanumDrive drive;
 
+    TrajectoryActionBuilder driveToBar, park;
+
     @Override
     public void runOpMode() throws InterruptedException {
         startPose = new Pose2d(-30, -61, Math.toRadians(0));
@@ -43,25 +46,17 @@ public class SafeSpecimenAuto extends LinearOpMode {
 
         robot.init();
 
+        driveToBar = drive.actionBuilder(startPose).splineToConstantHeading(new Vector2d(9,-34), 1);
+
+        park = drive.actionBuilder(startPose).fresh().splineToConstantHeading(new Vector2d(9,-34), 1);
+
         waitForStart();
 
         Actions.runBlocking(
                 new SequentialAction(
-                        //robot.outtake.up(),
-                        drive.actionBuilder(startPose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build(),
-                        
-                        new SleepAction(1),
-                        robot.outtake.down(),
-                        new ParallelAction(
-                                //robot.intake.intakeOut(),
-                                drive.actionBuilder(drive.pose).fresh().strafeToLinearHeading(new Vector2d(-45, -10), Math.toRadians(90)).build()
-                        ),
-                        //robot.intake.intakeInAndDump(),
-                        //robot.outtake.up(),
-                        drive.actionBuilder(drive.pose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build(),
-                        
-                        robot.outtake.down(),
-                        drive.actionBuilder(drive.pose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build()
+                        robot.outtake.bar(),
+                        driveToBar.build(),
+                        robot.outtake.down()
                 )
         );
     }
