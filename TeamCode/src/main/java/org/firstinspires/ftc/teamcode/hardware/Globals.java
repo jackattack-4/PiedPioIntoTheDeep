@@ -41,19 +41,13 @@ public class Globals {
         public static final int LIFT_TOP_BASKET = 4600;
         public static final int LIFT_BOTTOM_BASKET = 2400;
 
-        public static final int LIFT_TOP_BAR = 700;
-        public static final int LIFT_TOP_BAR_ATTACH = 680;
+        public static final int LIFT_TOP_BAR = 1250;
+        public static final int LIFT_TOP_BAR_ATTACH = 1200;
 
         public static final int LIFT_BOTTOM = 20;
 
         public static final double LIFT_IDLE = 0;
         public static final double LIFT_POWER = 1;
-
-        public static final double OUTTAKE_CLOSE = 0.34;
-        public static final double OUTTAKE_OPEN = 0;
-
-        public static final double CLAW_CLOSE = 0.34;
-        public static final double CLAW_OPEN = 0;
     }
 
     public static class Drive {

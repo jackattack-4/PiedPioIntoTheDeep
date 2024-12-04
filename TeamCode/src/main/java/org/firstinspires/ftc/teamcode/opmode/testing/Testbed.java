@@ -68,7 +68,7 @@ public class Testbed extends OpMode {
 
         } else if (gamepad2.right_trigger >= 0.1) {
             lift.setPower(1);
-            target = 4650;
+            target = 1275;
             intake.setPower(0);
         }
 

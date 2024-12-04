@@ -19,7 +19,7 @@ public class DrivePathingTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        startPose = new Pose2d(12, -62, Math.toRadians(90));
+        startPose = new Pose2d(12, -62, Math.toRadians(180));
 
         dashboard = FtcDashboard.getInstance();
 
@@ -29,11 +29,7 @@ public class DrivePathingTest extends LinearOpMode {
 
         Actions.runBlocking(
             drive.actionBuilder(startPose)
-                    .splineToConstantHeading(new Vector2d(9,-34), 1)
                     .strafeToConstantHeading(new Vector2d(10, -40))
-                    .splineToConstantHeading(new Vector2d(30, -37), Math.PI/4)
-                    .splineToConstantHeading(new Vector2d(36, -10), Math.PI/2)
-                    .splineToConstantHeading(new Vector2d(46, -52), -Math.PI/2)
                     .build()
         );
     }
