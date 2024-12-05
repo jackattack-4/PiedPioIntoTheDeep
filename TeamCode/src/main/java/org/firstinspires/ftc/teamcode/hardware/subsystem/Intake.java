@@ -27,7 +27,7 @@ public class Intake implements SubSystem {
 
     Servo bucket;
 
-    ColorSensor sensor;
+    //ColorSensor sensor;
 
     IntakePosition status;
 
@@ -41,7 +41,7 @@ public class Intake implements SubSystem {
 
         bucket = config.hardwareMap.get(Servo.class, Globals.Intake.INTAKE_SERVO);
 
-        sensor = config.hardwareMap.get(ColorSensor.class, "colorSensor");
+        //sensor = config.hardwareMap.get(ColorSensor.class, "colorSensor");
 
 
         extendo.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -92,6 +92,11 @@ public class Intake implements SubSystem {
             intake.setPower(Globals.Intake.POWER_DUMP);
         }
 
+        if (config.gamepad2.dpad_down) {
+            bucket.setPosition(Globals.Intake.BUCKET_PURGE);
+            intake.setPower(Globals.Intake.POWER_DUMP);
+        }
+
         if (config.gamepad2.dpad_left) {
             intake.setPower(Globals.Intake.POWER_PURGE);
         }
@@ -107,6 +112,7 @@ public class Intake implements SubSystem {
                     status = IntakePosition.EXTENDING;
                     return true;
                 case INTAKING:
+                    /*
                     if (sensor.red() >= Globals.Intake.SENSOR_THRESHOLD_RED && sensor.blue() >= Globals.Intake.SENSOR_THRESHOLD_BLUE && sensor.green() >= Globals.Intake.SENSOR_THRESHOLD_GREEN) {
                         bucket.setPosition(Globals.Intake.BUCKET_UP);
                         intake.setPower(Globals.Intake.POWER_OFF);
@@ -115,6 +121,8 @@ public class Intake implements SubSystem {
 
                         status = IntakePosition.RETRACTING;
                     }
+
+                     */
                     return true;
                 case RETRACTING:
                     if (extendo.getCurrentPosition() <= Globals.Intake.EXTENDO_IN) {

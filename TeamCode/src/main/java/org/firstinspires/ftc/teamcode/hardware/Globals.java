@@ -16,6 +16,7 @@ public class Globals {
         public static final double BUCKET_UP = 0.59;
         public static final double BUCKET_DOWN = 0.98;
         public static final double BUCKET_DUMP = 0.28;
+        public static final double BUCKET_PURGE = 0.8;
 
         public static final double EXTENDO_POWER_OUT = 0.8;
         public static final double EXTENDO_POWER_IN = -0.8;
@@ -51,11 +52,11 @@ public class Globals {
     }
 
     public static class Drive {
-        public static final String LEFT_FRONT_DRIVE = "leftFront";
-        public static final String RIGHT_FRONT_DRIVE = "rightFront";
-        public static final String LEFT_BACK_DRIVE = "leftBack";
-        public static final String RIGHT_BACK_DRIVE = "rightBack";
+        public static final String LEFT_FRONT_DRIVE = "rightBack";
+        public static final String RIGHT_FRONT_DRIVE = "leftBack";
+        public static final String LEFT_BACK_DRIVE = "leftFront";
+        public static final String RIGHT_BACK_DRIVE = "rightFront";
 
-        public static final double MAX_SPEED = 0.8;
+        public static final double MAX_SPEED = 1;
     }
 }

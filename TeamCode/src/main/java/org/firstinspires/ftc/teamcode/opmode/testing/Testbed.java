@@ -60,15 +60,15 @@ public class Testbed extends OpMode {
 
     @Override
     public void loop() {
-        if (gamepad2.left_trigger >= 0.1) {
+        if (gamepad2.left_trigger >= 0.1 && target != 15) {
             lift.setPower(-1);
             target = 15;
             direction = false;
             intake.setPower(0);
 
-        } else if (gamepad2.right_trigger >= 0.1) {
+        } else if (gamepad2.right_trigger >= 0.1&& target != 1250) {
             lift.setPower(1);
-            target = 1275;
+            target = 1250;
             intake.setPower(0);
         }
 
