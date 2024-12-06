@@ -34,7 +34,7 @@ public class SafeSpecimenAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        startPose = new Pose2d(-30, -61, Math.toRadians(0));
+        startPose = new Pose2d(15, -62, Math.toRadians(180));
 
         dashboard = FtcDashboard.getInstance();
 
@@ -46,9 +46,9 @@ public class SafeSpecimenAuto extends LinearOpMode {
 
         robot.init();
 
-        driveToBar = drive.actionBuilder(startPose).splineToConstantHeading(new Vector2d(9,-34), 1);
+        driveToBar = drive.actionBuilder(startPose).strafeToConstantHeading(new Vector2d(9,-34));
 
-        park = drive.actionBuilder(startPose).fresh().splineToConstantHeading(new Vector2d(9,-34), 1);
+        park = drive.actionBuilder(startPose).fresh().strafeToConstantHeading(new Vector2d(9,-34));
 
         waitForStart();
 
@@ -56,7 +56,8 @@ public class SafeSpecimenAuto extends LinearOpMode {
                 new SequentialAction(
                         robot.outtake.bar(),
                         driveToBar.build(),
-                        robot.outtake.down()
+                        robot.outtake.down(),
+                        park.build()
                 )
         );
     }

@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -29,9 +30,11 @@ public class SpecimenAuto extends LinearOpMode {
 
     MecanumDrive drive;
 
+    TrajectoryActionBuilder driveToBar, pushToZone, toBar, park;
+
     @Override
     public void runOpMode() throws InterruptedException {
-        startPose = new Pose2d(-30, -61, Math.toRadians(0));
+        startPose = new Pose2d(15, -62, Math.toRadians(180));
 
         dashboard = FtcDashboard.getInstance();
 
@@ -43,25 +46,31 @@ public class SpecimenAuto extends LinearOpMode {
 
         robot.init();
 
+        driveToBar = drive.actionBuilder(startPose).strafeToConstantHeading(new Vector2d(9,-34));
+
+        pushToZone = driveToBar.fresh()
+                .strafeToConstantHeading(new Vector2d(10, -40))
+                .splineToConstantHeading(new Vector2d(30, -37), Math.PI/4)
+                .splineToConstantHeading(new Vector2d(36, -10), Math.PI/2)
+                .turn(Math.toRadians(-90))
+                .splineToConstantHeading(new Vector2d(46, -10), Math.PI/4)
+                .strafeToConstantHeading(new Vector2d(46, -55))
+                .strafeToConstantHeading(new Vector2d(46, -10))
+                .splineToConstantHeading(new Vector2d(56, -10), Math.PI/4)
+                .strafeToConstantHeading(new Vector2d(56, -55));
+
+        park = toBar.fresh().strafeToConstantHeading(new Vector2d(9,-34));
+
         waitForStart();
 
         Actions.runBlocking(
                 new SequentialAction(
-                        //robot.outtake.up(),
-                        drive.actionBuilder(startPose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build(),
-                        
-                        new SleepAction(1),
+                        robot.outtake.bar(),
+                        driveToBar.build(),
                         robot.outtake.down(),
-                        new ParallelAction(
-                                //robot.intake.intakeOut(),
-                                drive.actionBuilder(drive.pose).fresh().strafeToLinearHeading(new Vector2d(-45, -10), Math.toRadians(90)).build()
-                        ),
-                        //robot.intake.intakeInAndDump(),
-                        //robot.outtake.up(),
-                        drive.actionBuilder(drive.pose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build(),
-                        
-                        robot.outtake.down(),
-                        drive.actionBuilder(drive.pose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build()
+                        pushToZone.build(),
+
+                        park.build()
                 )
         );
     }

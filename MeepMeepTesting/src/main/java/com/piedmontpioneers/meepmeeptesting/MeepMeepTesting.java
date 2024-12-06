@@ -25,12 +25,23 @@ public class MeepMeepTesting {
                 .setConstraints(100, 100, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
-        redDrive.runAction(redDrive.getDrive().actionBuilder(new Pose2d(12, -62, Math.toRadians(90)))
-                .splineToConstantHeading(BAR, 1)
+        redDrive.runAction(redDrive.getDrive().actionBuilder(new Pose2d(15, -62, Math.toRadians(180)))
+                .strafeToConstantHeading(new Vector2d(9,-34))
                 .strafeToConstantHeading(new Vector2d(10, -40))
                 .splineToConstantHeading(new Vector2d(30, -37), Math.PI/4)
                 .splineToConstantHeading(new Vector2d(36, -10), Math.PI/2)
-                .splineToConstantHeading(new Vector2d(46, -52), -Math.PI/2)
+                .turn(Math.toRadians(-90))
+                .splineToConstantHeading(new Vector2d(46, -10), Math.PI/4)
+                .strafeToConstantHeading(new Vector2d(46, -55))
+                .strafeToConstantHeading(new Vector2d(46, -10))
+                .splineToConstantHeading(new Vector2d(56, -10), Math.PI/4)
+                .strafeToConstantHeading(new Vector2d(56, -55))
+                .splineToLinearHeading(new Pose2d(50, -50, Math.toRadians(0)), -1)
+                .waitSeconds(3)
+                .strafeToConstantHeading(new Vector2d(50,-60))
+                .waitSeconds(3)
+                .splineToLinearHeading(new Pose2d(9, -34, Math.toRadians(180)), Math.PI/4)
+                .strafeToConstantHeading(new Vector2d(50, -60))
                 .build());
 
         /*redDrive.runAction(redDrive.getDrive().actionBuilder(new Pose2d(-12, -62, Math.toRadians(90)))
