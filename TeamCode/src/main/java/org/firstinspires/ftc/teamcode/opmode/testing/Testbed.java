@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.hardware.Globals;
+import org.firstinspires.ftc.teamcode.hardware.robot.enums.CycleTarget;
 
 @TeleOp(name="TeleOp", group="Testing")
 public class Testbed extends OpMode {
@@ -14,9 +15,11 @@ public class Testbed extends OpMode {
     private DcMotor leftFrontDrive, leftBackDrive, rightFrontDrive, rightBackDrive;
     public Servo bucket;
 
-    public int target = 0;
+    public int lTarget = 0;
     public int eTarget = 0;
     public boolean direction = true;
+
+    public CycleTarget target;
 
     @Override
     public void init() {
@@ -52,40 +55,44 @@ public class Testbed extends OpMode {
         extendo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         extendo.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
         bucket.setPosition(Globals.Intake.BUCKET_UP);
         intake.setPower(Globals.Intake.POWER_OFF);
+
+        target = CycleTarget.SPECIMEN;
     }
 
     @Override
     public void loop() {
-        if (gamepad2.left_trigger >= 0.1 && target != 15) {
+        if (gamepad2.left_trigger >= 0.1 && lTarget != -15) {
             lift.setPower(-1);
-            target = 15;
+            if (target == CycleTarget.SAMPLE && lift.getCurrentPosition() >= 400) {
+                lTarget = -1;
+            } else {
+                lTarget = 400;
+            }
             direction = false;
             intake.setPower(0);
 
-        } else if (gamepad2.right_trigger >= 0.1&& target != 1250) {
+        } else if (gamepad2.right_trigger >= 0.1 && lTarget != 460) {
             lift.setPower(1);
-            target = 1250;
+            lTarget = 460;
             intake.setPower(0);
         }
 
-        if (target != 0) {
+        if (lTarget != 0) {
             if (direction) {
-                if (lift.getCurrentPosition() >= target) {
-                    lift.setPower(0.2);
-                    target = 0;
+                if (lift.getCurrentPosition() >= lTarget) {
+                    lift.setPower(0.35);
+                    lTarget = 0;
                 }
             } else {
-                if (lift.getCurrentPosition() <= target) {
-                    if (target == 15) {
+                if (lift.getCurrentPosition() <= lTarget) {
+                    if (lTarget == 15) {
                         lift.setPower(0);
                     } else {
-                        lift.setPower(0.2);
+                        lift.setPower(-0.8);
                     }
-                    target = 0;
+                    lTarget = 0;
                     direction = true;
                 }
             }
@@ -128,9 +135,9 @@ public class Testbed extends OpMode {
         if (gamepad2.y) {
             bucket.setPosition(Globals.Intake.BUCKET_DUMP);
             try {
-                Thread.sleep(500);
+                Thread.sleep(400);
                 intake.setPower(Globals.Intake.POWER_DUMP);
-                Thread.sleep(1000);
+                Thread.sleep(500);
                 intake.setPower(Globals.Intake.POWER_OFF);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);

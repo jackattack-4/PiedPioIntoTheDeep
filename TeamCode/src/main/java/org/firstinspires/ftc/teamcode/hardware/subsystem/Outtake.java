@@ -101,7 +101,7 @@ public class Outtake implements SubSystem {
        }
        /*
 
-        if (config.target == CycleTarget.SPECIMEN) {
+        if (config.lTarget == CycleTarget.SPECIMEN) {
             if (config.gamepad2.right_trigger >= 0.1) {
                 switch (position) {
                     case BOTTOM:
@@ -191,6 +191,27 @@ public class Outtake implements SubSystem {
             }
         };
     }
+    public Action clip() {
+        return new Action() {
+            boolean initialized = false;
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                if (!initialized) {
+                    lift.setPower(-1);
+
+                    initialized = true;
+                }
+
+                if (lift.getCurrentPosition() <= Globals.Outtake.LIFT_TOP_BAR_ATTACH) {
+                    lift.setPower(0);
+                    return false;
+                }
+
+                return true;
+            }
+        };
+    }
 
     public Action down() {
         return new Action() {
@@ -206,9 +227,6 @@ public class Outtake implements SubSystem {
 
                 if (lift.getCurrentPosition() <= Globals.Outtake.LIFT_BOTTOM) {
                     lift.setPower(0);
-
-                    position = LiftPosition.BOTTOM;
-
                     return false;
                 }
 

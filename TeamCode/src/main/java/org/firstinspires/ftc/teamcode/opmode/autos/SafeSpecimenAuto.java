@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -34,7 +35,7 @@ public class SafeSpecimenAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        startPose = new Pose2d(15, -62, Math.toRadians(180));
+        startPose = new Pose2d(15, -65, Math.toRadians(180));
 
         dashboard = FtcDashboard.getInstance();
 
@@ -46,9 +47,9 @@ public class SafeSpecimenAuto extends LinearOpMode {
 
         robot.init();
 
-        driveToBar = drive.actionBuilder(startPose).strafeToConstantHeading(new Vector2d(9,-34));
+        driveToBar = drive.actionBuilder(startPose).strafeToLinearHeading(new Vector2d(9,-32), Math.toRadians(180));
 
-        park = drive.actionBuilder(startPose).fresh().strafeToConstantHeading(new Vector2d(9,-34));
+        park = drive.actionBuilder(startPose).fresh().strafeToConstantHeading(new Vector2d(50,-55), new TranslationalVelConstraint(50));
 
         waitForStart();
 
@@ -56,8 +57,11 @@ public class SafeSpecimenAuto extends LinearOpMode {
                 new SequentialAction(
                         robot.outtake.bar(),
                         driveToBar.build(),
-                        robot.outtake.down(),
-                        park.build()
+                        robot.outtake.clip(),
+                        new ParallelAction(
+                            robot.outtake.down(),
+                            park.build()
+                        )
                 )
         );
     }
