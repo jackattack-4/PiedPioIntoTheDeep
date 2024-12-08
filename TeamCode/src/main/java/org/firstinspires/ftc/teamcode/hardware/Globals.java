@@ -16,7 +16,7 @@ public class Globals {
         public static final double BUCKET_UP = 0.54;
         public static final double BUCKET_DOWN = 1;
         public static final double BUCKET_DUMP = 0.24;
-        public static final double BUCKET_PURGE = 0.8;
+        public static final double BUCKET_PURGE = 0.7;
 
         public static final double EXTENDO_POWER_OUT = 0.8;
         public static final double EXTENDO_POWER_IN = -0.8;
@@ -39,11 +39,11 @@ public class Globals {
         public static final String OUTTAKE_SERVO = "bucket";
         public static final String CLAW_SERVO = "claw";
 
-        public static final int LIFT_TOP_BASKET = 1250;
+        public static final int LIFT_TOP_BASKET = 2350;
         public static final int LIFT_BOTTOM_BASKET = 2400;
 
-        public static final int LIFT_TOP_BAR = 500;
-        public static final int LIFT_TOP_BAR_ATTACH = 400;
+        public static final int LIFT_TOP_BAR = 870;
+        public static final int LIFT_TOP_BAR_ATTACH = 500;
 
         public static final int LIFT_BOTTOM = 20;
 

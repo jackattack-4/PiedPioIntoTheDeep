@@ -59,7 +59,7 @@ public class SpecimenAuto extends LinearOpMode {
                 .splineToConstantHeading(new Vector2d(56, -10), Math.PI/4)
                 .strafeToConstantHeading(new Vector2d(56, -55));
 
-        park = toBar.fresh().strafeToConstantHeading(new Vector2d(9,-34));
+        park = pushToZone.fresh().strafeToConstantHeading(new Vector2d(9,-34));
 
         waitForStart();
 
@@ -67,9 +67,11 @@ public class SpecimenAuto extends LinearOpMode {
                 new SequentialAction(
                         robot.outtake.bar(),
                         driveToBar.build(),
-                        robot.outtake.down(),
-                        pushToZone.build(),
-
+                        robot.outtake.clip(),
+                        new ParallelAction(
+                                robot.outtake.down(),
+                                pushToZone.build()
+                        ),
                         park.build()
                 )
         );

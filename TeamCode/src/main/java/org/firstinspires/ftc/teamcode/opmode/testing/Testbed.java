@@ -19,6 +19,7 @@ public class Testbed extends OpMode {
     public int eTarget = 0;
     public boolean direction = true;
 
+    boolean x;
     public CycleTarget target;
 
     @Override
@@ -54,28 +55,44 @@ public class Testbed extends OpMode {
         lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         extendo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         extendo.setDirection(DcMotorSimple.Direction.REVERSE);
+        lift.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        target = CycleTarget.SAMPLE;
+
+        x =false;
+    }
+
+    @Override
+    public void start() {
         bucket.setPosition(Globals.Intake.BUCKET_UP);
         intake.setPower(Globals.Intake.POWER_OFF);
-
-        target = CycleTarget.SPECIMEN;
     }
 
     @Override
     public void loop() {
-        if (gamepad2.left_trigger >= 0.1 && lTarget != -15) {
+        if (gamepad2.back) {
+            target = (target == CycleTarget.SAMPLE)?CycleTarget.SPECIMEN:CycleTarget.SAMPLE;
+        }
+
+        if (gamepad2.left_trigger >= 0.1 && lTarget != -40) {
             lift.setPower(-1);
-            if (target == CycleTarget.SAMPLE && lift.getCurrentPosition() >= 400) {
-                lTarget = -1;
+            if (target == CycleTarget.SAMPLE || x) {
+                lTarget = -40;
+                x = false;
             } else {
-                lTarget = 400;
+                lTarget = 450;
+                x = true;
             }
             direction = false;
             intake.setPower(0);
 
-        } else if (gamepad2.right_trigger >= 0.1 && lTarget != 460) {
+        } else if (gamepad2.right_trigger >= 0.1 && lTarget != 2300) {
             lift.setPower(1);
-            lTarget = 460;
+            if (target == CycleTarget.SAMPLE) {
+                lTarget = 2350;
+            } else {
+                lTarget = 870;
+            }
             intake.setPower(0);
         }
 
@@ -132,6 +149,11 @@ public class Testbed extends OpMode {
             intake.setPower(Globals.Intake.POWER_OFF);
         }
 
+        if (gamepad2.dpad_left) {
+            bucket.setPosition(Globals.Intake.BUCKET_PURGE);
+            intake.setPower(Globals.Intake.POWER_PURGE);
+        }
+
         if (gamepad2.y) {
             bucket.setPosition(Globals.Intake.BUCKET_DUMP);
             try {
@@ -184,14 +206,15 @@ public class Testbed extends OpMode {
         rightBackDrive.setPower(rightBackPower);
 
         // Show the elapsed game time and wheel power.
-        telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
-        telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
-        telemetry.addData("Right Stick x Position", "%4.2f", yaw);
-        telemetry.addData("lift", lift.getCurrentPosition());
-        telemetry.addData("extendo", extendo.getCurrentPosition());
-        telemetry.addData("speed", speed);
-        telemetry.addData("power", lift.getPower());
-        telemetry.addData("bucket", bucket.getPosition());
+        //telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
+        //telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
+        //telemetry.addData("Right Stick x Position", "%4.2f", yaw);
+        //telemetry.addData("lift", lift.getCurrentPosition());
+        //telemetry.addData("extendo", extendo.getCurrentPosition());
+        telemetry.addData("ct", target);
+        //telemetry.addData("speed", lTarget);
+        //telemetry.addData("power", lift.getPower());
+        //telemetry.addData("bucket", bucket.getPosition());
         telemetry.update();
     }
 }

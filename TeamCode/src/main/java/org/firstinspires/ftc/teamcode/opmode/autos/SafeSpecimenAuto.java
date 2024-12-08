@@ -35,7 +35,7 @@ public class SafeSpecimenAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        startPose = new Pose2d(15, -65, Math.toRadians(180));
+        startPose = new Pose2d(15, -63, Math.toRadians(180));
 
         dashboard = FtcDashboard.getInstance();
 
