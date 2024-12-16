@@ -45,8 +45,7 @@ public class Outtake implements SubSystem {
     }
 
     @Override
-    public void start() {
-    }
+    public void start() {}
 
     @Override
     public void update() {
