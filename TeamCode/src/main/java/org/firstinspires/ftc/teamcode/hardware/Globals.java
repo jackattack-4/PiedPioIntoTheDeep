@@ -35,7 +35,8 @@ public class Globals {
     }
 
     public static class Outtake {
-        public static final String LIFT_MOTOR = "lift";
+        public static final String RIGHT_LIFT_MOTOR = "right";
+        public static final String LEFT_LIFT_MOTOR = "left";
         public static final String OUTTAKE_SERVO = "bucket";
         public static final String CLAW_SERVO = "claw";
 
@@ -47,8 +48,10 @@ public class Globals {
 
         public static final int LIFT_BOTTOM = 20;
 
+        public static final double LIFT_OFF = 0;
         public static final double LIFT_IDLE = 0.35;
-        public static final double LIFT_POWER = 1;
+        public static final double LIFT_DOWN = -1;
+        public static final double LIFT_UP = 1;
     }
 
     public static class Drive {

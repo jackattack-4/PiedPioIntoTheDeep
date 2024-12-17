@@ -1,46 +1,79 @@
 package org.firstinspires.ftc.teamcode.hardware.robot;
 
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
+
 import org.firstinspires.ftc.teamcode.hardware.robot.enums.GameStage;
 import org.firstinspires.ftc.teamcode.hardware.subsystem.Drive;
 import org.firstinspires.ftc.teamcode.hardware.subsystem.Intake;
 import org.firstinspires.ftc.teamcode.hardware.subsystem.Outtake;
+import org.firstinspires.ftc.teamcode.hardware.subsystem.SubSystem;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public abstract class Robot {
     // Config class to all hardware controls
     Config config;
+
     // List of all registered subsystems
-    public Drive drive;
-    public Intake intake;
+    public final List<SubSystem> subsystems = new ArrayList<>();
+
+    // List of all running Actions
+    private List<Action> runningActions = new ArrayList<>();
+
     public Outtake outtake;
-    //public Hang hang;
+    public Intake intake;
+
+    public List<Action> getRunningActions() {
+        return new ArrayList<>(runningActions);
+    }
 
     // Constructor
     public Robot(Config cfg) {
         config = cfg;
 
-        drive = new Drive(config);
-        outtake = new Outtake(config);
-        intake = new Intake(config);
+        subsystems.add(new Drive(config));
+        subsystems.add(new Intake(config));
+        subsystems.add(new Outtake(config));
+
+        intake = (Intake) subsystems.get(1);
+        outtake = (Outtake) subsystems.get(2);
     }
 
     // Initialize each subsystem
     public void init() {
-        if (config.stage != GameStage.Autonomous) {drive.init();}
-        intake.init();
-        outtake.init();
+        for (SubSystem subsystem : subsystems) {
+            if (!(subsystem instanceof Drive && config.stage == GameStage.Autonomous)) {
+                subsystem.init();
+            }
+        }
     }
 
     // Everything that moves right after pressing the start button
-    public void start() {
-        drive.start();
-        intake.start();
-        outtake.start();
-    }
+    public void start() {subsystems.forEach(SubSystem::start);}
 
     // Tick each subsystem
     public void update() {
-        drive.update();
-        intake.update();
-        outtake.update();
+        TelemetryPacket packet = new TelemetryPacket();
+        List<Action> newActions = new ArrayList<>();
+
+        for (SubSystem subsystem : subsystems) {
+            runningActions.addAll(subsystem.update());
+        }
+
+
+        for (Action action : runningActions) {
+            action.preview(packet.fieldOverlay());
+            if (action.run(packet)) {
+                newActions.add(action);
+            }
+        }
+
+        runningActions = newActions;
+
+        config.dashboard.sendTelemetryPacket(packet);
     }
 }
