@@ -1,15 +1,14 @@
 package org.firstinspires.ftc.teamcode.hardware.subsystem;
 
-import androidx.annotation.NonNull;
-
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.InstantAction;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.hardware.robot.enums.CycleTarget;
 import org.firstinspires.ftc.teamcode.hardware.robot.Config;
 import org.firstinspires.ftc.teamcode.hardware.Globals;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Outtake implements SubSystem {
     public enum LiftPosition {
@@ -17,12 +16,13 @@ public class Outtake implements SubSystem {
         LOWERING,
         RISING,
         TOP_BASKET,
-        TOP_BAR
+        TOP_BAR,
+        CLIPPING
     }
 
     Config config;
 
-    private DcMotor lift;
+    private DcMotor right, left;
 
     public LiftPosition position;
 
@@ -30,16 +30,17 @@ public class Outtake implements SubSystem {
 
     @Override
     public void init() {
-        lift = config.hardwareMap.get(DcMotor.class, Globals.Outtake.LIFT_MOTOR);
+        right = config.hardwareMap.get(DcMotor.class, Globals.Outtake.RIGHT_LIFT_MOTOR);
+        left = config.hardwareMap.get(DcMotor.class, Globals.Outtake.LEFT_LIFT_MOTOR);
 
-        lift.setDirection(DcMotor.Direction.FORWARD);
+        right.setDirection(DcMotor.Direction.FORWARD);
+        left.setDirection(DcMotor.Direction.FORWARD);
 
-        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        lift.setDirection(DcMotorSimple.Direction.REVERSE);
+        right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         position = LiftPosition.BOTTOM;
     }
@@ -48,193 +49,98 @@ public class Outtake implements SubSystem {
     public void start() {}
 
     @Override
-    public void update() {
-        if (config.gamepad2.back) {
-            lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        }
+    public List<Action> update() {
+        List<Action> newActions = new ArrayList<>();
 
-       if (config.target == CycleTarget.SAMPLE) {
-           if (config.gamepad2.right_trigger >= 0.1) {
-               switch (position) {
-                   case BOTTOM:
-                       lift.setPower(Globals.Outtake.LIFT_POWER);
-                       position = LiftPosition.RISING;
-                       config.telemetry.addData("POSITION", "RISING");
-                   case RISING:
-                       if (lift.getCurrentPosition() >= Globals.Outtake.LIFT_TOP_BASKET) {
-                           lift.setPower(Globals.Outtake.LIFT_IDLE);
-                           position = LiftPosition.TOP_BASKET;
-                           config.telemetry.addData("POSITION", "TOP BASKET");
-                       } else {
-                           config.telemetry.addData("POSITION", "RISING");
-                       }
-                   case LOWERING:
-                       lift.setPower(Globals.Outtake.LIFT_POWER);
-                       position = LiftPosition.RISING;
-                       config.telemetry.addData("POSITION", "RISING");
-                   case TOP_BASKET:
-                       lift.setPower(Globals.Outtake.LIFT_IDLE);
+        if (config.gamepad2.back) {newActions.add(zero());}
 
-                       config.telemetry.addData("POSITION", "TOP BASKET");
-               }
-           } else if (config.gamepad2.left_trigger >= 0.1) {
-               switch (position) {
-                   case TOP_BASKET:
-                       lift.setPower(-Globals.Outtake.LIFT_POWER);
-                       position = LiftPosition.LOWERING;
+        if (config.gamepad2.left_stick_y >= 0.25 && position != LiftPosition.TOP_BASKET) {newActions.add(bucket());}
+        if (config.gamepad2.left_stick_y <= -0.25 && position != LiftPosition.BOTTOM) {newActions.add(down());}
 
-                       config.telemetry.addData("POSITION", "LOWERING");
-                   case LOWERING:
-                       if (lift.getCurrentPosition() <= Globals.Outtake.LIFT_BOTTOM) {
-                           lift.setPower(0);
-                           position = LiftPosition.BOTTOM;
-                           config.telemetry.addData("POSITION", "BOTTOM");
-                       }
-                   case RISING:
-                       lift.setPower(-Globals.Outtake.LIFT_POWER);
-                       position = LiftPosition.LOWERING;
-                       config.telemetry.addData("POSITION", "LOWERING");
-                   case BOTTOM:
-                       lift.setPower(Globals.Outtake.LIFT_IDLE);
-                       config.telemetry.addData("POSITION", "BOTTOM");
-               }
-           }
-       }
-       /*
+        if (config.gamepad2.right_stick_y >= 0.25 && position != LiftPosition.TOP_BAR) {newActions.add(bar());}
+        if (config.gamepad2.right_stick_y <= -0.25 && position != LiftPosition.BOTTOM && position != LiftPosition.CLIPPING) {newActions.add(clip());}
+        if (config.gamepad2.right_stick_y <= -0.25 && position != LiftPosition.BOTTOM && position != LiftPosition.TOP_BAR) {newActions.add(down());}
 
-        if (config.lTarget == CycleTarget.SPECIMEN) {
-            if (config.gamepad2.right_trigger >= 0.1) {
-                switch (position) {
-                    case BOTTOM:
-                        lift.setPower(Globals.Outtake.LIFT_POWER);
-                        position = LiftPosition.RISING;
-                    case RISING:
-                        if (lift.getCurrentPosition() >= Globals.Outtake.LIFT_TOP_BAR) {
-                            lift.setPower(Globals.Outtake.LIFT_IDLE);
-                            position = LiftPosition.TOP_BAR;
-                        }
-                    case LOWERING:
-                        lift.setPower(Globals.Outtake.LIFT_POWER);
-                        position = LiftPosition.RISING;
-                }
-            } else if (config.gamepad2.left_trigger >= 0.1) {
-                switch (position) {
-                    case TOP_BAR:
-                        lift.setPower(-Globals.Outtake.LIFT_POWER);
-                        position = LiftPosition.LOWERING;
-                    case LOWERING:
-                        if (lift.getCurrentPosition() <= Globals.Outtake.LIFT_BOTTOM) {
-                            lift.setPower(0);
-                            position = LiftPosition.BOTTOM;
-                        }
-                    case RISING:
-                        lift.setPower(-Globals.Outtake.LIFT_POWER);
-                        position = LiftPosition.LOWERING;
-                }
-            }
-        }
-*/
-        config.telemetry.addData("Lift Position", lift.getCurrentPosition());
-        config.telemetry.addData("Lift Power", lift.getPower());
+
+        config.telemetry.addData("Right Lift Pos", right.getCurrentPosition());
+        config.telemetry.addData("Right Lift Power", right.getPower());
+        config.telemetry.addData("Left Lift Pos", left.getCurrentPosition());
+        config.telemetry.addData("Left Lift Power", left.getPower());
+        config.telemetry.addData("Lift Position", position);
+
+        return newActions;
     }
 
-    public Action bar() {
-        return new Action() {
-            boolean initialized = false;
+    public Action raise(int target) {
+        return telemetryPacket -> {
+            if (position != LiftPosition.RISING) {
+                right.setPower(Globals.Outtake.LIFT_UP);
+                left.setPower(Globals.Outtake.LIFT_UP);
 
-            @Override
-            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                if (!initialized) {
-                    lift.setPower(1);
-
-                    initialized = true;
-                }
-
-                telemetryPacket.put("lift", lift.getCurrentPosition());
-                telemetryPacket.put("liftPower", lift.getPower());
-
-                if (lift.getCurrentPosition() >= Globals.Outtake.LIFT_TOP_BAR) {
-                    lift.setPower(Globals.Outtake.LIFT_IDLE);
-
-                    position = LiftPosition.TOP_BAR;
-                    return false;
-                }
-
-
-                return true;
+                position = LiftPosition.RISING;
             }
-        };
-    }
-    public Action bucket() {
-        return new Action() {
-            boolean initialized = false;
 
-            @Override
-            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                if (!initialized) {
-                    lift.setPower(1);
+            telemetryPacket.put("Right Lift Pos", right.getCurrentPosition());
+            telemetryPacket.put("Right Lift Power", right.getPower());
+            telemetryPacket.put("Left Lift Pos", left.getCurrentPosition());
+            telemetryPacket.put("Left Lift Power", left.getPower());
+            telemetryPacket.put("Lift Position", position);
 
-                    initialized = true;
-                }
+            if (right.getCurrentPosition() >= target) {
+                right.setPower(Globals.Outtake.LIFT_IDLE);
+                left.setPower(Globals.Outtake.LIFT_IDLE);
 
-                telemetryPacket.put("lift", lift.getCurrentPosition());
-                telemetryPacket.put("liftPower", lift.getPower());
+                position = (target == Globals.Outtake.LIFT_TOP_BASKET)?LiftPosition.TOP_BASKET:LiftPosition.TOP_BAR;
 
-                if (lift.getCurrentPosition() >= Globals.Outtake.LIFT_TOP_BASKET) {
-                    lift.setPower(Globals.Outtake.LIFT_IDLE);
-
-                    position = LiftPosition.TOP_BASKET;
-                    return false;
-                }
-
-
-                return true;
+                return false;
             }
-        };
-    }
-    public Action clip() {
-        return new Action() {
-            boolean initialized = false;
 
-            @Override
-            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                if (!initialized) {
-                    lift.setPower(-1);
-
-                    initialized = true;
-                }
-
-                if (lift.getCurrentPosition() <= Globals.Outtake.LIFT_TOP_BAR_ATTACH) {
-                    lift.setPower(0);
-                    return false;
-                }
-
-                return true;
-            }
+            return true;
         };
     }
 
-    public Action down() {
-        return new Action() {
-            boolean initialized = false;
+    public Action lower(int target) {
+        return telemetryPacket -> {
+            if (position != LiftPosition.LOWERING) {
+                right.setPower(Globals.Outtake.LIFT_DOWN);
+                left.setPower(Globals.Outtake.LIFT_DOWN);
 
-            @Override
-            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                if (!initialized) {
-                    lift.setPower(-1);
-
-                    initialized = true;
-                }
-
-                if (lift.getCurrentPosition() <= Globals.Outtake.LIFT_BOTTOM) {
-                    lift.setPower(0);
-                    return false;
-                }
-
-
-                return true;
+                position = LiftPosition.LOWERING;
             }
+
+            telemetryPacket.put("Right Lift Pos", right.getCurrentPosition());
+            telemetryPacket.put("Right Lift Power", right.getPower());
+            telemetryPacket.put("Left Lift Pos", left.getCurrentPosition());
+            telemetryPacket.put("Left Lift Power", left.getPower());
+            telemetryPacket.put("Lift Position", position);
+
+            if (right.getCurrentPosition() <= target) {
+                right.setPower(Globals.Outtake.LIFT_OFF);
+                left.setPower(Globals.Outtake.LIFT_OFF);
+
+                position = (target == Globals.Outtake.LIFT_TOP_BASKET)?LiftPosition.TOP_BASKET:LiftPosition.TOP_BAR;
+
+                return false;
+            }
+
+            return true;
         };
+    }
+
+    public Action bar() {return raise(Globals.Outtake.LIFT_TOP_BAR);}
+    public Action bucket() {return raise(Globals.Outtake.LIFT_TOP_BASKET);}
+    public Action clip() {return lower(Globals.Outtake.LIFT_TOP_BAR_ATTACH);}
+    public Action down() {return lower(Globals.Outtake.LIFT_BOTTOM);}
+
+    public InstantAction zero() {
+        return new InstantAction(() -> {
+            right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+            position = LiftPosition.BOTTOM;
+        });
     }
 }

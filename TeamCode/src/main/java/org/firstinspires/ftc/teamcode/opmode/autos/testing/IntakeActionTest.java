@@ -40,7 +40,7 @@ public class IntakeActionTest extends LinearOpMode {
                 new SequentialAction(
                         robot.intake.run(),
                         robot.sleep(5),
-                        robot.intake.stopDumping()
+                        robot.intake.raise()
                 )
         );
     }
