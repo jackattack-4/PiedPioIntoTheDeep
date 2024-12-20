@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.hardware.robot;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -20,15 +18,12 @@ import java.util.List;
 
 public class Config {
 
-
     public Telemetry telemetry;
 
     public HardwareMap hardwareMap;
 
     public Gamepad gamepad1;
     public Gamepad gamepad2;
-
-    public FtcDashboard dashboard;
 
     public GameStage stage;
 
@@ -40,15 +35,13 @@ public class Config {
     private ElapsedTime runtime = new ElapsedTime();
 
     // Constructor
-    public Config(Telemetry tlm, FtcDashboard dsh, HardwareMap hwm, Gamepad gmp1, Gamepad gmp2, GameStage stage, CycleTarget target, Alliance alliance) {
+    public Config(Telemetry tlm, HardwareMap hwm, Gamepad gmp1, Gamepad gmp2, GameStage stage, Alliance alliance) {
         this.telemetry = tlm;
         this.hardwareMap = hwm;
-        this.dashboard = dsh;
         this.gamepad1 = gmp1;
         this.gamepad2 = gmp2;
         this.stage = stage;
         this.alliance = alliance;
-        this.target = target;
 
         // Sets up bulk caching. Instead of reading a sensor value multiple times, assign it to a variable and use that to prevent more bulk reads
         List<LynxModule> allHubs = hardwareMap.getAll(LynxModule.class);

@@ -16,8 +16,8 @@ import org.firstinspires.ftc.teamcode.hardware.robot.enums.CycleTarget;
 import org.firstinspires.ftc.teamcode.hardware.robot.enums.GameStage;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
-@Autonomous(name="Samples Auto / 3+0 Auto", group="Autos")
-public class SamplesAuto extends LinearOpMode {
+@Autonomous(name="One Specimen & Samples Auto / 3+1 Auto", group="Autos")
+public class OneSpecSamplesAuto extends LinearOpMode {
     Config config;
 
     AutonomousRobot robot;

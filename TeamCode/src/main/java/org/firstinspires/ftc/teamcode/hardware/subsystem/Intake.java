@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.hardware.subsystem;
 
-import androidx.annotation.NonNull;
-
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.InstantAction;
 import com.acmerobotics.roadrunner.SequentialAction;
@@ -18,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Intake implements SubSystem {
-    public enum IntakePosition {
+    public enum IntakeState {
         DUMPING,
         RETRACTED,
         INTAKING,
@@ -26,6 +23,20 @@ public class Intake implements SubSystem {
         RETRACTING,
         EXTENDING,
         EXTENDED
+    }
+
+    public enum BucketPosition {
+        DUMP,
+        ZERO,
+        DOWN,
+        PURGE
+    }
+
+    public enum IntakeContent {
+        RED,
+        BLUE,
+        YELLOW,
+        NULL
     }
 
     Config config;
@@ -37,7 +48,11 @@ public class Intake implements SubSystem {
 
     //ColorSensor sensor;
 
-    IntakePosition status;
+    IntakeState state;
+
+    BucketPosition bucketPosition;
+
+    IntakeContent detected;
 
     public Intake(Config config) {this.config = config;}
 
@@ -58,7 +73,11 @@ public class Intake implements SubSystem {
         intake.setDirection(DcMotorSimple.Direction.FORWARD);
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        status = IntakePosition.RETRACTED;
+        state = IntakeState.RETRACTED;
+
+        bucketPosition = BucketPosition.ZERO;
+
+        detected = IntakeContent.NULL;
     }
 
     @Override
@@ -72,61 +91,20 @@ public class Intake implements SubSystem {
 
         if (config.gamepad2.right_bumper && !(extendo.getCurrentPosition() >= Globals.Intake.EXTENDO_OUT)) {extendo.setPower(1);} else if (config.gamepad2.left_bumper && !(extendo.getCurrentPosition() <= Globals.Intake.EXTENDO_IN)) {extendo.setPower(-1);} else {extendo.setPower(0);}
 
-        if (config.gamepad2.b && status != IntakePosition.RETRACTED) {newActions.add(raiseAndRetract());}
-        if (config.gamepad2.a && status != IntakePosition.INTAKING) {newActions.add(runIntake());}
-        if (config.gamepad2.x && status != IntakePosition.EXTENDED && status != IntakePosition.RETRACTED) {newActions.add(raise());}
-        if (config.gamepad2.y && status != IntakePosition.DUMPING) {newActions.add(dump());}
-        if (config.gamepad2.dpad_down && status != IntakePosition.PURGING) {newActions.add(purge());}
+        if (config.gamepad2.b && state != IntakeState.RETRACTED) {newActions.add(raiseAndRetract());}
+        if (config.gamepad2.a && state != IntakeState.INTAKING) {newActions.add(runIntake());}
+        if (config.gamepad2.x && bucketPosition != BucketPosition.ZERO) {newActions.add(raise());}
+        if (config.gamepad2.y && state != IntakeState.DUMPING && bucketPosition != BucketPosition.DUMP) {newActions.add(dump());}
+        if (config.gamepad2.dpad_down && state != IntakeState.PURGING) {newActions.add(purge());}
+
+        config.telemetry.addData("bucket pos (0-1)", bucket.getPosition());
+        config.telemetry.addData("bucket pos (State)", bucketPosition);
+        config.telemetry.addData("extendo pos (enc)", extendo.getCurrentPosition());
+        config.telemetry.addData("intake state", state);
+        config.telemetry.addData("intake power (0-1)", intake.getPower());
+        //config.telemetry.addData("color sensor detections", detected);
 
         return newActions;
-    }
-
-    public Action run() {
-        return packet -> {
-            switch (status) {
-                case DUMPING:
-                    return false;
-                case RETRACTED:
-                    extendo.setPower(Globals.Intake.EXTENDO_POWER_OUT);
-                    status = IntakePosition.EXTENDING;
-                    return true;
-                case INTAKING:
-                    /*
-                    if (sensor.red() >= Globals.Intake.SENSOR_THRESHOLD_RED && sensor.blue() >= Globals.Intake.SENSOR_THRESHOLD_BLUE && sensor.green() >= Globals.Intake.SENSOR_THRESHOLD_GREEN) {
-                        bucket.setPosition(Globals.Intake.BUCKET_UP);
-                        intake.setPower(Globals.Intake.POWER_OFF);
-
-                        extendo.setPower(Globals.Intake.EXTENDO_POWER_IN);
-
-                        status = IntakePosition.RETRACTING;
-                    }
-
-                     */
-                    return true;
-                case RETRACTING:
-                    if (extendo.getCurrentPosition() <= Globals.Intake.EXTENDO_IN) {
-                        extendo.setPower(Globals.Intake.EXTENDO_POWER_OFF);
-                        bucket.setPosition(Globals.Intake.BUCKET_DUMP);
-                        intake.setPower(Globals.Intake.POWER_DUMP);
-
-                        status = IntakePosition.DUMPING;
-                    }
-                    return true;
-                case EXTENDING:
-                    if (extendo.getCurrentPosition() >= Globals.Intake.EXTENDO_OUT) {
-                        extendo.setPower(Globals.Intake.EXTENDO_POWER_OFF);
-                        status = IntakePosition.EXTENDED;
-                    }
-                    return true;
-                case EXTENDED:
-                    bucket.setPosition(Globals.Intake.BUCKET_DOWN);
-                    intake.setPower(Globals.Intake.POWER_ON);
-
-                    status = IntakePosition.INTAKING;
-                    return true;
-            }
-            return false;
-        };
     }
 
     public InstantAction purge() {
@@ -134,7 +112,8 @@ public class Intake implements SubSystem {
             intake.setPower(Globals.Intake.POWER_PURGE);
             bucket.setPosition(Globals.Intake.BUCKET_PURGE);
 
-            status = IntakePosition.PURGING;
+            state = IntakeState.PURGING;
+            bucketPosition = BucketPosition.PURGE;
         });
     }
 
@@ -143,7 +122,8 @@ public class Intake implements SubSystem {
             intake.setPower(Globals.Intake.POWER_ON);
             bucket.setPosition(Globals.Intake.BUCKET_DOWN);
 
-            status = IntakePosition.INTAKING;
+            state = IntakeState.INTAKING;
+            bucketPosition = BucketPosition.DOWN;
         });
     }
 
@@ -153,7 +133,8 @@ public class Intake implements SubSystem {
                 intake.setPower(Globals.Intake.POWER_DUMP);
                 bucket.setPosition(Globals.Intake.BUCKET_DUMP);
 
-                status = IntakePosition.DUMPING;}),
+                state = IntakeState.DUMPING;
+                bucketPosition = BucketPosition.DUMP;}),
                 new SleepAction(2),
                 raise()
         );
@@ -163,21 +144,41 @@ public class Intake implements SubSystem {
         return new InstantAction(() -> {
             intake.setPower(Globals.Intake.POWER_OFF);
             bucket.setPosition(Globals.Intake.BUCKET_UP);
-            status = (status == IntakePosition.DUMPING)?IntakePosition.RETRACTED:IntakePosition.EXTENDED;
+            state = (state == IntakeState.DUMPING)? IntakeState.RETRACTED: IntakeState.EXTENDED;
+
+            bucketPosition = BucketPosition.ZERO;
         });
+    }
+
+    public Action extend() {
+        return telemetryPacket -> {
+            if (!(state == IntakeState.EXTENDING)) {
+                extendo.setPower(Globals.Intake.EXTENDO_POWER_OUT);
+
+                state = IntakeState.EXTENDING;
+            }
+
+            if (extendo.getCurrentPosition() <= Globals.Intake.EXTENDO_OUT) {
+                extendo.setPower(0);
+                state = IntakeState.EXTENDED;
+                return false;
+            }
+
+            return true;
+        };
     }
 
     public Action retract() {
         return telemetryPacket -> {
-            if (!(status == IntakePosition.RETRACTING)) {
+            if (!(state == IntakeState.RETRACTING)) {
                 extendo.setPower(Globals.Intake.EXTENDO_POWER_IN);
 
-                status = IntakePosition.RETRACTING;
+                state = IntakeState.RETRACTING;
             }
 
             if (extendo.getCurrentPosition() <= Globals.Intake.EXTENDO_IN) {
                 extendo.setPower(0);
-                status = IntakePosition.RETRACTED;
+                state = IntakeState.RETRACTED;
                 return false;
             }
 

@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmode.autos.testing;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -12,7 +11,6 @@ import org.firstinspires.ftc.teamcode.hardware.robot.AutonomousRobot;
 import org.firstinspires.ftc.teamcode.hardware.robot.Config;
 import org.firstinspires.ftc.teamcode.hardware.robot.enums.CycleTarget;
 import org.firstinspires.ftc.teamcode.hardware.robot.enums.GameStage;
-import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
 @Autonomous(name="Lift Action Test", group="Test")
 public class LiftActionTest extends LinearOpMode {
@@ -25,7 +23,7 @@ public class LiftActionTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         dashboard = FtcDashboard.getInstance();
 
-        config = new Config(telemetry, dashboard, hardwareMap, gamepad1, gamepad2, GameStage.Autonomous, CycleTarget.SAMPLE, Alliance.RED);
+        config = new Config(telemetry, hardwareMap, gamepad1, gamepad2, GameStage.Autonomous, CycleTarget.SAMPLE, Alliance.RED);
 
         robot = new AutonomousRobot(config);
 

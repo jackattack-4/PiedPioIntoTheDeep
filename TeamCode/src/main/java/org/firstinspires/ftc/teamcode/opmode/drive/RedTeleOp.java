@@ -20,7 +20,7 @@ public class RedTeleOp extends OpMode {
     public void init() {
         dashboard = FtcDashboard.getInstance();
 
-        config = new Config(telemetry, dashboard, hardwareMap, gamepad1, gamepad2, GameStage.TeleOp, CycleTarget.SAMPLE, Alliance.RED);
+        config = new Config(telemetry, hardwareMap, gamepad1, gamepad2, GameStage.TeleOp, CycleTarget.SAMPLE, Alliance.RED);
 
         robot = new ManualRobot(config);
         

@@ -29,9 +29,10 @@ public class Globals {
         public static final double POWER_ON = 1;
         public static final double POWER_PURGE = -1;
 
-        public static final int SENSOR_THRESHOLD_RED = 300;
-        public static final int SENSOR_THRESHOLD_GREEN = 300;
-        public static final int SENSOR_THRESHOLD_BLUE = 300;
+        public static final int SENSOR_RED_THRESHOLD = 300;
+        public static final int SENSOR_YELLOW_THRESHOLD_RED = 300;
+        public static final int SENSOR_YELLOW_THRESHOLD_GREEN = 300;
+        public static final int SENSOR_BLUE_THRESHOLD = 300;
     }
 
     public static class Outtake {

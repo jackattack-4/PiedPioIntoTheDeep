@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.hardware.robot;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 
@@ -17,6 +18,8 @@ import java.util.stream.Stream;
 public abstract class Robot {
     // Config class to all hardware controls
     Config config;
+
+    FtcDashboard dashboard;
 
     // List of all registered subsystems
     public final List<SubSystem> subsystems = new ArrayList<>();
