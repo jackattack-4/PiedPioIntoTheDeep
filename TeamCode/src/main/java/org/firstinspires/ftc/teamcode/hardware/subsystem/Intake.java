@@ -46,7 +46,7 @@ public class Intake implements SubSystem {
 
     Servo bucket;
 
-    //ColorSensor sensor;
+    //IntakeColorSensor sensor;
 
     IntakeState state;
 
@@ -64,7 +64,7 @@ public class Intake implements SubSystem {
 
         bucket = config.hardwareMap.get(Servo.class, Globals.Intake.INTAKE_SERVO);
 
-        //sensor = config.hardwareMap.get(ColorSensor.class, "colorSensor");
+        //sensor = new IntakeColorSensor(config.hardwareMap.get(ColorSensor.class, "colorSensor"));
 
         extendo.setDirection(DcMotorSimple.Direction.FORWARD);
         extendo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
