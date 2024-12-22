@@ -77,6 +77,6 @@ public abstract class Robot {
 
         runningActions = newActions;
 
-        config.dashboard.sendTelemetryPacket(packet);
+        dashboard.sendTelemetryPacket(packet);
     }
 }

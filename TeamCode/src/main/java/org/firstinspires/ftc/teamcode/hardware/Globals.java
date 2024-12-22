@@ -56,10 +56,10 @@ public class Globals {
     }
 
     public static class Drive {
-        public static final String LEFT_FRONT_DRIVE = "rightBack";
-        public static final String RIGHT_FRONT_DRIVE = "leftBack";
-        public static final String LEFT_BACK_DRIVE = "leftFront";
-        public static final String RIGHT_BACK_DRIVE = "rightFront";
+        public static final String LEFT_FRONT_DRIVE = "leftFront";
+        public static final String RIGHT_FRONT_DRIVE = "rightFront";
+        public static final String LEFT_BACK_DRIVE = "leftBack";
+        public static final String RIGHT_BACK_DRIVE = "rightBack";
 
         public static final double MAX_SPEED = 1;
     }

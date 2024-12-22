@@ -58,7 +58,6 @@ public class OneSpecSamplesAuto extends LinearOpMode {
                         robot.outtake.down(),
                         robot.outtake.down(),
                         barSpikemark.build(),
-                        robot.intake.run(),
                         //spikemarkBasketA.build,
                         robot.outtake.bucket(),
                         drive.actionBuilder(drive.pose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build(),

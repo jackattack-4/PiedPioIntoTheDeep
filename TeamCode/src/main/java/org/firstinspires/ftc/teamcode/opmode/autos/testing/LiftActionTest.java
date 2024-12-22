@@ -23,7 +23,7 @@ public class LiftActionTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         dashboard = FtcDashboard.getInstance();
 
-        config = new Config(telemetry, hardwareMap, gamepad1, gamepad2, GameStage.Autonomous, CycleTarget.SAMPLE, Alliance.RED);
+        config = new Config(telemetry, hardwareMap, gamepad1, gamepad2, GameStage.Autonomous, Alliance.RED);
 
         robot = new AutonomousRobot(config);
 
