@@ -33,8 +33,8 @@ public class Outtake implements SubSystem {
         right = config.hardwareMap.get(DcMotor.class, Globals.Outtake.RIGHT_LIFT_MOTOR);
         left = config.hardwareMap.get(DcMotor.class, Globals.Outtake.LEFT_LIFT_MOTOR);
 
-        right.setDirection(DcMotor.Direction.FORWARD);
-        left.setDirection(DcMotor.Direction.FORWARD);
+        right.setDirection(DcMotor.Direction.REVERSE);
+        left.setDirection(DcMotor.Direction.REVERSE);
 
         right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -54,12 +54,12 @@ public class Outtake implements SubSystem {
 
         if (config.gamepad2.back) {newActions.add(zero());}
 
-        if (config.gamepad2.left_stick_y >= 0.25 && position != LiftPosition.TOP_BASKET) {newActions.add(bucket());}
-        if (config.gamepad2.left_stick_y <= -0.25 && position != LiftPosition.BOTTOM) {newActions.add(down());}
+        if (-config.gamepad2.left_stick_y >= 0.25 && position != LiftPosition.TOP_BASKET) {newActions.add(bucket());}
+        if (-config.gamepad2.left_stick_y <= -0.25 && position != LiftPosition.BOTTOM) {newActions.add(down());}
 
-        if (config.gamepad2.right_stick_y >= 0.25 && position != LiftPosition.TOP_BAR) {newActions.add(bar());}
-        if (config.gamepad2.right_stick_y <= -0.25 && position != LiftPosition.BOTTOM && position != LiftPosition.CLIPPING) {newActions.add(clip());}
-        if (config.gamepad2.right_stick_y <= -0.25 && position != LiftPosition.BOTTOM && position != LiftPosition.TOP_BAR) {newActions.add(down());}
+        if (-config.gamepad2.right_stick_y >= 0.25 && position != LiftPosition.TOP_BAR) {newActions.add(bar());}
+        if (-config.gamepad2.right_stick_y <= -0.25 && position != LiftPosition.BOTTOM && position != LiftPosition.CLIPPING) {newActions.add(clip());}
+        if (-config.gamepad2.right_stick_y <= -0.25 && position != LiftPosition.BOTTOM && position != LiftPosition.TOP_BAR) {newActions.add(down());}
 
 
         config.telemetry.addData("Right Lift Pos", right.getCurrentPosition());
@@ -71,7 +71,7 @@ public class Outtake implements SubSystem {
         return newActions;
     }
 
-    public Action raise(int target) {
+    public Action raiseToPosition(int target) {
         return telemetryPacket -> {
             if (position != LiftPosition.RISING) {
                 right.setPower(Globals.Outtake.LIFT_UP);
@@ -99,7 +99,7 @@ public class Outtake implements SubSystem {
         };
     }
 
-    public Action lower(int target) {
+    public Action lowerToPosition(int target) {
         return telemetryPacket -> {
             if (position != LiftPosition.LOWERING) {
                 right.setPower(Globals.Outtake.LIFT_DOWN);
@@ -118,7 +118,7 @@ public class Outtake implements SubSystem {
                 right.setPower(Globals.Outtake.LIFT_OFF);
                 left.setPower(Globals.Outtake.LIFT_OFF);
 
-                position = (target == Globals.Outtake.LIFT_TOP_BASKET)?LiftPosition.TOP_BASKET:LiftPosition.TOP_BAR;
+                position = (target == Globals.Outtake.LIFT_TOP_BAR_ATTACH)?LiftPosition.CLIPPING:LiftPosition.BOTTOM;
 
                 return false;
             }
@@ -127,10 +127,10 @@ public class Outtake implements SubSystem {
         };
     }
 
-    public Action bar() {return raise(Globals.Outtake.LIFT_TOP_BAR);}
-    public Action bucket() {return raise(Globals.Outtake.LIFT_TOP_BASKET);}
-    public Action clip() {return lower(Globals.Outtake.LIFT_TOP_BAR_ATTACH);}
-    public Action down() {return lower(Globals.Outtake.LIFT_BOTTOM);}
+    public Action bar() {return raiseToPosition(Globals.Outtake.LIFT_TOP_BAR);}
+    public Action bucket() {return raiseToPosition(Globals.Outtake.LIFT_TOP_BASKET);}
+    public Action clip() {return lowerToPosition(Globals.Outtake.LIFT_TOP_BAR_ATTACH);}
+    public Action down() {return lowerToPosition(Globals.Outtake.LIFT_BOTTOM);}
 
     public InstantAction zero() {
         return new InstantAction(() -> {

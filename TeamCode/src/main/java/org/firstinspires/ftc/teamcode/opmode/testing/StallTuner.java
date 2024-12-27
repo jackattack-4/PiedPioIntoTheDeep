@@ -27,43 +27,16 @@ public class StallTuner extends OpMode {
 
         left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        left.setDirection(DcMotorSimple.Direction.FORWARD);
+        left.setDirection(DcMotorSimple.Direction.REVERSE);
 
         left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     @Override
     public void loop() {
-        if (gamepad1.left_trigger >= 0.1 && lTarget != 50) {
-            left.setPower(-1);
-            right.setPower(-1);
-            lTarget = 50;
-            direction = false;
+        left.setPower(1);
 
-        } else if (gamepad1.right_trigger >= 0.1 && lTarget != 1500) {
-            left.setPower(1);
-            right.setPower(1);
-            lTarget = 1500;
-        }
-
-        if (lTarget != 0) {
-            if (direction) {
-                if (right.getCurrentPosition() >= lTarget) {
-                    left.setPower(0.11);
-                    right.setPower(0.11);
-                    lTarget = 0;
-                }
-            } else {
-                if (right.getCurrentPosition() <= lTarget) {
-                    left.setPower(0);
-                    right.setPower(0);
-                    lTarget = 0;
-                    direction = true;
-                }
-            }
-        }
-        telemetry.addData("pos", right.getCurrentPosition());
-        telemetry.addData("pos", left.getCurrentPosition());
+       telemetry.addData("r", left.getCurrentPosition());
         telemetry.update();
     }
 }

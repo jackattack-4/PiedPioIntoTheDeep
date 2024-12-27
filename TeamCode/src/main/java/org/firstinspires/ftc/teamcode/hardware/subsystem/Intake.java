@@ -66,11 +66,11 @@ public class Intake implements SubSystem {
 
         //sensor = new IntakeColorSensor(config.hardwareMap.get(ColorSensor.class, "colorSensor"));
 
-        extendo.setDirection(DcMotorSimple.Direction.FORWARD);
+        extendo.setDirection(DcMotorSimple.Direction.REVERSE);
         extendo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         extendo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        intake.setDirection(DcMotorSimple.Direction.FORWARD);
+        intake.setDirection(DcMotorSimple.Direction.REVERSE);
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         state = IntakeState.RETRACTED;
@@ -135,7 +135,7 @@ public class Intake implements SubSystem {
 
                 state = IntakeState.DUMPING;
                 bucketPosition = BucketPosition.DUMP;}),
-                new SleepAction(2),
+                new SleepAction(0.6),
                 raise()
         );
     }

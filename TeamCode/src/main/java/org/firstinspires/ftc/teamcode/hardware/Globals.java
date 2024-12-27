@@ -50,7 +50,7 @@ public class Globals {
         public static final int LIFT_BOTTOM = 20;
 
         public static final double LIFT_OFF = 0;
-        public static final double LIFT_IDLE = 0.35;
+        public static final double LIFT_IDLE = 0.05;
         public static final double LIFT_DOWN = -1;
         public static final double LIFT_UP = 1;
     }

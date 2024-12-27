@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.hardware.robot.Config;
 import org.firstinspires.ftc.teamcode.hardware.Globals;
 import org.firstinspires.ftc.teamcode.hardware.utils.DrivePowersBundle;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -49,7 +50,7 @@ public class Drive implements SubSystem {
     }
 
     public List<Action> update() {
-        double y = -config.gamepad1.left_stick_y; // Remember, Y stick value is reversed
+        double y = config.gamepad1.left_stick_y; // Remember, Y stick value is reversed
         double x = config.gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
         double rx = config.gamepad1.right_stick_x;
 
@@ -79,6 +80,6 @@ public class Drive implements SubSystem {
 
         old = now;
 
-        return null;
+        return new ArrayList<>();
     }
 }

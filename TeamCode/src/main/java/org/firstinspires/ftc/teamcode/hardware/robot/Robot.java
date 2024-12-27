@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.hardware.subsystem.SubSystem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -44,6 +45,8 @@ public abstract class Robot {
 
         intake = (Intake) subsystems.get(1);
         outtake = (Outtake) subsystems.get(2);
+
+        dashboard = FtcDashboard.getInstance();
     }
 
     // Initialize each subsystem
@@ -64,7 +67,11 @@ public abstract class Robot {
         List<Action> newActions = new ArrayList<>();
 
         for (SubSystem subsystem : subsystems) {
-            runningActions.addAll(subsystem.update());
+            List<Action> newLoopActions = subsystem.update();
+
+            if (!Objects.equals(newLoopActions, new ArrayList<Action>())) {
+                runningActions.addAll(newLoopActions);
+            }
         }
 
 
