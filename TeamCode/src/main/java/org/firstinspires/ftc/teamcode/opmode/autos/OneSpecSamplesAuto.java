@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmode.autos;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
@@ -12,11 +13,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.hardware.robot.enums.Alliance;
 import org.firstinspires.ftc.teamcode.hardware.robot.AutonomousRobot;
 import org.firstinspires.ftc.teamcode.hardware.robot.Config;
-import org.firstinspires.ftc.teamcode.hardware.robot.enums.CycleTarget;
 import org.firstinspires.ftc.teamcode.hardware.robot.enums.GameStage;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
-@Autonomous(name="One Specimen & Samples Auto / 3+1 Auto", group="Autos")
+@Autonomous(name="One Specimen & Samples Auto / 1+1 Auto", group="Autos")
 public class OneSpecSamplesAuto extends LinearOpMode {
     Config config;
 
@@ -28,8 +28,7 @@ public class OneSpecSamplesAuto extends LinearOpMode {
 
     MecanumDrive drive;
 
-    TrajectoryActionBuilder startBar;
-    TrajectoryActionBuilder barSpikemark;
+    TrajectoryActionBuilder clipFirstSpec, retrieveFirstSample, scoreFirstSample, getOut;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -45,24 +44,35 @@ public class OneSpecSamplesAuto extends LinearOpMode {
 
         robot.init();
 
-        startBar = drive.actionBuilder(startPose).splineToConstantHeading(new Vector2d(-9,-34), 1);
-        barSpikemark = startBar.endTrajectory().fresh().strafeTo(new Vector2d(-9, -42)).splineToLinearHeading(new Pose2d(-27,-36.5, Math.toRadians(155)), Math.PI);
-        //spikemarkBasketA
+        clipFirstSpec = drive.actionBuilder(startPose).splineToConstantHeading(new Vector2d(-9,-34), 1);
+        retrieveFirstSample = clipFirstSpec.endTrajectory().fresh().strafeTo(new Vector2d(-9, -42)).splineToLinearHeading(new Pose2d(-27,-36.5, Math.toRadians(155)), Math.PI);
+        scoreFirstSample = retrieveFirstSample.endTrajectory().fresh().strafeTo(new Vector2d(-54,-54)).waitSeconds(5).strafeTo(new Vector2d(-56,-56));
+        getOut = scoreFirstSample.endTrajectory().fresh().strafeTo(new Vector2d(-20,0));
 
         waitForStart();
 
         Actions.runBlocking(
                 new SequentialAction(
                         robot.outtake.bar(),
-                        startBar.build(),
-                        robot.outtake.down(),
-                        robot.outtake.down(),
-                        barSpikemark.build(),
-                        //spikemarkBasketA.build,
-                        robot.outtake.bucket(),
-                        drive.actionBuilder(drive.pose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build(),
-                        robot.outtake.down(),
-                        drive.actionBuilder(drive.pose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build()
+                        clipFirstSpec.build(),
+                        robot.outtake.clip(),
+                        new ParallelAction(
+                                retrieveFirstSample.build(),
+                                robot.outtake.down()),
+                        new ParallelAction(
+                                robot.intake.extend(),
+                                new SequentialAction(
+                                        robot.sleep(2),
+                                        robot.intake.runIntake())),
+                        robot.sleep(3),
+                        robot.intake.raiseAndRetract(),
+                        robot.intake.dump(),
+                        new ParallelAction(
+                                scoreFirstSample.build(),
+                                robot.outtake.bucket()),
+                        new ParallelAction(
+                                getOut.build(),
+                                robot.outtake.down())
                 )
         );
     }

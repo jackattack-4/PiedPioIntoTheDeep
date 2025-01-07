@@ -51,10 +51,10 @@ public class SafeSamplesAuto extends LinearOpMode {
                         drive.actionBuilder(startPose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build(),
                         //
                         new SleepAction(2),
-                        drive.actionBuilder(drive.pose).fresh().strafeTo(new Vector2d(-50,-50)).build(),
+                        drive.actionBuilder(drive.localizer.getPose()).fresh().strafeTo(new Vector2d(-50,-50)).build(),
                         new ParallelAction(
                                 robot.outtake.down(),
-                                drive.actionBuilder(drive.pose).fresh().waitSeconds(5).strafeToLinearHeading(new Vector2d(-45, -45), Math.toRadians(90)).build()
+                                drive.actionBuilder(drive.localizer.getPose()).fresh().waitSeconds(5).strafeToLinearHeading(new Vector2d(-45, -45), Math.toRadians(90)).build()
                         )
                 )
         );
