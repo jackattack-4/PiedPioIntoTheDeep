@@ -1,16 +1,6 @@
-name: Bug Report
-description: File a bug report
+name: Error
+description: Something doesnt work
 body:
-  - type: input
-    id: version
-    attributes:
-      label: RR FTC Version
-      description: Open `TeamCode/build.gradle` and read the version from the
-        `implementation "com.acmerobotics.roadrunner:ftc:LIBRARY_VERSION_HERE"`
-        line
-      placeholder: 0.1.8
-    validations:
-      required: true
   - type: textarea
     id: repro
     attributes:
@@ -18,16 +8,10 @@ body:
     validations:
       required: true
   - type: textarea
-    id: tuning
+    id: expected
     attributes:
-      label: Tuning Files
-      description: Click the "Download" button on the tuning page and attach the file
-        (if applicable)
-  - type: textarea
-    id: logs
-    attributes:
-      label: Robot Logs
-      description: Download the relevant logs from `http://192.168.43.1:8080/logs` and
-        attach them here
+      label: Expected Behavior
+    validations:
+      required: true
 
 
