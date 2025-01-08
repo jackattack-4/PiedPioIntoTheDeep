@@ -125,6 +125,7 @@ public class Outtake implements SubSystem {
 
             if (right.getCurrentPosition() <= target) {
                 setLiftPower(Globals.Outtake.LIFT_OFF);
+                if (target != Globals.Outtake.LIFT_TOP_BAR_ATTACH) {resetMotors();}
                 position = (target == Globals.Outtake.LIFT_TOP_BAR_ATTACH) ? LiftPosition.CLIPPING : LiftPosition.BOTTOM;
                 return false;
             }

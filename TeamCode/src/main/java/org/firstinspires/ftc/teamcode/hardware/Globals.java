@@ -41,13 +41,13 @@ public class Globals {
         public static final String OUTTAKE_SERVO = "bucket";
         public static final String CLAW_SERVO = "claw";
 
-        public static final int LIFT_TOP_BASKET = 4550;
+        public static final int LIFT_TOP_BASKET = 4500;
         public static final int LIFT_BOTTOM_BASKET = 2700;
 
         public static final int LIFT_TOP_BAR = 1900;
         public static final int LIFT_TOP_BAR_ATTACH = 1800;
 
-        public static final int LIFT_BOTTOM = 50;
+        public static final int LIFT_BOTTOM = 150;
 
         public static final double LIFT_OFF = 0;
         public static final double LIFT_IDLE = 0.05;
@@ -61,6 +61,6 @@ public class Globals {
         public static final String LEFT_BACK_DRIVE = "leftBack";
         public static final String RIGHT_BACK_DRIVE = "rightBack";
 
-        public static final double MAX_SPEED = 0.5;
+        public static final double MAX_SPEED = 0.8;
     }
 }
