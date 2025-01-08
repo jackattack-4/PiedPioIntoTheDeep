@@ -14,7 +14,7 @@ public final class DrivePowersBundle {
     }
 
     public boolean moved() {
-        double MIN = 0.05;
+        double MIN = 0.2;
         return FL >= MIN || FR >= MIN || BL >= MIN || BR >= MIN;
     }
 }
