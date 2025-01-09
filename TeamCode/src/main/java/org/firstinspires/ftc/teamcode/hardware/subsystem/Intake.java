@@ -159,7 +159,7 @@ public class Intake implements SubSystem {
                 state = IntakeState.EXTENDING;
             }
 
-            if (extendo.getCurrentPosition() <= Globals.Intake.EXTENDO_OUT) {
+            if (extendo.getCurrentPosition() >= Globals.Intake.EXTENDO_OUT) {
                 extendo.setPower(0);
                 state = IntakeState.EXTENDED;
                 return false;

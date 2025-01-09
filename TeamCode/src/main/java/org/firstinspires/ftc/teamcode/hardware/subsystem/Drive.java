@@ -50,8 +50,8 @@ public class Drive implements SubSystem {
     }
 
     public List<Action> update() {
-        double y = -config.gamepad1.left_stick_y; // Remember, Y stick value is reversed
-        double x = config.gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
+        double y = config.gamepad1.left_stick_y; // Remember, Y stick value is reversed
+        double x = -config.gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
         double rx = config.gamepad1.right_stick_x;
 
         // Denominator is the largest motor power (absolute value) or 1
@@ -63,22 +63,22 @@ public class Drive implements SubSystem {
         double backLeftPower = (y - x + rx) / denominator;
         double frontRightPower = (y - x - rx) / denominator;
         double backRightPower = (y + x - rx) / denominator;
-
+/*
         DrivePowersBundle now = new DrivePowersBundle(frontLeftPower, frontRightPower, backLeftPower, backRightPower);
 
         if (old.moved() && !now.moved()) {
-            frontLeftPower = -1;
-            frontRightPower = -1;
-            backLeftPower = -1;
-            backRightPower = -1;
+            frontLeftPower = -old.FL;
+            frontRightPower = -old.FR;
+            backLeftPower = -old.BL;
+            backRightPower = -old.BR;
         }
-
+*/
         leftFrontDrive.setPower(frontLeftPower);
         leftBackDrive.setPower(backLeftPower);
         rightFrontDrive.setPower(frontRightPower);
         rightBackDrive.setPower(backRightPower);
 
-        old = now;
+        //old = now;
 
         return new ArrayList<>();
     }

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.hardware.utils;
 
+import org.firstinspires.ftc.teamcode.hardware.Globals;
+
 public final class DrivePowersBundle {
     public final double FL;
     public final double FR;
@@ -14,7 +16,7 @@ public final class DrivePowersBundle {
     }
 
     public boolean moved() {
-        double MIN = 0.2;
+        double MIN = Globals.Drive.WHEEL_LOCK_MIN;
         return FL >= MIN || FR >= MIN || BL >= MIN || BR >= MIN;
     }
 }
