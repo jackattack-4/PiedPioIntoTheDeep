@@ -23,12 +23,19 @@ public class Outtake implements SubSystem {
         CLIPPING
     }
 
+    public enum LiftDirection {
+        UP,
+        DOWN,
+        STOP
+    }
+
     // Constants for joystick thresholds
     private static final double JOYSTICK_THRESHOLD = 0.25;
 
     private final Config config;
     private DcMotor right, left;
     private LiftPosition position;
+    private LiftDirection direction;
 
     public Outtake(Config config) {
         this.config = config;
@@ -47,6 +54,8 @@ public class Outtake implements SubSystem {
         resetMotors();
 
         position = LiftPosition.BOTTOM;
+
+        direction = LiftDirection.STOP;
     }
 
     @Override
@@ -66,17 +75,22 @@ public class Outtake implements SubSystem {
         double rightStickY = -config.gamepad2.right_stick_y;
 
         if (leftStickY >= JOYSTICK_THRESHOLD && position != LiftPosition.TOP_BASKET) {
+            direction = LiftDirection.UP;
             newActions.add(bucket());
         } else if (leftStickY <= -JOYSTICK_THRESHOLD && position != LiftPosition.BOTTOM) {
+            direction = LiftDirection.DOWN;
             newActions.add(down());
         }
 
         if (rightStickY >= JOYSTICK_THRESHOLD && position != LiftPosition.TOP_BAR) {
+            direction = LiftDirection.UP;
             newActions.add(bar());
         } else if (rightStickY <= -JOYSTICK_THRESHOLD && position != LiftPosition.BOTTOM) {
             if (position != LiftPosition.CLIPPING) {
+                direction = LiftDirection.DOWN;
                 newActions.add(clip());
             } else {
+                direction = LiftDirection.DOWN;
                 newActions.add(down());
             }
         }
@@ -93,6 +107,7 @@ public class Outtake implements SubSystem {
         config.telemetry.addData("Left Lift Pos", left.getCurrentPosition());
         config.telemetry.addData("Left Lift Power", left.getPower());
         config.telemetry.addData("Lift Position", position);
+        config.telemetry.addData("Lift Direction", direction);
     }
 
     public Action raiseToPosition(int target) {
@@ -107,10 +122,10 @@ public class Outtake implements SubSystem {
             if (right.getCurrentPosition() >= target) {
                 setLiftPower(Globals.Outtake.LIFT_IDLE);
                 position = (target == Globals.Outtake.LIFT_TOP_BASKET) ? LiftPosition.TOP_BASKET : LiftPosition.TOP_BAR;
-                return false;
+                direction = LiftDirection.STOP;
             }
 
-            return true;
+            return direction == LiftDirection.UP;
         };
     }
 
@@ -125,12 +140,12 @@ public class Outtake implements SubSystem {
 
             if (right.getCurrentPosition() <= target) {
                 setLiftPower(Globals.Outtake.LIFT_OFF);
-                if (target != Globals.Outtake.LIFT_TOP_BAR_ATTACH) {resetMotors();}
                 position = (target == Globals.Outtake.LIFT_TOP_BAR_ATTACH) ? LiftPosition.CLIPPING : LiftPosition.BOTTOM;
-                return false;
+                direction = LiftDirection.STOP;
+                if (target != Globals.Outtake.LIFT_TOP_BAR_ATTACH) {resetMotors();}
             }
 
-            return true;
+            return direction == LiftDirection.DOWN;
         };
     }
 
@@ -140,6 +155,7 @@ public class Outtake implements SubSystem {
         telemetryPacket.put("Left Lift Pos", left.getCurrentPosition());
         telemetryPacket.put("Left Lift Power", left.getPower());
         telemetryPacket.put("Lift Position", position);
+        telemetryPacket.put("Lift Direction", direction);
 
         addTelemetryData();
     }
