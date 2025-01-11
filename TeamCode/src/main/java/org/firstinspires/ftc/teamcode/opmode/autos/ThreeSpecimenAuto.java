@@ -49,15 +49,15 @@ public class ThreeSpecimenAuto extends LinearOpMode {
 
         robot.init();
 
-        driveToBar = drive.actionBuilder(startPose).strafeToLinearHeading(new Vector2d(0,-35), Math.toRadians(0));
+        driveToBar = drive.actionBuilder(startPose).strafeToLinearHeading(new Vector2d(0,-28), Math.toRadians(0));
 
-        getTwo = driveToBar.endTrajectory().fresh().strafeToConstantHeading(new Vector2d(40,-42)).strafeToConstantHeading(new Vector2d(40,-15)).strafeToLinearHeading(new Vector2d(50,-35), Math.toRadians(270)).strafeToConstantHeading(new Vector2d(65,-60)).strafeToLinearHeading(new Vector2d(50,-55), Math.toRadians(180)).waitSeconds(1).strafeToConstantHeading(new Vector2d(50,-73));
+        getTwo = driveToBar.endTrajectory().fresh().strafeToConstantHeading(new Vector2d(40,-42)).strafeToConstantHeading(new Vector2d(40,-15)).strafeToLinearHeading(new Vector2d(50,-35), Math.toRadians(270)).strafeToConstantHeading(new Vector2d(65,-60)).strafeToLinearHeading(new Vector2d(45,-55), Math.toRadians(180)).waitSeconds(1).strafeToConstantHeading(new Vector2d(50,-73));
 
-        hangTwo = getTwo.endTrajectory().fresh().strafeToLinearHeading(new Vector2d(6,-30), Math.toRadians(0));
+        hangTwo = getTwo.endTrajectory().fresh().strafeToLinearHeading(new Vector2d(6,-28), Math.toRadians(0));
 
         getThree = hangTwo.endTrajectory().fresh().strafeToLinearHeading(new Vector2d(50,-55), Math.toRadians(180)).waitSeconds(1).strafeToConstantHeading(new Vector2d(50,-73));
 
-        hangThree = getThree.endTrajectory().fresh().strafeToLinearHeading(new Vector2d(10,-30), Math.toRadians(0));
+        hangThree = getThree.endTrajectory().fresh().strafeToLinearHeading(new Vector2d(8,-27), Math.toRadians(0));
 
         park = hangThree.endTrajectory().fresh().strafeToLinearHeading(new Vector2d(50,-70), Math.toRadians(0));
 

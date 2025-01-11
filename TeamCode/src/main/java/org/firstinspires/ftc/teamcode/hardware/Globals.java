@@ -47,7 +47,7 @@ public class Globals {
         public static final int LIFT_TOP_BAR = 2000;
         public static final int LIFT_TOP_BAR_ATTACH = 1800;
 
-        public static final int LIFT_BOTTOM = 400;
+        public static final int LIFT_BOTTOM = 200;
 
         public static final double LIFT_OFF = 0;
         public static final double LIFT_IDLE = 0.1;
