@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.hardware.robot.enums.Alliance;
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.teamcode.hardware.robot.Config;
 import org.firstinspires.ftc.teamcode.hardware.robot.enums.CycleTarget;
 import org.firstinspires.ftc.teamcode.hardware.robot.enums.GameStage;
 
+@Disabled
 @Autonomous(name="Intake Action Test", group="Test")
 public class IntakeActionTest extends LinearOpMode {
     Config config;

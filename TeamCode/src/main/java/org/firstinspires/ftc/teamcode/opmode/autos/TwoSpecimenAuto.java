@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.opmode.autos;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.roadrunner.InstantAction;
+import com.acmerobotics.roadrunner.InstantFunction;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.SleepAction;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -15,10 +18,11 @@ import org.firstinspires.ftc.teamcode.hardware.robot.AutonomousRobot;
 import org.firstinspires.ftc.teamcode.hardware.robot.Config;
 import org.firstinspires.ftc.teamcode.hardware.robot.enums.CycleTarget;
 import org.firstinspires.ftc.teamcode.hardware.robot.enums.GameStage;
+import org.firstinspires.ftc.teamcode.hardware.subsystem.Outtake;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
-@Autonomous(name="Safe Samples Auto / 1+0 ", group="Autos")
-public class SafeSamplesAuto extends LinearOpMode {
+@Autonomous(name="Two Specimen Auto / 0+2 Auto", group="Autos")
+public class TwoSpecimenAuto extends LinearOpMode {
     Config config;
 
     AutonomousRobot robot;
@@ -29,9 +33,11 @@ public class SafeSamplesAuto extends LinearOpMode {
 
     MecanumDrive drive;
 
+    TrajectoryActionBuilder driveToBar, getTwo, hangTwo, park;
+
     @Override
     public void runOpMode() throws InterruptedException {
-        startPose = new Pose2d(-30, -61, Math.toRadians(0));
+        startPose = new Pose2d(15, -63, Math.toRadians(0));
 
         dashboard = FtcDashboard.getInstance();
 
@@ -43,18 +49,32 @@ public class SafeSamplesAuto extends LinearOpMode {
 
         robot.init();
 
+        driveToBar = drive.actionBuilder(startPose).strafeToLinearHeading(new Vector2d(0,-35), Math.toRadians(0));
+
+        getTwo = driveToBar.endTrajectory().fresh().strafeToLinearHeading(new Vector2d(50,-55), Math.toRadians(180)).waitSeconds(1).strafeToConstantHeading(new Vector2d(50,-73));
+
+        hangTwo = getTwo.endTrajectory().fresh().strafeToLinearHeading(new Vector2d(9,-33), Math.toRadians(0));
+
+        park = hangTwo.endTrajectory().fresh().strafeToLinearHeading(new Vector2d(50,-70), Math.toRadians(180));
+
         waitForStart();
 
         Actions.runBlocking(
                 new SequentialAction(
-                        //robot.outtake.up(),
-                        drive.actionBuilder(startPose).strafeToLinearHeading(new Vector2d(-55, -55), Math.toRadians(45)).build(),
-                        //
-                        new SleepAction(2),
-                        drive.actionBuilder(drive.localizer.getPose()).fresh().strafeTo(new Vector2d(-50,-50)).build(),
+                        robot.outtake.bar(),
+                        driveToBar.build(),
+                        robot.outtake.clip(),
+                        new ParallelAction(
+                            robot.outtake.down(),
+                            getTwo.build()
+                        ),
+                        robot.outtake.zero(),
+                        robot.outtake.bar(),
+                        hangTwo.build(),
+                        robot.outtake.clip(),
                         new ParallelAction(
                                 robot.outtake.down(),
-                                drive.actionBuilder(drive.localizer.getPose()).fresh().waitSeconds(5).strafeToLinearHeading(new Vector2d(-45, -45), Math.toRadians(90)).build()
+                                park.build()
                         )
                 )
         );

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmode.testing;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,6 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.hardware.Globals;
 import org.firstinspires.ftc.teamcode.hardware.robot.enums.CycleTarget;
 
+@Disabled
 @TeleOp(name="TeleOp", group="Testing")
 public class Testbed extends OpMode {
     public DcMotor lift, extendo, intake;

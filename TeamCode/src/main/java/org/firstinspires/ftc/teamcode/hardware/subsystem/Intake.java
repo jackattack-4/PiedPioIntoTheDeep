@@ -89,7 +89,7 @@ public class Intake implements SubSystem {
     public List<Action> update() {
         List<Action> newActions = new ArrayList<>();
 
-        if (config.gamepad2.right_trigger >= 0.1 && !(extendo.getCurrentPosition() >= Globals.Intake.EXTENDO_OUT)) {extendo.setPower(1);} else if (config.gamepad2.left_trigger >= 0.1 && !(extendo.getCurrentPosition() <= Globals.Intake.EXTENDO_IN)) {extendo.setPower(-1);} else {extendo.setPower(0);}
+        if (config.gamepad2.right_bumper && !(extendo.getCurrentPosition() >= Globals.Intake.EXTENDO_OUT)) {extendo.setPower(1);} else if (config.gamepad2.left_bumper && !(extendo.getCurrentPosition() <= Globals.Intake.EXTENDO_IN)) {extendo.setPower(-1);} else {extendo.setPower(0);}
 
         if (config.gamepad2.b && state != IntakeState.RETRACTED) {newActions.add(raiseAndRetract());}
         if (config.gamepad2.a && state != IntakeState.INTAKING) {newActions.add(runIntake());}

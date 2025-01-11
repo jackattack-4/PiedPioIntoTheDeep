@@ -44,13 +44,13 @@ public class Globals {
         public static final int LIFT_TOP_BASKET = 4500;
         public static final int LIFT_BOTTOM_BASKET = 2700;
 
-        public static final int LIFT_TOP_BAR = 1900;
+        public static final int LIFT_TOP_BAR = 2000;
         public static final int LIFT_TOP_BAR_ATTACH = 1800;
 
-        public static final int LIFT_BOTTOM = 150;
+        public static final int LIFT_BOTTOM = 400;
 
         public static final double LIFT_OFF = 0;
-        public static final double LIFT_IDLE = 0.05;
+        public static final double LIFT_IDLE = 0.1;
         public static final double LIFT_DOWN = -1;
         public static final double LIFT_UP = 1;
     }

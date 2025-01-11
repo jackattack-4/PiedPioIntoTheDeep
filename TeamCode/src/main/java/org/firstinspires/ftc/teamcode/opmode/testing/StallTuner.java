@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.hardware.robot.enums.CycleTarget;
 
+@Disabled
 @TeleOp(name="StallTuner", group="Testing")
 public class StallTuner extends OpMode {
     DcMotor right, left;

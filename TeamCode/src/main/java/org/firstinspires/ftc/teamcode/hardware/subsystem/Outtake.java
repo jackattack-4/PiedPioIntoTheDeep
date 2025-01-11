@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.hardware.robot.Config;
 import org.firstinspires.ftc.teamcode.hardware.Globals;
+import org.firstinspires.ftc.teamcode.hardware.robot.enums.GameStage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +70,17 @@ public class Outtake implements SubSystem {
         if (config.gamepad2.back) {
             newActions.add(zero());
         }
+        if (config.gamepad2.right_trigger >= 0.1) {
+            setLiftPower(Globals.Outtake.LIFT_UP);
+        } else if (config.gamepad2.left_trigger >= 0.1) {
+            setLiftPower(Globals.Outtake.LIFT_DOWN);
+        } else if (right.getCurrentPosition() >= Globals.Outtake.LIFT_BOTTOM) {
+            setLiftPower(Globals.Outtake.LIFT_IDLE);
+        }else {
+            setLiftPower(Globals.Outtake.LIFT_OFF);
+        }
 
+/*
         // Handle joystick controls
         double leftStickY = -config.gamepad2.left_stick_y;
         double rightStickY = -config.gamepad2.right_stick_y;
@@ -94,6 +105,7 @@ public class Outtake implements SubSystem {
                 newActions.add(down());
             }
         }
+        */
 
         // Add telemetry data
         addTelemetryData();
@@ -112,6 +124,10 @@ public class Outtake implements SubSystem {
 
     public Action raiseToPosition(int target) {
         return telemetryPacket -> {
+            if (config.stage == GameStage.Autonomous) {
+                direction = LiftDirection.UP;
+            }
+
             if (position != LiftPosition.RISING) {
                 setLiftPower(Globals.Outtake.LIFT_UP);
                 position = LiftPosition.RISING;
@@ -131,6 +147,9 @@ public class Outtake implements SubSystem {
 
     public Action lowerToPosition(int target) {
         return telemetryPacket -> {
+            if (config.stage == GameStage.Autonomous) {
+                direction = LiftDirection.DOWN;
+            }
             if (position != LiftPosition.LOWERING) {
                 setLiftPower(Globals.Outtake.LIFT_DOWN);
                 position = LiftPosition.LOWERING;

@@ -21,6 +21,8 @@ public class Drive implements SubSystem {
 
     private DrivePowersBundle old;
 
+    private boolean switched;
+
     public Drive(Config config) {
         this.config = config;
     }
@@ -42,6 +44,8 @@ public class Drive implements SubSystem {
         rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         old = new DrivePowersBundle(0,0,0,0);
+
+        switched = false;
     }
 
     @Override
@@ -50,9 +54,13 @@ public class Drive implements SubSystem {
     }
 
     public List<Action> update() {
-        double y = config.gamepad1.left_stick_y; // Remember, Y stick value is reversed
-        double x = -config.gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
+        double y = config.gamepad1.left_stick_y * ((switched)?-1:1); // Remember, Y stick value is reversed
+        double x = -config.gamepad1.left_stick_x * ((switched)?-1.1:1.1); // Counteract imperfect strafing
         double rx = config.gamepad1.right_stick_x;
+
+        if (config.gamepad1.back) {
+            switched = !switched;
+        }
 
         // Denominator is the largest motor power (absolute value) or 1
         // This ensures all the powers maintain the same ratio,
@@ -79,6 +87,8 @@ public class Drive implements SubSystem {
         rightBackDrive.setPower(backRightPower);
 
         //old = now;
+
+        config.telemetry.addData("switched", switched);
 
         return new ArrayList<>();
     }
