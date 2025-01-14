@@ -110,7 +110,7 @@ public class Intake implements SubSystem {
     public InstantAction purge() {
         return new InstantAction(() -> {
             intake.setPower(Globals.Intake.POWER_PURGE);
-            bucket.setPosition(Globals.Intake.BUCKET_PURGE);
+            bucket.setPosition(Globals.Intake.BUCKET_DOWN);
 
             state = IntakeState.PURGING;
             bucketPosition = BucketPosition.PURGE;
