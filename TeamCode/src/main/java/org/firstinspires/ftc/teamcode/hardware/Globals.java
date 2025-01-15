@@ -13,9 +13,9 @@ public class Globals {
         public static final String INTAKE_SERVO = "bucket";
 
 
-        public static final double BUCKET_UP = 0.54;
-        public static final double BUCKET_DOWN = 0.95;
-        public static final double BUCKET_DUMP = 0.20;
+        public static final double BUCKET_UP = 0.50;
+        public static final double BUCKET_DOWN = 0.90;
+        public static final double BUCKET_DUMP = 0.25;
         public static final double BUCKET_PURGE = 0.7;
 
         public static final double EXTENDO_POWER_OUT = 1;

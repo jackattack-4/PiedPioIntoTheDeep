@@ -71,9 +71,9 @@ public class Outtake implements SubSystem {
             newActions.add(zero());
         }
         if (config.gamepad2.right_trigger >= 0.1) {
-            setLiftPower(Globals.Outtake.LIFT_UP);
+            setLiftPower(config.gamepad2.right_trigger);
         } else if (config.gamepad2.left_trigger >= 0.1) {
-            setLiftPower(Globals.Outtake.LIFT_DOWN);
+            setLiftPower(-config.gamepad2.left_trigger);
         } else if (right.getCurrentPosition() >= Globals.Outtake.LIFT_BOTTOM) {
             setLiftPower(Globals.Outtake.LIFT_IDLE);
         }else {

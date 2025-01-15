@@ -37,7 +37,7 @@ public class ThreeSpecimenAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        startPose = new Pose2d(15, -63, Math.toRadians(0));
+        startPose = new Pose2d(0, -63, Math.toRadians(0));
 
         dashboard = FtcDashboard.getInstance();
 
@@ -51,22 +51,36 @@ public class ThreeSpecimenAuto extends LinearOpMode {
 
         driveToBar = drive.actionBuilder(startPose).strafeToLinearHeading(new Vector2d(0,-28), Math.toRadians(0));
 
-        getTwo = driveToBar.endTrajectory().fresh().strafeToConstantHeading(new Vector2d(40,-42)).strafeToConstantHeading(new Vector2d(40,-15)).strafeToLinearHeading(new Vector2d(50,-35), Math.toRadians(270)).strafeToConstantHeading(new Vector2d(65,-60)).strafeToLinearHeading(new Vector2d(45,-55), Math.toRadians(180)).waitSeconds(1).strafeToConstantHeading(new Vector2d(50,-73));
+        getTwo = driveToBar.endTrajectory().fresh()
+                .strafeToConstantHeading(new Vector2d(4, -40))
+                .strafeToConstantHeading(new Vector2d(30, -37))
+                .strafeToConstantHeading(new Vector2d(30, -10))
+                .turn(Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(36, -10), Math.PI/4)
+                .strafeToConstantHeading(new Vector2d(36, -55))
+                .strafeToConstantHeading(new Vector2d(36, -10))
+                .splineToConstantHeading(new Vector2d(46, -10), Math.PI/4)
+                .strafeToConstantHeading(new Vector2d(46, -55))
+                .splineToLinearHeading(new Pose2d(50, -50, Math.toRadians(180)), -1)
+                .waitSeconds(1)
+                .strafeToConstantHeading(new Vector2d(50,-60));
 
-        hangTwo = getTwo.endTrajectory().fresh().strafeToLinearHeading(new Vector2d(6,-28), Math.toRadians(0));
+        hangTwo = getTwo.endTrajectory().fresh().strafeToLinearHeading(new Vector2d(9, -34), Math.toRadians(0));
 
-        getThree = hangTwo.endTrajectory().fresh().strafeToLinearHeading(new Vector2d(50,-55), Math.toRadians(180)).waitSeconds(1).strafeToConstantHeading(new Vector2d(50,-73));
+        getThree = hangTwo.endTrajectory().strafeToLinearHeading(new Vector2d(50, -50), Math.toRadians(180)).waitSeconds(1).strafeToConstantHeading(new Vector2d(50,-60));
 
-        hangThree = getThree.endTrajectory().fresh().strafeToLinearHeading(new Vector2d(8,-27), Math.toRadians(0));
+        hangThree = getThree.endTrajectory().fresh().strafeToLinearHeading(new Vector2d(9, -34), Math.toRadians(0));
 
-        park = hangThree.endTrajectory().fresh().strafeToLinearHeading(new Vector2d(50,-70), Math.toRadians(0));
+        park = hangThree.endTrajectory().fresh().strafeToConstantHeading(new Vector2d(50, -60));
 
         waitForStart();
 
         Actions.runBlocking(
                 new SequentialAction(
+                        new ParallelAction(
                         robot.outtake.bar(),
-                        driveToBar.build(),
+                        driveToBar.build()
+                        ),
                         robot.outtake.clip(),
                         new ParallelAction(
                                 robot.outtake.down(),

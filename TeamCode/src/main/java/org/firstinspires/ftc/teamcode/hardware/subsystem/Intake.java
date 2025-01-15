@@ -22,14 +22,14 @@ public class Intake implements SubSystem {
         PURGING,
         RETRACTING,
         EXTENDING,
-        EXTENDED
+        EXTENDED,
+        STOPPED
     }
 
     public enum BucketPosition {
         DUMP,
         ZERO,
-        DOWN,
-        PURGE
+        DOWN
     }
 
     public enum IntakeContent {
@@ -91,11 +91,12 @@ public class Intake implements SubSystem {
 
         if (config.gamepad2.right_bumper && !(extendo.getCurrentPosition() >= Globals.Intake.EXTENDO_OUT)) {extendo.setPower(1);} else if (config.gamepad2.left_bumper && !(extendo.getCurrentPosition() <= Globals.Intake.EXTENDO_IN)) {extendo.setPower(-1);} else {extendo.setPower(0);}
 
-        if (config.gamepad2.b && state != IntakeState.RETRACTED) {newActions.add(raiseAndRetract());}
+        if (config.gamepad2.b && state != IntakeState.RETRACTED) {newActions.add(raise());}
         if (config.gamepad2.a && state != IntakeState.INTAKING) {newActions.add(runIntake());}
         if (config.gamepad2.x && bucketPosition != BucketPosition.ZERO) {newActions.add(raise());}
         if (config.gamepad2.y && state != IntakeState.DUMPING && bucketPosition != BucketPosition.DUMP) {newActions.add(dump());}
         if (config.gamepad2.dpad_down && state != IntakeState.PURGING) {newActions.add(purge());}
+        if (config.gamepad2.dpad_up && state != IntakeState.STOPPED) {newActions.add(stop());}
 
         config.telemetry.addData("bucket pos (0-1)", bucket.getPosition());
         config.telemetry.addData("bucket pos (State)", bucketPosition);
@@ -113,7 +114,16 @@ public class Intake implements SubSystem {
             bucket.setPosition(Globals.Intake.BUCKET_DOWN);
 
             state = IntakeState.PURGING;
-            bucketPosition = BucketPosition.PURGE;
+            bucketPosition = BucketPosition.DOWN;
+        });
+    }
+
+    public InstantAction stop() {
+        return new InstantAction(() -> {
+            intake.setPower(Globals.Intake.POWER_OFF);
+
+            state = IntakeState.STOPPED;
+            bucketPosition = BucketPosition.DOWN;
         });
     }
 
