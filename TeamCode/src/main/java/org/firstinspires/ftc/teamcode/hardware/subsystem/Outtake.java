@@ -147,7 +147,7 @@ public class Outtake implements SubSystem {
 
     public Action lowerToPosition(int target) {
         return telemetryPacket -> {
-            if (config.stage == GameStage.Autonomous) {
+            if (config.stage == GameStage.Autonomous && direction != LiftDirection.DOWN) {
                 direction = LiftDirection.DOWN;
             }
             if (position != LiftPosition.LOWERING) {
@@ -157,7 +157,7 @@ public class Outtake implements SubSystem {
 
             updateTelemetry(telemetryPacket);
 
-            if (right.getCurrentPosition() <= target) {
+            if (left.getCurrentPosition() <= target) {
                 setLiftPower(Globals.Outtake.LIFT_OFF);
                 position = (target == Globals.Outtake.LIFT_TOP_BAR_ATTACH) ? LiftPosition.CLIPPING : LiftPosition.BOTTOM;
                 direction = LiftDirection.STOP;

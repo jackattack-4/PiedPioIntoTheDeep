@@ -13,7 +13,6 @@ import org.firstinspires.ftc.teamcode.hardware.robot.Config;
 import org.firstinspires.ftc.teamcode.hardware.robot.enums.CycleTarget;
 import org.firstinspires.ftc.teamcode.hardware.robot.enums.GameStage;
 
-@Disabled
 @Autonomous(name="Lift Action Test", group="Test")
 public class LiftActionTest extends LinearOpMode {
     Config config;
@@ -36,11 +35,9 @@ public class LiftActionTest extends LinearOpMode {
         Actions.runBlocking(
                 new SequentialAction(
                         robot.outtake.bar(),
-                        robot.sleep(3),
-                        robot.outtake.down(),
-                        robot.sleep(3),
-                        robot.outtake.bucket(),
-                        robot.sleep(3),
+                        robot.sleep(2),
+                        robot.outtake.clip(),
+                        robot.sleep(2),
                         robot.outtake.down()
                 )
         );
