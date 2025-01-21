@@ -53,7 +53,7 @@ public class ThreeSpecimenAuto extends LinearOpMode {
 
         getTwo = driveToBar.endTrajectory().fresh()
                 .strafeToConstantHeading(new Vector2d(20, -55))
-                .strafeToConstantHeading(new Vector2d(30, -20))
+                .strafeToConstantHeading(new Vector2d(36, -20))
                 .turn(Math.toRadians(-90))
                 .splineToConstantHeading(new Vector2d(33, -20), Math.PI/4)
                 .strafeToConstantHeading(new Vector2d(33, -63))
@@ -64,7 +64,7 @@ public class ThreeSpecimenAuto extends LinearOpMode {
                 .waitSeconds(1)
                 .strafeToConstantHeading(new Vector2d(37,-78));
 
-        hangTwo = getTwo.endTrajectory().fresh().turn(179).strafeTo(new Vector2d(-10, -40));
+        hangTwo = getTwo.endTrajectory().fresh().turn(Math.toRadians(180)).strafeTo(new Vector2d(-10, -40));
 
         getThree = hangTwo.endTrajectory().fresh().strafeToLinearHeading(new Vector2d(35, -70), Math.toRadians(180)).waitSeconds(1).strafeToConstantHeading(new Vector2d(35,-78));
 
