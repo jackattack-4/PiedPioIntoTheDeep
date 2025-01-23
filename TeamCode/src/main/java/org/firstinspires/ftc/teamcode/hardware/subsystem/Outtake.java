@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.InstantAction;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import org.firstinspires.ftc.teamcode.hardware.robot.Config;
 import org.firstinspires.ftc.teamcode.hardware.Globals;
@@ -35,6 +36,7 @@ public class Outtake implements SubSystem {
 
     private final Config config;
     private DcMotor right, left;
+    private DigitalChannel switchV;
     private LiftPosition position;
     private LiftDirection direction;
 
@@ -46,6 +48,8 @@ public class Outtake implements SubSystem {
     public void init() {
         right = config.hardwareMap.get(DcMotor.class, Globals.Outtake.RIGHT_LIFT_MOTOR);
         left = config.hardwareMap.get(DcMotor.class, Globals.Outtake.LEFT_LIFT_MOTOR);
+
+        switchV = config.hardwareMap.get(DigitalChannel.class, Globals.Outtake.LIMIT_SWITCH);
 
         // Set motor directions
         right.setDirection(DcMotor.Direction.REVERSE);
@@ -67,16 +71,16 @@ public class Outtake implements SubSystem {
         List<Action> newActions = new ArrayList<>();
 
         // Zero the lift if the back button is pressed
-        if (config.gamepad2.back) {
-            newActions.add(zero());
+        if (config.gamepad2.back || switchV.getState()) {
+            resetMotors();
         }
         if (config.gamepad2.right_trigger >= 0.1) {
             setLiftPower(Math.min(1,config.gamepad2.right_trigger*2));
         } else if (config.gamepad2.left_trigger >= 0.1) {
             setLiftPower(-Math.min(1,config.gamepad2.left_trigger*2));
-        } else if (right.getCurrentPosition() >= Globals.Outtake.LIFT_BOTTOM) {
+        } else if (!switchV.getState()) {
             setLiftPower(Globals.Outtake.LIFT_IDLE);
-        }else {
+        } else {
             setLiftPower(Globals.Outtake.LIFT_OFF);
         }
 
@@ -120,6 +124,7 @@ public class Outtake implements SubSystem {
         config.telemetry.addData("Left Lift Power", left.getPower());
         config.telemetry.addData("Lift Position", position);
         config.telemetry.addData("Lift Direction", direction);
+        config.telemetry.addData("Switch", switchV.getState());
     }
 
     public Action raiseToPosition(int target) {
@@ -168,6 +173,29 @@ public class Outtake implements SubSystem {
         };
     }
 
+    public Action lowerToBottom() {
+        return telemetryPacket -> {
+            if (config.stage == GameStage.Autonomous && direction != LiftDirection.DOWN) {
+                direction = LiftDirection.DOWN;
+            }
+            if (position != LiftPosition.LOWERING) {
+                setLiftPower(Globals.Outtake.LIFT_DOWN);
+                position = LiftPosition.LOWERING;
+            }
+
+            updateTelemetry(telemetryPacket);
+
+            if (switchV.getState()) {
+                setLiftPower(Globals.Outtake.LIFT_OFF);
+                position = (switchV.getState()) ? LiftPosition.CLIPPING : LiftPosition.BOTTOM;
+                direction = LiftDirection.STOP;
+                if (switchV.getState()) {resetMotors();}
+            }
+
+            return direction == LiftDirection.DOWN;
+        };
+    }
+
     private void updateTelemetry(TelemetryPacket telemetryPacket) {
         telemetryPacket.put("Right Lift Pos", right.getCurrentPosition());
         telemetryPacket.put("Right Lift Power", right.getPower());
@@ -175,6 +203,7 @@ public class Outtake implements SubSystem {
         telemetryPacket.put("Left Lift Power", left.getPower());
         telemetryPacket.put("Lift Position", position);
         telemetryPacket.put("Lift Direction", direction);
+        telemetryPacket.put("Switch", switchV.getState());
 
         addTelemetryData();
     }
@@ -197,7 +226,7 @@ public class Outtake implements SubSystem {
     }
 
     public Action down() {
-        return lowerToPosition(Globals.Outtake.LIFT_BOTTOM);
+        return lowerToBottom();
     }
 
     public InstantAction zero() {

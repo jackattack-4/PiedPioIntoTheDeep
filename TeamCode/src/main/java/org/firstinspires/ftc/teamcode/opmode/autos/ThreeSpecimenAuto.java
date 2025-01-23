@@ -55,20 +55,19 @@ public class ThreeSpecimenAuto extends LinearOpMode {
                 .strafeToConstantHeading(new Vector2d(20, -55))
                 .strafeToConstantHeading(new Vector2d(36, -20))
                 .turn(Math.toRadians(-90))
-                .splineToConstantHeading(new Vector2d(33, -20), Math.PI/4)
-                .strafeToConstantHeading(new Vector2d(33, -63))
-                .strafeToConstantHeading(new Vector2d(33, -27))
-                .splineToConstantHeading(new Vector2d(42, -27), Math.PI/4)
-                .strafeToConstantHeading(new Vector2d(42, -63))
+                .strafeToConstantHeading(new Vector2d(36, -63))
+                .strafeToConstantHeading(new Vector2d(36, -27))
+                .splineToConstantHeading(new Vector2d(44, -27), Math.PI/4)
+                .strafeToConstantHeading(new Vector2d(44, -63))
                 .splineToLinearHeading(new Pose2d(37, -65, Math.toRadians(180)), -1)
-                .waitSeconds(1)
-                .strafeToConstantHeading(new Vector2d(37,-78));
+                .waitSeconds(0.1)
+                .strafeToConstantHeading(new Vector2d(37,-76));
 
-        hangTwo = getTwo.endTrajectory().fresh().turn(Math.toRadians(180)).strafeTo(new Vector2d(-10, -40));
+        hangTwo = getTwo.endTrajectory().fresh().turn(Math.toRadians(180)).strafeTo(new Vector2d(-10, -40)).waitSeconds(0.2);
 
-        getThree = hangTwo.endTrajectory().fresh().strafeToLinearHeading(new Vector2d(35, -70), Math.toRadians(180)).waitSeconds(1).strafeToConstantHeading(new Vector2d(35,-78));
+        getThree = hangTwo.endTrajectory().fresh().strafeToLinearHeading(new Vector2d(35, -70), Math.toRadians(180)).waitSeconds(0.1).strafeToConstantHeading(new Vector2d(35,-78));
 
-        hangThree = getThree.endTrajectory().fresh().strafeToLinearHeading(new Vector2d(-14, -40), Math.toRadians(0));
+        hangThree = getThree.endTrajectory().fresh().turn(Math.toRadians(180)).strafeTo(new Vector2d(-12, -40)).waitSeconds(0.2);
 
         park = hangThree.endTrajectory().fresh().strafeToConstantHeading(new Vector2d(35, -70));
 
