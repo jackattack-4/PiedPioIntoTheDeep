@@ -93,7 +93,7 @@ public class Intake implements SubSystem {
 
         if (config.gamepad2.b && state != IntakeState.RETRACTED) {newActions.add(raise());}
         if (config.gamepad2.a && state != IntakeState.INTAKING) {newActions.add(runIntake());}
-        if (config.gamepad2.x && bucketPosition != BucketPosition.ZERO) {newActions.add(raise());}
+        if (config.gamepad2.x || config.gamepad2.left_trigger >= 0.1 && bucketPosition != BucketPosition.ZERO) {newActions.add(raise());}
         if (config.gamepad2.y && state != IntakeState.DUMPING && bucketPosition != BucketPosition.DUMP) {newActions.add(dump());}
         if (config.gamepad2.dpad_down && state != IntakeState.PURGING) {newActions.add(purge());}
         if (config.gamepad2.dpad_up && state != IntakeState.STOPPED) {newActions.add(stop());}

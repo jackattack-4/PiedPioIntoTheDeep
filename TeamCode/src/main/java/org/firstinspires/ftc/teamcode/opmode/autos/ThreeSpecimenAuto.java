@@ -49,15 +49,15 @@ public class ThreeSpecimenAuto extends LinearOpMode {
 
         robot.init();
 
-        driveToBar = drive.actionBuilder(startPose).strafeToLinearHeading(new Vector2d(-8,-38), Math.toRadians(0));
+        driveToBar = drive.actionBuilder(startPose).strafeTo(new Vector2d(-8,-38));
 
         getTwo = driveToBar.endTrajectory().fresh()
                 .strafeToConstantHeading(new Vector2d(20, -55))
-                .strafeToConstantHeading(new Vector2d(36, -20))
+                .strafeToConstantHeading(new Vector2d(38, -20))
                 .turn(Math.toRadians(-90))
-                .strafeToConstantHeading(new Vector2d(36, -63))
-                .strafeToConstantHeading(new Vector2d(36, -27))
-                .splineToConstantHeading(new Vector2d(44, -27), Math.PI/4)
+                .strafeToConstantHeading(new Vector2d(38, -63))
+                .strafeToConstantHeading(new Vector2d(38, -27))
+                .strafeToConstantHeading(new Vector2d(44, -27)  )
                 .strafeToConstantHeading(new Vector2d(44, -63))
                 .splineToLinearHeading(new Pose2d(37, -65, Math.toRadians(180)), -1)
                 .waitSeconds(0.1)
