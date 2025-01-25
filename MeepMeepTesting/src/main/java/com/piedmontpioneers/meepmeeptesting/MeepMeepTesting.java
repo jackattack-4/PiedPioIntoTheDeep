@@ -1,6 +1,9 @@
 package com.piedmontpioneers.meepmeeptesting;
 
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
@@ -25,52 +28,43 @@ public class MeepMeepTesting {
                 .setConstraints(100, 100, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
-        redDrive.runAction(redDrive.getDrive().actionBuilder(new Pose2d(15, -62, Math.toRadians(0)))
-                .strafeToConstantHeading(new Vector2d(9,-34))
-                .strafeToConstantHeading(new Vector2d(10, -40))
-                .splineToConstantHeading(new Vector2d(30, -37), Math.PI/4)
-                .splineToConstantHeading(new Vector2d(36, -10), Math.PI/2)
-                .turn(Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(46, -10), Math.PI/4)
-                .strafeToConstantHeading(new Vector2d(46, -55))
-                .strafeToConstantHeading(new Vector2d(46, -10))
-                .splineToConstantHeading(new Vector2d(56, -10), Math.PI/4)
-                .strafeToConstantHeading(new Vector2d(56, -55))
-                .splineToLinearHeading(new Pose2d(50, -50, Math.toRadians(180)), -1)
-                .waitSeconds(1)
-                .strafeToConstantHeading(new Vector2d(50,-60))
-                .waitSeconds(1)
-                .strafeToLinearHeading(new Vector2d(9, -34), Math.toRadians(0))
-                .waitSeconds(1)
-                .strafeToLinearHeading(new Vector2d(50, -50), Math.toRadians(180))
-                .waitSeconds(1)
-                .strafeToConstantHeading(new Vector2d(50,-60))
-                .waitSeconds(1)
-                .strafeToLinearHeading(new Vector2d(9, -34), Math.toRadians(0))
-                .strafeToConstantHeading(new Vector2d(50, -60))
-                .build());
 
-        /*redDrive.runAction(redDrive.getDrive().actionBuilder(new Pose2d(-12, -62, Math.toRadians(90)))
-                .splineToConstantHeading(BAR, 1)
-                .waitSeconds(SPECIMEN)
-                .strafeTo(new Vector2d(-9, -42))
-                .splineToLinearHeading(new Pose2d(-27,-36.5, Math.toRadians(155)), Math.PI)
-                .waitSeconds(INTAKE)
-                .splineToLinearHeading(BUCKET, -0.75*Math.PI)
-                .waitSeconds(OUTTAKE)
-                .splineToLinearHeading(new Pose2d(-40,-27, Math.toRadians(180)), Math.PI/2)
-                .strafeToConstantHeading(new Vector2d(-38, -27))
-                .waitSeconds(INTAKE)
-                .splineToLinearHeading(BUCKET, -0.75*Math.PI)
-                .waitSeconds(OUTTAKE)
-                .splineToLinearHeading(new Pose2d(-40,-27, Math.toRadians(180)), Math.PI/2)
-                .strafeToConstantHeading(new Vector2d(-46, -27))
-                .waitSeconds(INTAKE)
-                .splineToLinearHeading(BUCKET, -0.75*Math.PI)
-                .waitSeconds(OUTTAKE)
-                .build());
-        */
+            TrajectoryActionBuilder driveToBar, getTwo, hangTwo, getThree, hangThree, park;
 
+            Pose2d startPose = new Pose2d(0, -70.5, Math.toRadians(0));
+
+                driveToBar = redDrive.getDrive().actionBuilder(startPose).strafeTo(new Vector2d(-8,-38));
+
+                getTwo = driveToBar.endTrajectory().fresh()
+                        .strafeToConstantHeading(new Vector2d(20, -55))
+                        .strafeToConstantHeading(new Vector2d(38, -20))
+                        .turn(Math.toRadians(-90))
+                        .strafeToConstantHeading(new Vector2d(38, -63))
+                        .strafeToConstantHeading(new Vector2d(38, -27))
+                        .strafeToConstantHeading(new Vector2d(44, -27)  )
+                        .strafeToConstantHeading(new Vector2d(44, -63))
+                        .splineToLinearHeading(new Pose2d(37, -65, Math.toRadians(180)), -1)
+                        .waitSeconds(0.1)
+                        .strafeToConstantHeading(new Vector2d(37,-76));
+
+                hangTwo = getTwo.endTrajectory().fresh().turn(Math.toRadians(180)).strafeTo(new Vector2d(-10, -40)).waitSeconds(0.2);
+
+                getThree = hangTwo.endTrajectory().fresh().strafeToLinearHeading(new Vector2d(35, -70), Math.toRadians(180)).waitSeconds(0.1).strafeToConstantHeading(new Vector2d(35,-78));
+
+                hangThree = getThree.endTrajectory().fresh().turn(Math.toRadians(180)).strafeTo(new Vector2d(-12, -40)).waitSeconds(0.2);
+
+                park = hangThree.endTrajectory().fresh().strafeToConstantHeading(new Vector2d(35, -70));
+
+                redDrive.runAction(
+                        new SequentialAction(
+                                driveToBar.build(),
+                                getTwo.build(),
+                                hangTwo.build(),
+                                getThree.build(),
+                                hangThree.build(),
+                                park.build()
+                        )
+                );
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
                 .setDarkMode(true)
