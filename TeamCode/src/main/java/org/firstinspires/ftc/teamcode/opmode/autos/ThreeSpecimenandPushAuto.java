@@ -58,7 +58,7 @@ public class ThreeSpecimenandPushAuto extends LinearOpMode {
                 .strafeToConstantHeading(new Vector2d(35, -20))
                 .strafeToConstantHeading(new Vector2d(35, -63))
                 .splineToLinearHeading(new Pose2d(37, -65, Math.toRadians(180)), -1)
-                .strafeToConstantHeading(new Vector2d(37,-78));
+                .strafeToConstantHeading(new Vector2d(37,-76));
 
         hangTwo = getTwo.endTrajectory().fresh().strafeTo(new Vector2d(37, -70)).turn(Math.toRadians(180)).strafeTo(new Vector2d(-10, -41)).waitSeconds(0.5);
 
