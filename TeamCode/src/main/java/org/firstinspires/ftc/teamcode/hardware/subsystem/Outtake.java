@@ -74,9 +74,9 @@ public class Outtake implements SubSystem {
         if (config.gamepad2.back) {
             resetMotors();
         }
-        if (config.gamepad2.right_trigger >= 0.1) {
+        if (config.gamepad2.right_trigger >= 0.1 && !switchV.getState()) {
             setLiftPower(-Math.min(1,config.gamepad2.right_trigger*2));
-        } else if (config.gamepad2.left_trigger >= 0.1 && !switchV.getState()) {
+        } else if (config.gamepad2.left_trigger >= 0.1 ) {
             setLiftPower(Math.min(1,config.gamepad2.left_trigger*2));
         } else if (!switchV.getState()) {
             setLiftPower(Globals.Outtake.LIFT_IDLE);
@@ -163,11 +163,10 @@ public class Outtake implements SubSystem {
 
             updateTelemetry(telemetryPacket);
 
-            if (left.getCurrentPosition() <= target) {
+            if (right.getCurrentPosition() <= target) {
                 setLiftPower(Globals.Outtake.LIFT_OFF);
-                position = (target == Globals.Outtake.LIFT_TOP_BAR_ATTACH) ? LiftPosition.CLIPPING : LiftPosition.BOTTOM;
+                position = LiftPosition.CLIPPING;
                 direction = LiftDirection.STOP;
-                if (target != Globals.Outtake.LIFT_TOP_BAR_ATTACH) {resetMotors();}
             }
 
             return direction == LiftDirection.DOWN;

@@ -46,7 +46,7 @@ public class Globals {
         public static final int LIFT_BOTTOM_BASKET = 2700;
 
         public static final int LIFT_TOP_BAR = 2000;
-        public static final int LIFT_TOP_BAR_ATTACH = 1999;
+        public static final int LIFT_TOP_BAR_ATTACH = 1900;
 
         public static final int LIFT_BOTTOM = 200;
 

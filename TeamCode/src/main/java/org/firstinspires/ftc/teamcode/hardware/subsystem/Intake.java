@@ -83,6 +83,7 @@ public class Intake implements SubSystem {
     @Override
     public void start() {
         bucket.setPosition(Globals.Intake.BUCKET_UP);
+        extendo.setPower(-0.1);
     }
 
     @Override

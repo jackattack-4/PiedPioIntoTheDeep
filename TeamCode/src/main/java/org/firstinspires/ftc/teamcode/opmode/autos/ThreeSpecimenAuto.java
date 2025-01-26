@@ -1,13 +1,10 @@
 package org.firstinspires.ftc.teamcode.opmode.autos;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.roadrunner.InstantAction;
-import com.acmerobotics.roadrunner.InstantFunction;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
-import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -16,9 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.hardware.robot.enums.Alliance;
 import org.firstinspires.ftc.teamcode.hardware.robot.AutonomousRobot;
 import org.firstinspires.ftc.teamcode.hardware.robot.Config;
-import org.firstinspires.ftc.teamcode.hardware.robot.enums.CycleTarget;
 import org.firstinspires.ftc.teamcode.hardware.robot.enums.GameStage;
-import org.firstinspires.ftc.teamcode.hardware.subsystem.Outtake;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
 @Autonomous(name="Three Specimen Auto / 0+3 Auto", group="Autos")
@@ -37,7 +32,7 @@ public class ThreeSpecimenAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        startPose = new Pose2d(0, -70.5, Math.toRadians(0));
+        startPose = new Pose2d(15, -63, Math.toRadians(0));
 
         dashboard = FtcDashboard.getInstance();
 
@@ -49,62 +44,40 @@ public class ThreeSpecimenAuto extends LinearOpMode {
 
         robot.init();
 
-        driveToBar = drive.actionBuilder(startPose).strafeTo(new Vector2d(-8,-38));
+        driveToBar = drive.actionBuilder(startPose).strafeToLinearHeading(new Vector2d(0,-28), Math.toRadians(0));
 
-        getTwo = driveToBar.endTrajectory().fresh()
-                .strafeToConstantHeading(new Vector2d(20, -55))
-                .strafeToConstantHeading(new Vector2d(38, -20))
-                .turn(Math.toRadians(-90))
-                .strafeToConstantHeading(new Vector2d(38, -63))
-                .strafeToConstantHeading(new Vector2d(38, -27))
-                .strafeToConstantHeading(new Vector2d(44, -27)  )
-                .strafeToConstantHeading(new Vector2d(44, -63))
-                .splineToLinearHeading(new Pose2d(37, -65, Math.toRadians(180)), -1)
-                .waitSeconds(0.1)
-                .strafeToConstantHeading(new Vector2d(37,-76));
+        getTwo = driveToBar.endTrajectory().fresh().strafeToConstantHeading(new Vector2d(40,-42)).strafeToConstantHeading(new Vector2d(40,-15)).strafeToLinearHeading(new Vector2d(50,-35), Math.toRadians(270)).strafeToConstantHeading(new Vector2d(65,-60)).strafeToLinearHeading(new Vector2d(45,-55), Math.toRadians(180)).waitSeconds(1).strafeToConstantHeading(new Vector2d(50,-73));
 
-        hangTwo = getTwo.endTrajectory().fresh().turn(Math.toRadians(180)).strafeTo(new Vector2d(-10, -40)).waitSeconds(0.2);
+        hangTwo = getTwo.endTrajectory().fresh().strafeToLinearHeading(new Vector2d(6,-28), Math.toRadians(0));
 
-        getThree = hangTwo.endTrajectory().fresh().strafeToLinearHeading(new Vector2d(35, -70), Math.toRadians(180)).waitSeconds(0.1).strafeToConstantHeading(new Vector2d(35,-78));
+        getThree = hangTwo.endTrajectory().fresh().strafeToLinearHeading(new Vector2d(50,-55), Math.toRadians(180)).waitSeconds(1).strafeToConstantHeading(new Vector2d(50,-73));
 
-        hangThree = getThree.endTrajectory().fresh().turn(Math.toRadians(180)).strafeTo(new Vector2d(-12, -40)).waitSeconds(0.2);
+        hangThree = getThree.endTrajectory().fresh().strafeToLinearHeading(new Vector2d(8,-27), Math.toRadians(0));
 
-        park = hangThree.endTrajectory().fresh().strafeToConstantHeading(new Vector2d(35, -70));
+        park = hangThree.endTrajectory().fresh().strafeToLinearHeading(new Vector2d(50,-70), Math.toRadians(0));
 
         waitForStart();
 
         Actions.runBlocking(
                 new SequentialAction(
-                        new ParallelAction(
-                                robot.outtake.bar(),
-                                driveToBar.build()
-                        ),
+                        robot.outtake.bar(),
+                        driveToBar.build(),
                         robot.outtake.clip(),
                         new ParallelAction(
-                                new SequentialAction(
-                                        robot.sleep(2),
-                                        robot.outtake.down()
-                                ),
+                                robot.outtake.down(),
                                 getTwo.build()
                         ),
                         robot.outtake.zero(),
-                        new ParallelAction(
-                                robot.outtake.bar(),
-                                hangTwo.build()
-                        ),
+                        robot.outtake.bar(),
+                        hangTwo.build(),
                         robot.outtake.clip(),
                         new ParallelAction(
-                                new SequentialAction(
-                                        robot.sleep(1.5),
-                                        robot.outtake.down()
-                                ),
+                                robot.outtake.down(),
                                 getThree.build()
                         ),
                         robot.outtake.zero(),
-                        new ParallelAction(
-                                robot.outtake.bar(),
-                                hangThree.build()
-                        ),
+                        robot.outtake.bar(),
+                        hangThree.build(),
                         robot.outtake.clip(),
                         new ParallelAction(
                                 robot.outtake.down(),
