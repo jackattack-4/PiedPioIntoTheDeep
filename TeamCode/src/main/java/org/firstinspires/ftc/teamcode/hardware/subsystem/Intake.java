@@ -90,14 +90,14 @@ public class Intake implements SubSystem {
     public List<Action> update() {
         List<Action> newActions = new ArrayList<>();
 
-        if (config.gamepad2.right_bumper && !(extendo.getCurrentPosition() >= Globals.Intake.EXTENDO_OUT)) {extendo.setPower(1);} else if (config.gamepad2.left_bumper && !(extendo.getCurrentPosition() <= Globals.Intake.EXTENDO_IN)) {extendo.setPower(-1);} else {extendo.setPower(0);}
+        if (config.gamepad2.right_bumper) {extendo.setPower(1);} else if (config.gamepad2.left_bumper) {extendo.setPower(-1);} else {extendo.setPower(0);}
 
         if (config.gamepad2.b && state != IntakeState.RETRACTED) {newActions.add(raise());}
         if (config.gamepad2.a && state != IntakeState.INTAKING) {newActions.add(runIntake());}
         if (config.gamepad2.x || config.gamepad2.left_trigger >= 0.1 && bucketPosition != BucketPosition.ZERO) {newActions.add(raise());}
         if (config.gamepad2.y && state != IntakeState.DUMPING && bucketPosition != BucketPosition.DUMP) {newActions.add(dump());}
-        if (config.gamepad2.dpad_down && state != IntakeState.PURGING) {newActions.add(purge());}
-        if (config.gamepad2.dpad_up && state != IntakeState.STOPPED) {newActions.add(stop());}
+        if (config.gamepad2.dpad_up && state != IntakeState.PURGING) {newActions.add(purge());}
+        if (config.gamepad2.dpad_down && state != IntakeState.STOPPED) {newActions.add(stop());}
 
         config.telemetry.addData("bucket pos (0-1)", bucket.getPosition());
         config.telemetry.addData("bucket pos (State)", bucketPosition);
@@ -109,14 +109,18 @@ public class Intake implements SubSystem {
         return newActions;
     }
 
-    public InstantAction purge() {
-        return new InstantAction(() -> {
-            intake.setPower(Globals.Intake.POWER_PURGE);
-            bucket.setPosition(Globals.Intake.BUCKET_DOWN);
+    public Action purge() {
+        return new SequentialAction(
+                new InstantAction(() -> {
+                    bucket.setPosition(Globals.Intake.BUCKET_DOWN);
+                    bucketPosition = BucketPosition.DOWN;
+                    }),
+                new SleepAction(0.6),
+                new InstantAction(() -> {
+                    intake.setPower(Globals.Intake.POWER_PURGE);
 
-            state = IntakeState.PURGING;
-            bucketPosition = BucketPosition.DOWN;
-        });
+                    state = IntakeState.PURGING;
+        }));
     }
 
     public InstantAction stop() {
@@ -147,7 +151,7 @@ public class Intake implements SubSystem {
                     bucketPosition = BucketPosition.DUMP;}),
                 new SleepAction(0.5),
                 new InstantAction(() -> {intake.setPower(Globals.Intake.POWER_DUMP);}),
-                new SleepAction(0.4),
+                new SleepAction(0.3),
                 raise()
         );
     }

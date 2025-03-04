@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmode.autos;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.roadrunner.CompositeVelConstraint;
 import com.acmerobotics.roadrunner.InstantAction;
 import com.acmerobotics.roadrunner.InstantFunction;
 import com.acmerobotics.roadrunner.ParallelAction;
@@ -49,7 +50,7 @@ public class ThreeSpecimenandPushAuto extends LinearOpMode {
 
         robot.init();
 
-        driveToBar = drive.actionBuilder(startPose).strafeTo(new Vector2d(-8,-38));
+        driveToBar = drive.actionBuilder(startPose).strafeTo(new Vector2d(-8,-38.5));
 
         getTwo = driveToBar.endTrajectory().fresh()
                 .strafeToConstantHeading(new Vector2d(26, -55))
@@ -57,7 +58,7 @@ public class ThreeSpecimenandPushAuto extends LinearOpMode {
                 .strafeToConstantHeading(new Vector2d(26, -20))
                 .strafeToConstantHeading(new Vector2d(35, -20))
                 .strafeToConstantHeading(new Vector2d(35, -63))
-                .splineToLinearHeading(new Pose2d(37, -65, Math.toRadians(180)), -1)
+                .splineToLinearHeading(new Pose2d(38, -65, Math.toRadians(180)), -1)
                 .strafeToConstantHeading(new Vector2d(37,-76));
 
         hangTwo = getTwo.endTrajectory().fresh().strafeTo(new Vector2d(37, -70)).turn(Math.toRadians(180)).strafeTo(new Vector2d(-10, -41)).waitSeconds(0.5);

@@ -74,15 +74,19 @@ public class Outtake implements SubSystem {
         if (config.gamepad2.back) {
             resetMotors();
         }
-        if (config.gamepad2.right_trigger >= 0.1 && !switchV.getState()) {
-            setLiftPower(-Math.min(1,config.gamepad2.right_trigger*2));
-        } else if (config.gamepad2.left_trigger >= 0.1 ) {
-            setLiftPower(Math.min(1,config.gamepad2.left_trigger*2));
+        if (config.gamepad2.right_trigger >= 0.1) {
+            setLiftPower(Math.min(1,config.gamepad2.right_trigger*2));
+        } else if (config.gamepad2.left_trigger >= 0.1 && !switchV.getState()) {
+            setLiftPower(-Math.min(1,config.gamepad2.left_trigger*2));
         } else if (!switchV.getState()) {
             setLiftPower(Globals.Outtake.LIFT_IDLE);
         } else {
             setLiftPower(Globals.Outtake.LIFT_OFF);
             resetMotors();
+        }
+
+        if (config.gamepad2.dpad_left) {
+            newActions.add(lowerToBottom());
         }
 
 /*

@@ -13,9 +13,9 @@ public class Globals {
         public static final String INTAKE_SERVO = "bucket";
 
 
-        public static final double BUCKET_UP = 0.40;
-        public static final double BUCKET_DOWN = 0.90;
-        public static final double BUCKET_DUMP = 0.15;
+        public static final double BUCKET_UP = 0.34;
+        public static final double BUCKET_DOWN = 0.86;
+        public static final double BUCKET_DUMP = 0.18;
         public static final double BUCKET_PURGE = 0.7;
 
         public static final double EXTENDO_POWER_OUT = 1;
@@ -27,7 +27,7 @@ public class Globals {
         public static final double POWER_DUMP = -0.6;
         public static final double POWER_OFF = 0;
         public static final double POWER_ON = 1;
-        public static final double POWER_PURGE = -0.7;
+        public static final double POWER_PURGE = -0.3;
 
         public static final int SENSOR_RED_THRESHOLD = 300;
         public static final int SENSOR_YELLOW_THRESHOLD_RED = 300;
