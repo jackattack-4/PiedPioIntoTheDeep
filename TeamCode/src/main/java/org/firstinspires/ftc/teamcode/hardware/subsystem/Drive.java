@@ -50,7 +50,6 @@ public class Drive implements SubSystem {
 
     @Override
     public void start() {
-
     }
 
     public List<Action> update() {
