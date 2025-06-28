@@ -41,7 +41,7 @@ public class Intake implements SubSystem {
 
     Config config;
 
-    DcMotor intake;
+    DcMotor intakeMotor;
     DcMotor extendo;
 
     Servo bucket;
@@ -60,7 +60,7 @@ public class Intake implements SubSystem {
     public void init() {
         extendo = config.hardwareMap.get(DcMotor.class, Globals.Intake.EXTENDO_MOTOR);
 
-        intake = config.hardwareMap.get(DcMotor.class, Globals.Intake.INTAKE_MOTOR);
+        intakeMotor = config.hardwareMap.get(DcMotor.class, Globals.Intake.INTAKE_MOTOR);
 
         bucket = config.hardwareMap.get(Servo.class, Globals.Intake.INTAKE_SERVO);
 
@@ -70,8 +70,8 @@ public class Intake implements SubSystem {
         extendo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         extendo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        intake.setDirection(DcMotorSimple.Direction.REVERSE);
-        intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         state = IntakeState.RETRACTED;
 
@@ -103,7 +103,7 @@ public class Intake implements SubSystem {
         config.telemetry.addData("bucket pos (State)", bucketPosition);
         config.telemetry.addData("extendo pos (enc)", extendo.getCurrentPosition());
         config.telemetry.addData("intake state", state);
-        config.telemetry.addData("intake power (0-1)", intake.getPower());
+        config.telemetry.addData("intake power (0-1)", intakeMotor.getPower());
         //config.telemetry.addData("color sensor detections", detected);
 
         return newActions;
@@ -117,7 +117,7 @@ public class Intake implements SubSystem {
                     }),
                 new SleepAction(0.6),
                 new InstantAction(() -> {
-                    intake.setPower(Globals.Intake.POWER_PURGE);
+                    intakeMotor.setPower(Globals.Intake.POWER_PURGE);
 
                     state = IntakeState.PURGING;
         }));
@@ -125,7 +125,7 @@ public class Intake implements SubSystem {
 
     public InstantAction stop() {
         return new InstantAction(() -> {
-            intake.setPower(Globals.Intake.POWER_OFF);
+            intakeMotor.setPower(Globals.Intake.POWER_OFF);
 
             state = IntakeState.STOPPED;
             bucketPosition = BucketPosition.DOWN;
@@ -135,7 +135,7 @@ public class Intake implements SubSystem {
     public InstantAction runIntake() {
         return new InstantAction(() -> {
             bucketPosition = BucketPosition.DOWN;
-            intake.setPower(Globals.Intake.POWER_ON);
+            intakeMotor.setPower(Globals.Intake.POWER_ON);
             bucket.setPosition(Globals.Intake.BUCKET_DOWN);
 
             state = IntakeState.INTAKING;
@@ -150,7 +150,8 @@ public class Intake implements SubSystem {
                     state = IntakeState.DUMPING;
                     bucketPosition = BucketPosition.DUMP;}),
                 new SleepAction(0.5),
-                new InstantAction(() -> {intake.setPower(Globals.Intake.POWER_DUMP);}),
+                new InstantAction(() -> {
+                    intakeMotor.setPower(Globals.Intake.POWER_DUMP);}),
                 new SleepAction(0.3),
                 raise()
         );
@@ -158,7 +159,7 @@ public class Intake implements SubSystem {
 
     public InstantAction raise() {
         return new InstantAction(() -> {
-            intake.setPower(Globals.Intake.POWER_OFF);
+            intakeMotor.setPower(Globals.Intake.POWER_OFF);
             bucket.setPosition(Globals.Intake.BUCKET_UP);
             state = (state == IntakeState.DUMPING)? IntakeState.RETRACTED: IntakeState.EXTENDED;
 
